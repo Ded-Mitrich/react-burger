@@ -1,0 +1,13 @@
+.main {
+    display: flex;
+}
+
+.main_ingredients {
+    composes: ml-10 mr-5 from "@ya.praktikum/react-developer-burger-ui-components/dist/ui/box.css";
+    flex: 50%;
+}
+
+.main_constructor {
+    composes: mr-10 ml-5 from "@ya.praktikum/react-developer-burger-ui-components/dist/ui/box.css";
+    flex: 50%;
+}
