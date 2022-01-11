@@ -23,3 +23,8 @@
     align-items: center;
     justify-content: flex-end;
 }
+
+.main_holder {
+    composes: mr-10 ml-5 from "@ya.praktikum/react-developer-burger-ui-components/dist/ui/box.css";
+    flex: 50%;
+}

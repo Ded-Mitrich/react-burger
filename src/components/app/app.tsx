@@ -4,20 +4,19 @@ import AppHeader from '../app-header/app-header';
 import BurgerIngredients from '../burger-ingredients/burger-ingredients';
 import BurgerConstructor from '../burger-constructor/burger-constructor';
 
-const data = require('./data.json');
+const data = require('../../utils/data.json');
+const selectedData = require('../../utils/selectedData.json');
 
 function App() {
     return (
         <>
-            <header>
-                <AppHeader />
-            </header>
+            <AppHeader />
             <main className={styles.main}>
-                <section className={styles.main_ingredients}>
+                <section>
                     <BurgerIngredients ingredients={data} />
                 </section>
-                <section className={styles.main_constructor}>
-                    <BurgerConstructor elements={data} />
+                <section>
+                    <BurgerConstructor elements={selectedData} />
                 </section>
             </main>
         </>

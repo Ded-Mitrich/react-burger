@@ -3,6 +3,7 @@ import { ConstructorElement } from '@ya.praktikum/react-developer-burger-ui-comp
 import styles from './burger-constructor.module.css';
 import { CurrencyIcon, DragIcon, Button } from '@ya.praktikum/react-developer-burger-ui-components';
 import PropTypes from 'prop-types';
+import burgerIngredientPropType from '../../utils/types'
 
 
 const BurgerConstructor = ({ elements }) => {
@@ -15,7 +16,7 @@ const BurgerConstructor = ({ elements }) => {
             <ConstructorElement
                 type={type}
                 isLocked={isLocked}
-                text={elem.name}
+                text={elem.name + (type === 'top' ? ' (верх)' : type === 'bottom' ? ' (низ)' : '')}
                 price={elem.price}
                 thumbnail={elem.image}
             />
@@ -23,14 +24,14 @@ const BurgerConstructor = ({ elements }) => {
     }
 
     return (
-        <>
+        <div className={styles.main_holder}>
             <div className={styles.elements_container}>
-                    
+
                 {elementLayout(elements[0], 'top', true)}
                 <div className='custom-scroll' style={{ maxHeight: window.outerHeight - 564, overflow: 'auto' }}>
-                {elements.filter((elem, index) => index !== 0 && index !== elements.length - 1).map((elem, index) => (
-                    elementLayout(elem, '', false)
-                ))}
+                    {elements.filter((elem, index) => index !== 0 && index !== elements.length - 1).map((elem, index) => (
+                        elementLayout(elem, '', false)
+                    ))}
                 </div>
                 {elementLayout(elements[elements.length - 1], 'bottom', true)}
             </div>
@@ -41,25 +42,12 @@ const BurgerConstructor = ({ elements }) => {
                 </span>
                 <Button type="primary" size="large">Оформить заказ</Button>
             </span>
-        </>
+        </div>
     );
 }
 
 BurgerConstructor.propTypes = {
-    elements: PropTypes.arrayOf(PropTypes.shape({
-        _id: PropTypes.string.isRequired,
-        name: PropTypes.string.isRequired,
-        type: PropTypes.string.isRequired,
-        proteins: PropTypes.number,
-        fat: PropTypes.number,
-        carbohydrates: PropTypes.number,
-        calories: PropTypes.number,
-        price: PropTypes.number.isRequired,
-        image: PropTypes.string.isRequired,
-        image_mobile: PropTypes.string,
-        image_large: PropTypes.string,
-        __v: PropTypes.number,
-    }))
+    elements: PropTypes.arrayOf(burgerIngredientPropType)
 };
 
 export default BurgerConstructor
