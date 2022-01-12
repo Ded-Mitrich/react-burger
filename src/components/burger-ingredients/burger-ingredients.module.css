@@ -17,6 +17,8 @@
 }
 
 .main_holder {
-    composes: ml-10 mr-5 from "@ya.praktikum/react-developer-burger-ui-components/dist/ui/box.css";
+    composes: mr-5 from "@ya.praktikum/react-developer-burger-ui-components/dist/ui/box.css";
     flex: 50%;
+    display: flex;
+    justify-content:right;
 }

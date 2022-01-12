@@ -33,31 +33,33 @@ const BurgerIngredients = ({ ingredients }) => {
 
     return (
         <section className={styles.main_holder}>
-            <h1 className="mt-10 mb-5 text text_type_main-large">Соберите бургер</h1>
+            <div>
+                <h1 className="mt-10 mb-5 text text_type_main-large">Соберите бургер</h1>
 
-            <div className={styles.tabs_container}>
-                <Tab value={{ type: 'Булки', scrollTo: buns }} active={current.type === 'Булки'} onClick={onTabClick}>
-                    Булки
-                </Tab>
-                <Tab value={{ type: 'Соусы', scrollTo: souces }} active={current.type === 'Соусы'} onClick={onTabClick}>
-                    Соусы
-                </Tab>
-                <Tab value={{ type: 'Начинки', scrollTo: main }} active={current.type === 'Начинки'} onClick={onTabClick}>
-                    Начинки
-                </Tab>
-            </div>
-            <div className='custom-scroll' style={{ maxHeight: window.outerHeight - 322, overflow: 'auto' }}>
-                <div ref={buns} className="mt-10 mb-6 text text_type_main-medium">
-                    Булки
-                    {ingredientGroup('bun')}
+                <div className={styles.tabs_container}>
+                    <Tab value={{ type: 'Булки', scrollTo: buns }} active={current.type === 'Булки'} onClick={onTabClick}>
+                        Булки
+                    </Tab>
+                    <Tab value={{ type: 'Соусы', scrollTo: souces }} active={current.type === 'Соусы'} onClick={onTabClick}>
+                        Соусы
+                    </Tab>
+                    <Tab value={{ type: 'Начинки', scrollTo: main }} active={current.type === 'Начинки'} onClick={onTabClick}>
+                        Начинки
+                    </Tab>
                 </div>
-                <div ref={souces} className="mt-10 mb-6 text text_type_main-medium">
-                    Соусы
-                    {ingredientGroup('sauce')}
-                </div>
-                <div ref={main} className="mt-10 mb-6 text text_type_main-medium">
-                    Начинки
-                    {ingredientGroup('main')}
+                <div className='custom-scroll' style={{ maxHeight: window.outerHeight - 322, overflow: 'auto' }}>
+                    <div ref={buns} className="mt-10 mb-6 text text_type_main-medium">
+                        Булки
+                        {ingredientGroup('bun')}
+                    </div>
+                    <div ref={souces} className="mt-10 mb-6 text text_type_main-medium">
+                        Соусы
+                        {ingredientGroup('sauce')}
+                    </div>
+                    <div ref={main} className="mt-10 mb-6 text text_type_main-medium">
+                        Начинки
+                        {ingredientGroup('main')}
+                    </div>
                 </div>
             </div>
         </section>

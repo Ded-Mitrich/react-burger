@@ -25,22 +25,24 @@ const BurgerConstructor = ({ elements }) => {
 
     return (
         <section className={styles.main_holder}>
-            <div className={styles.elements_container}>
-                {elementLayout(elements[0], 'top', true)}
-                <div className='custom-scroll' style={{ maxHeight: window.outerHeight - 564, overflow: 'auto' }}>
-                    {elements.filter((elem, index) => index !== 0 && index !== elements.length - 1).map((elem, index) => (
-                        elementLayout(elem, '', false)
-                    ))}
+            <div>
+                <div className={styles.elements_container}>
+                    {elementLayout(elements[0], 'top', true)}
+                    <div className='custom-scroll' style={{ maxHeight: window.outerHeight - 564, overflow: 'auto' }}>
+                        {elements.filter((elem, index) => index !== 0 && index !== elements.length - 1).map((elem, index) => (
+                            elementLayout(elem, '', false)
+                        ))}
+                    </div>
+                    {elementLayout(elements[elements.length - 1], 'bottom', true)}
                 </div>
-                {elementLayout(elements[elements.length - 1], 'bottom', true)}
-            </div>
-            <span className={styles.make_order}>
-                <span className={'text text_type_digits-medium mr-10 ' + styles.price}>
-                    <span style={{ marginRight: 9 }}>{elements.reduce((sm, a) => sm + a.price, 0)}</span>
-                    <CurrencyIcon type="primary" />
+                <span className={styles.make_order}>
+                    <span className={'text text_type_digits-medium mr-10 ' + styles.price}>
+                        <span style={{ marginRight: 9 }}>{elements.reduce((sm, a) => sm + a.price, 0)}</span>
+                        <CurrencyIcon type="primary" />
+                    </span>
+                    <Button type="primary" size="large">Оформить заказ</Button>
                 </span>
-                <Button type="primary" size="large">Оформить заказ</Button>
-            </span>
+            </div>
         </section>
     );
 }
