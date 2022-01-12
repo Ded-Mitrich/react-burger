@@ -1,0 +1,25 @@
+.holder {
+    composes: ml-5 mr-5 mt-4 mb-4 from "@ya.praktikum/react-developer-burger-ui-components/dist/ui/box.css";
+    display: inline-flex;
+    align-items: center;
+    justify-content: flex-end;
+    text-align: right;
+}
+
+.header_container {
+    display: flex;
+    align-items: center;
+}
+
+.holder_fill {
+    composes: m-4 from "@ya.praktikum/react-developer-burger-ui-components/dist/ui/box.css";
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-grow: 1;
+}
+
+.logo {
+}
+
+

@@ -1,0 +1,32 @@
+.elements_container {
+    composes: mt-25 from "@ya.praktikum/react-developer-burger-ui-components/dist/ui/box.css";
+    display: flex;
+    flex-direction: column;
+}
+
+.element_holder {
+    composes: mb-4 mr-4 ml-4 from "@ya.praktikum/react-developer-burger-ui-components/dist/ui/box.css";
+    display: flex;
+    align-items: center;
+    justify-content: left;
+}
+
+.make_order {
+    composes: mt-10 mr-4 from "@ya.praktikum/react-developer-burger-ui-components/dist/ui/box.css";
+    display: flex;
+    align-items: center;
+    justify-content: right;
+}
+
+.price {
+    display: inline-flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.main_holder {
+    composes: ml-5 from "@ya.praktikum/react-developer-burger-ui-components/dist/ui/box.css";
+    flex: 50%;
+    display: flex;
+    justify-content: left;
+}

@@ -1,0 +1,24 @@
+.tabs_container {
+    composes: mt-5 from "@ya.praktikum/react-developer-burger-ui-components/dist/ui/box.css";
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: row;
+}
+
+.ingredients_container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, 50%);
+    justify-content: space-between;
+}
+
+.ingredient {
+    justify-content: left;
+}
+
+.main_holder {
+    composes: mr-5 from "@ya.praktikum/react-developer-burger-ui-components/dist/ui/box.css";
+    flex: 50%;
+    display: flex;
+    justify-content:right;
+}
