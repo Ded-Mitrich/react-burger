@@ -18,7 +18,7 @@ const IngredientElement = ({ ingredient }) => {
 };
 
 IngredientElement.propTypes = {
-    ingredient: burgerIngredientPropType
+    ingredient: burgerIngredientPropType.isRequired
 };
 
 export default IngredientElement

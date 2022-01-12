@@ -65,7 +65,7 @@ const BurgerIngredients = ({ ingredients }) => {
 }
 
 BurgerIngredients.propTypes = {
-    elements: PropTypes.arrayOf(burgerIngredientPropType)
+    ingredients: PropTypes.arrayOf(burgerIngredientPropType).isRequired
 };
 
 export default BurgerIngredients
