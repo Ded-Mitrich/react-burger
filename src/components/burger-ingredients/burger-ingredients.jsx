@@ -32,7 +32,7 @@ const BurgerIngredients = ({ ingredients }) => {
     }
 
     return (
-        <div className={styles.main_holder}>
+        <section className={styles.main_holder}>
             <h1 className="mt-10 mb-5 text text_type_main-large">Соберите бургер</h1>
 
             <div className={styles.tabs_container}>
@@ -60,7 +60,7 @@ const BurgerIngredients = ({ ingredients }) => {
                     {ingredientGroup('main')}
                 </div>
             </div>
-        </div>
+        </section>
     );
 }
 

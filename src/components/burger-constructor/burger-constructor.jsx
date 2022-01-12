@@ -24,9 +24,8 @@ const BurgerConstructor = ({ elements }) => {
     }
 
     return (
-        <div className={styles.main_holder}>
+        <section className={styles.main_holder}>
             <div className={styles.elements_container}>
-
                 {elementLayout(elements[0], 'top', true)}
                 <div className='custom-scroll' style={{ maxHeight: window.outerHeight - 564, overflow: 'auto' }}>
                     {elements.filter((elem, index) => index !== 0 && index !== elements.length - 1).map((elem, index) => (
@@ -42,7 +41,7 @@ const BurgerConstructor = ({ elements }) => {
                 </span>
                 <Button type="primary" size="large">Оформить заказ</Button>
             </span>
-        </div>
+        </section>
     );
 }
 

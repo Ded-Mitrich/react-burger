@@ -12,12 +12,8 @@ function App() {
         <>
             <AppHeader />
             <main className={styles.main}>
-                <section>
-                    <BurgerIngredients ingredients={data} />
-                </section>
-                <section>
-                    <BurgerConstructor elements={selectedData} />
-                </section>
+                <BurgerIngredients ingredients={data} />
+                <BurgerConstructor elements={selectedData} />
             </main>
         </>
     );
