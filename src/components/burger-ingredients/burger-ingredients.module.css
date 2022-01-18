@@ -20,5 +20,5 @@
     composes: mr-5 from "@ya.praktikum/react-developer-burger-ui-components/dist/ui/box.css";
     flex: 50%;
     display: flex;
-    justify-content:right;
+    justify-content: right;
 }
