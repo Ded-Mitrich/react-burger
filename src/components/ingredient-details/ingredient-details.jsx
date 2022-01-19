@@ -6,9 +6,9 @@ const IngredientDetails = ({ ingredient }) => {
     return (
         <>
             <img src={ingredient.image_large} style={{ maxHeight: 240, objectFit: 'contain' }} />
-            <div className="mt-4 text text_type_main-medium">
+            <h3 className="mt-4 text text_type_main-medium">
                 {ingredient.name}
-            </div>
+            </h3>
             <div className={"mt-8 mb-15 mr-25 ml-25 text text_type_main-default text_color_inactive " + styles.nutrition_data}>
                 <span className={styles.nutrition_value}>
                     Калории, ккал

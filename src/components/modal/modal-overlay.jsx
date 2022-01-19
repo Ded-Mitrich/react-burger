@@ -1,36 +1,22 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import styles from './modal.module.css';
 
-class ModalOverLay extends React.Component {
-    constructor(props) {
-        super(props);
-        this.escFunction = this.escFunction.bind(this);
-    }
+const ModalOverLay = React.forwardRef((props, ref) => {
 
-    escFunction(event) {
-        if (event.keyCode === 27) {
-            this.props.onClose();
+    React.useEffect(() => {
+        document.addEventListener("keydown", escFunction, false);
+        return () => {
+            document.removeEventListener("keydown", escFunction, false);
+        }
+    }, []);
+
+    const escFunction = (e) => {
+        if (e.keyCode === 27) {
+            props.onClose();
         }
     }
 
-    componentDidMount() {
-        document.addEventListener("keydown", this.escFunction, false);
-    }
-
-    componentWillUnmount() {
-        document.removeEventListener("keydown", this.escFunction, false);
-    }
-
-    render() {
-        const { children, modalRoot, onClose } = this.props;
-        return ReactDOM.createPortal(
-            <div className={styles.modal_overlay} onClick={onClose} onKeyDown={this.escFunction}>
-                {children}
-            </div>
-            , modalRoot
-        );
-    }
-}
+    return (<div ref={ref} className={styles.modal_overlay} onClick={props.onClose} onKeyDown={escFunction} />)
+})
 
 export default ModalOverLay

@@ -19,5 +19,7 @@
     flex-grow: 1;
 }
 
-.logo {
+.link {
+    composes: ml-2 from "@ya.praktikum/react-developer-burger-ui-components/dist/ui/box.css";
+    color: white;
 }

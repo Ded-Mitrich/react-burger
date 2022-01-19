@@ -5,7 +5,6 @@ import PropTypes from 'prop-types';
 import burgerIngredientPropType from '../../utils/types';
 import Modal from '../modal/modal';
 import OrderDetails from '../order-details/order-details';
-import ModalOverLay from '../modal/modal-overlay';
 
 const BurgerConstructor = ({ elements }) => {
     const root = React.useRef(null);
@@ -27,11 +26,9 @@ const BurgerConstructor = ({ elements }) => {
     }
 
     const modal = (
-        <ModalOverLay modalRoot={root.current} onClose={() => setShowModal(false)}>
-            <Modal header='' onClose={() => setShowModal(false)}>
-                <OrderDetails />
-            </Modal>
-        </ModalOverLay>
+        <Modal modalRoot={root} header='' onClose={() => setShowModal(false)}>
+            <OrderDetails />
+        </Modal>
     );
 
 
@@ -40,7 +37,7 @@ const BurgerConstructor = ({ elements }) => {
             <div ref={root}>
                 <div className={styles.elements_container}>
                     {elementLayout(elements[0], 'top', true)}
-                    <div className='custom-scroll' style={{ maxHeight: window.outerHeight - 564, overflow: 'auto' }}>
+                    <div className={styles.scroll}>
                         {elements.filter((elem, index) => index !== 0 && index !== elements.length - 1).map((elem, index) => (
                             elementLayout(elem, '', false)
                         ))}
@@ -49,7 +46,7 @@ const BurgerConstructor = ({ elements }) => {
                 </div>
                 <span className={styles.make_order}>
                     <span className={'text text_type_digits-medium mr-10 ' + styles.price}>
-                        <span style={{ marginRight: 9 }}>{elements.reduce((sm, a) => sm + a.price, 0)}</span>
+                        <span className="mr-2">{elements.reduce((sm, a) => sm + a.price, 0)}</span>
                         <CurrencyIcon type="primary" />
                     </span>
                     <Button type="primary" size="large" onClick={() => setShowModal(true)}>Оформить заказ</Button>

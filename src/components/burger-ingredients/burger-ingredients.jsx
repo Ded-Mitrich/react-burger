@@ -47,7 +47,7 @@ const BurgerIngredients = ({ ingredients }) => {
                         Начинки
                     </Tab>
                 </div>
-                <div className='custom-scroll' style={{ maxHeight: window.outerHeight - 322, overflow: 'auto' }}>
+                <div className={styles.scroll}>
                     <div ref={buns} className="mt-10 mb-6 text text_type_main-medium">
                         Булки
                         {ingredientGroup('bun')}
@@ -62,7 +62,7 @@ const BurgerIngredients = ({ ingredients }) => {
                     </div>
                 </div>
             </div>
-        </section>
+        </section >
     );
 }
 
