@@ -4,13 +4,12 @@ import styles from './ingredient-element.module.css';
 import burgerIngredientPropType from '../../utils/types'
 import Modal from '../modal/modal';
 import IngredientDetails from '../ingredient-details/ingredient-details';
-import PropTypes from 'prop-types';
 
-const IngredientElement = ({ modalRoot, ingredient }) => {
+const IngredientElement = ({ ingredient }) => {
     const [showModal, setShowModal] = React.useState(false);
 
     const modal = (
-        <Modal modalRoot={modalRoot} header='Детали ингредиента' onClose={() => setShowModal(false)}>
+        <Modal header='Детали ингредиента' onClose={() => setShowModal(false)}>
             <IngredientDetails ingredient={ingredient} />
         </Modal>
     );
@@ -30,7 +29,6 @@ const IngredientElement = ({ modalRoot, ingredient }) => {
 };
 
 IngredientElement.propTypes = {
-    modalRoot: PropTypes.object.isRequired,
     ingredient: burgerIngredientPropType.isRequired
 };
 

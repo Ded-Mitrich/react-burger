@@ -14,6 +14,7 @@ function App() {
             <main className={styles.main}>
                 <BurgerIngredients ingredients={data} />
                 <BurgerConstructor elements={selectedData} />
+                <div id="modals"/>
             </main>
         </>
     );

@@ -7,7 +7,6 @@ import Modal from '../modal/modal';
 import OrderDetails from '../order-details/order-details';
 
 const BurgerConstructor = ({ elements }) => {
-    const root = React.useRef(null);
     const [showModal, setShowModal] = React.useState(false);
 
     const elementLayout = (elem, type, isLocked) => {
@@ -26,7 +25,7 @@ const BurgerConstructor = ({ elements }) => {
     }
 
     const modal = (
-        <Modal modalRoot={root} header='' onClose={() => setShowModal(false)}>
+        <Modal header='' onClose={() => setShowModal(false)}>
             <OrderDetails />
         </Modal>
     );
@@ -34,7 +33,7 @@ const BurgerConstructor = ({ elements }) => {
 
     return (
         <section className={styles.main_holder}>
-            <div ref={root}>
+            <div>
                 <div className={styles.elements_container}>
                     {elementLayout(elements[0], 'top', true)}
                     <div className={styles.scroll}>

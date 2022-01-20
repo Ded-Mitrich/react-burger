@@ -1,22 +1,13 @@
 import React from 'react';
 import styles from './modal.module.css';
+import PropTypes from 'prop-types';
 
-const ModalOverLay = React.forwardRef((props, ref) => {
+const ModalOverLay = ({ onClose }) => {
+    return (<div className={styles.modal_overlay} onClick={onClose} />)
+}
 
-    React.useEffect(() => {
-        document.addEventListener("keydown", escFunction, false);
-        return () => {
-            document.removeEventListener("keydown", escFunction, false);
-        }
-    }, []);
-
-    const escFunction = (e) => {
-        if (e.keyCode === 27) {
-            props.onClose();
-        }
-    }
-
-    return (<div ref={ref} className={styles.modal_overlay} onClick={props.onClose} onKeyDown={escFunction} />)
-})
+ModalOverLay.propTypes = {
+    onClose: PropTypes.func.isRequired,
+};
 
 export default ModalOverLay

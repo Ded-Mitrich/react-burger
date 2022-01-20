@@ -6,8 +6,33 @@ import ModalOverLay from './modal-overlay';
 import PropTypes from 'prop-types';
 
 class Modal extends React.Component {
+
+    escFunction = (e) => {
+        e.stopPropagation();
+        if (e.keyCode === 27) {
+            this.props.onClose();
+        }
+    }
+
+    componentDidMount() {
+        document.addEventListener("keydown", this.escFunction, false);
+    }
+
+    componentDidUpdate(prevProps, prevState) {
+        console.log("componentDidUpdate");
+        if (this.props.onClose !== prevProps.onClose) {
+            console.log("componentDidUpdate onClose changed");
+            document.removeEventListener("keydown", this.escFunction, false);
+            document.addEventListener("keydown", this.escFunction, false);
+        }
+    }
+
+    componentWillUnmount() {
+        document.removeEventListener("keydown", this.escFunction, false);
+    }
+
     render() {
-        const { modalRoot, onClose, header, children } = this.props;
+        const { onClose, header, children } = this.props;
         return ReactDOM.createPortal(
             <div className={styles.modal_root}>
                 <ModalOverLay onClose={onClose} />
@@ -20,13 +45,12 @@ class Modal extends React.Component {
                     </h2>
                     {children}
                 </div>
-            </div>
-            , modalRoot.current)
+            </div>,
+            document.getElementById("modals"))
     }
 }
 
 Modal.propTypes = {
-    modalRoot: PropTypes.object.isRequired,
     onClose: PropTypes.func.isRequired,
     header: PropTypes.string,
     children: PropTypes.any

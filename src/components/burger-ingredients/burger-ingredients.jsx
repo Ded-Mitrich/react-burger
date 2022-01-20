@@ -9,7 +9,6 @@ const BurgerIngredients = ({ ingredients }) => {
     const buns = React.useRef(null);
     const souces = React.useRef(null);
     const main = React.useRef(null);
-    const modalRoot = React.useRef(null);
     const [current, setCurrent] = React.useState({ type: 'Булки', scrollTo: buns });
 
     const onTabClick = (value) => {
@@ -24,7 +23,7 @@ const BurgerIngredients = ({ ingredients }) => {
                 {
                     src.map((elem) =>
                     (
-                        <IngredientElement key={elem._id} ingredient={elem} modalRoot={modalRoot} />
+                        <IngredientElement key={elem._id} ingredient={elem} />
                     ))
                 }
             </div>
@@ -33,7 +32,7 @@ const BurgerIngredients = ({ ingredients }) => {
 
     return (
         <section className={styles.main_holder}>
-            <div ref={modalRoot}>
+            <div>
                 <h1 className="mt-10 mb-5 text text_type_main-large">Соберите бургер</h1>
 
                 <div className={styles.tabs_container}>
