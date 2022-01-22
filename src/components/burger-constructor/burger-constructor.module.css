@@ -31,20 +31,8 @@
     justify-content: left;
 }
 
-.modal_confirm {
-    display: flex;
-    align-items: center;
-    justify-content: left;
-    flex-direction: column;
-    position: absolute;
-    top: 20%;
-    background: #1C1C21;
-    border: 1px solid rgba(76, 76, 255, 0.2);
-    box-sizing: border-box;
-    box-shadow: 0px 24px 32px rgba(0, 0, 0, 0.04), 0px 16px 24px rgba(0, 0, 0, 0.04), 0px 4px 8px rgba(0, 0, 0, 0.04), 0px 0px 1px rgba(0, 0, 0, 0.04);
-    border-radius: 40px;
-}
-
-.order_number {
-    text-shadow: #3333FF80 0px 4px 32px, #3333FF40 0px 0px 8px, black 0px 0px 16px;
+.scroll {
+    composes: custom-scroll from "@ya.praktikum/react-developer-burger-ui-components/dist/ui/common.css";
+    max-height: calc(100vh - 554px);
+    overflow: auto;
 }

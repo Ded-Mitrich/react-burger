@@ -1,0 +1,11 @@
+.nutrition_data {
+    display: flex;
+    flex-direction: row;
+}
+
+.nutrition_value {
+    display: flex;
+    flex-direction: column;
+    justify-items: center;
+    align-items: center;
+}

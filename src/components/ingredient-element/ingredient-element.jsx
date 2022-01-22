@@ -1,44 +1,16 @@
 ﻿import React from 'react';
-import { CurrencyIcon, Counter, CloseIcon } from '@ya.praktikum/react-developer-burger-ui-components';
+import { CurrencyIcon, Counter } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './ingredient-element.module.css';
 import burgerIngredientPropType from '../../utils/types'
 import Modal from '../modal/modal';
+import IngredientDetails from '../ingredient-details/ingredient-details';
 
-const IngredientElement = ({ ingredient, modalRoot }) => {
+const IngredientElement = ({ ingredient }) => {
     const [showModal, setShowModal] = React.useState(false);
 
     const modal = (
-        <Modal modalRoot={modalRoot.current}>
-            <div className={styles.modal_details}>
-                <div className={"text text_type_main-large " + styles.modal_header}>
-                    Детали ингредиента
-                    <span style={{ marginLeft: 225 }}><CloseIcon onClick={() => setShowModal(false)} /></span>
-                </div>
-                <img src={ingredient.image_large} style={{ maxHeight: 240, objectFit: 'contain' }} />
-
-                <div className="mt-4 text text_type_main-medium">
-                    {ingredient.name}
-                </div>
-
-                <div className={"mt-8 mb-15 mr-25 ml-25 text text_type_main-default text_color_inactive " + styles.nutrition_data}>
-                    <span className={styles.nutrition_value}>
-                        Калории, ккал
-                        <span className="text_type_digits-default">{ingredient.calories}</span>
-                    </span>
-                    <span className={"ml-5 " + styles.nutrition_value}>
-                        Белки, г
-                        <span className="text_type_digits-default">{ingredient.proteins}</span>
-                    </span>
-                    <span className={"ml-5 " + styles.nutrition_value}>
-                        Жиры, г
-                        <span className="text_type_digits-default">{ingredient.fat}</span>
-                    </span>
-                    <span className={"ml-5 " + styles.nutrition_value}>
-                        Углеводы, г
-                        <span className="text_type_digits-default">{ingredient.carbohydrates}</span>
-                    </span>
-                </div>
-            </div>
+        <Modal header='Детали ингредиента' onClose={() => setShowModal(false)}>
+            <IngredientDetails ingredient={ingredient} />
         </Modal>
     );
 
