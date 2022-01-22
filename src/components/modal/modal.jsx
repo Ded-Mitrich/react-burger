@@ -18,15 +18,6 @@ class Modal extends React.Component {
         document.addEventListener("keydown", this.escFunction, false);
     }
 
-    componentDidUpdate(prevProps, prevState) {
-        console.log("componentDidUpdate");
-        if (this.props.onClose !== prevProps.onClose) {
-            console.log("componentDidUpdate onClose changed");
-            document.removeEventListener("keydown", this.escFunction, false);
-            document.addEventListener("keydown", this.escFunction, false);
-        }
-    }
-
     componentWillUnmount() {
         document.removeEventListener("keydown", this.escFunction, false);
     }
