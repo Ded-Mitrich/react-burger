@@ -21,9 +21,9 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-/ReactBurger.sln
-/ReactBurger.njsproj.user
 /ReactBurger.njsproj
-/obj/x86/Debug/ReactBurger.csproj.AssemblyReference.cache
+/ReactBurger.njsproj.user
+/ReactBurger.sln
 /obj/x86/Debug/DesignTimeResolveAssemblyReferencesInput.cache
+/obj/x86/Debug/ReactBurger.csproj.AssemblyReference.cache
 /.vs/ReactBurger/v16/.suo
