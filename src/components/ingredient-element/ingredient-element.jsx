@@ -2,8 +2,11 @@
 import { CurrencyIcon, Counter } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './ingredient-element.module.css';
 import burgerIngredientPropType from '../../utils/types'
+import { IngredientsContext } from '../../services/ingredients-context';
 
 const IngredientElement = ({ ingredient }) => {
+    const [setSelectedIngredients] = useContext(IngredientsContext);
+
     return (
         <div className={styles.ingredient_container}>
             <img className={styles.ingredient_image} src={ingredient.image} alt={ingredient.name} />

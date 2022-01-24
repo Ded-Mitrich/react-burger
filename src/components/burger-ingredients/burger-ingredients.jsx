@@ -4,8 +4,12 @@ import styles from './burger-ingredients.module.css';
 import IngredientElement from '../ingredient-element/ingredient-element';
 import PropTypes from 'prop-types';
 import burgerIngredientPropType from '../../utils/types'
+import { IngredientsContext } from '../../services/ingredients-context';
 
-const BurgerIngredients = ({ ingredients }) => {
+const BurgerIngredients = () => {
+
+    const [avalaibleIngredients, selectedIngredients, setSelectedIngredients] = useContext(IngredientsContext);
+
     const buns = React.useRef(null);
     const souces = React.useRef(null);
     const main = React.useRef(null);
@@ -13,12 +17,11 @@ const BurgerIngredients = ({ ingredients }) => {
 
     const onTabClick = (value) => {
         setCurrent(value);
-        console.log(current);
         value.scrollTo.current.scrollIntoView({ behavior: "smooth" });
     };
 
     const ingredientGroup = (type) => {
-        const src = ingredients.filter(ingredient => ingredient.type === type);
+        const src = avalaibleIngredients.filter(ingredient => ingredient.type === type);
         return (
             <div className={styles.ingredients_container}>
                 {
@@ -47,7 +50,7 @@ const BurgerIngredients = ({ ingredients }) => {
                         Начинки
                     </Tab>
                 </div>
-                <div className='custom-scroll' style={{ maxHeight: window.outerHeight - 322, overflow: 'auto' }}>
+                <div className={styles.scroll}>
                     <div ref={buns} className="mt-10 mb-6 text text_type_main-medium">
                         Булки
                         {ingredientGroup('bun')}
@@ -62,13 +65,9 @@ const BurgerIngredients = ({ ingredients }) => {
                     </div>
                 </div>
             </div>
-        </section>
+        </section >
     );
 }
-
-BurgerIngredients.propTypes = {
-    ingredients: PropTypes.arrayOf(burgerIngredientPropType).isRequired
-};
 
 export default BurgerIngredients
 

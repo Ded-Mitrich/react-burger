@@ -1,12 +1,17 @@
 import React from 'react';
-import { ConstructorElement } from '@ya.praktikum/react-developer-burger-ui-components'
 import styles from './burger-constructor.module.css';
-import { CurrencyIcon, DragIcon, Button } from '@ya.praktikum/react-developer-burger-ui-components';
+import { ConstructorElement, CurrencyIcon, DragIcon, Button } from '@ya.praktikum/react-developer-burger-ui-components';
 import PropTypes from 'prop-types';
-import burgerIngredientPropType from '../../utils/types'
+import burgerIngredientPropType from '../../utils/types';
+import Modal from '../modal/modal';
+import OrderDetails from '../order-details/order-details';
+import { IngredientsContext } from '../../services/ingredients-context';
 
+const BurgerConstructor = () => {
 
-const BurgerConstructor = ({ elements }) => {
+    const [selectedIngredients, setSelectedIngredients] = useContext(IngredientsContext);
+
+    const [showModal, setShowModal] = React.useState(false);
 
     const elementLayout = (elem, type, isLocked) => {
         return (<span key={elem._id} className={styles.element_holder}>
@@ -23,32 +28,37 @@ const BurgerConstructor = ({ elements }) => {
         </span>)
     }
 
+    const modal = (
+        <Modal header='' onClose={() => setShowModal(false)}>
+            <OrderDetails />
+        </Modal>
+    );
+
+
     return (
         <section className={styles.main_holder}>
             <div>
                 <div className={styles.elements_container}>
-                    {elementLayout(elements[0], 'top', true)}
-                    <div className='custom-scroll' style={{ maxHeight: window.outerHeight - 564, overflow: 'auto' }}>
-                        {elements.filter((elem, index) => index !== 0 && index !== elements.length - 1).map((elem, index) => (
-                            elementLayout(elem, '', false)
-                        ))}
+                    {elementLayout(selectedIngredients.filter((elem, index) => elem.type === 'bun')[0], 'top', true)}
+                    <div className={styles.scroll}>
+                        {elements
+                            .filter((elem, index) => index !== 0 && index !== elements.length - 1)
+                            .map((elem, index) => (elementLayout(elem, '', false)
+                            ))}
                     </div>
-                    {elementLayout(elements[elements.length - 1], 'bottom', true)}
+                    {elementLayout(selectedIngredients.filter((elem, index) => elem.type === 'bun')[1], 'bottom', true)}
                 </div>
                 <span className={styles.make_order}>
                     <span className={'text text_type_digits-medium mr-10 ' + styles.price}>
-                        <span style={{ marginRight: 9 }}>{elements.reduce((sm, a) => sm + a.price, 0)}</span>
+                        <span className="mr-2">{elements.reduce((sm, a) => sm + a.price, 0)}</span>
                         <CurrencyIcon type="primary" />
                     </span>
-                    <Button type="primary" size="large">Оформить заказ</Button>
+                    <Button type="primary" size="large" onClick={() => setShowModal(true)}>Оформить заказ</Button>
                 </span>
+                {showModal && modal}
             </div>
         </section>
     );
 }
-
-BurgerConstructor.propTypes = {
-    elements: PropTypes.arrayOf(burgerIngredientPropType)
-};
 
 export default BurgerConstructor
