@@ -2,6 +2,7 @@
     composes: mt-25 from "@ya.praktikum/react-developer-burger-ui-components/dist/ui/box.css";
     display: flex;
     flex-direction: column;
+    min-width: 618px;
 }
 
 .element_holder {
@@ -12,9 +13,8 @@
 }
 
 .make_order {
-    composes: mt-10 mr-4 from "@ya.praktikum/react-developer-burger-ui-components/dist/ui/box.css";
+    composes: mr-4 mb-10 from "@ya.praktikum/react-developer-burger-ui-components/dist/ui/box.css";
     display: flex;
-    flex: 1;
     justify-content: right;
     align-items:end;
 }
@@ -28,7 +28,7 @@
 .main_holder {
     composes: ml-5 from "@ya.praktikum/react-developer-burger-ui-components/dist/ui/box.css";
     flex: 50%;
-    display: flex;
+    display: grid;
     justify-content: left;
     flex-direction:column;
 }
