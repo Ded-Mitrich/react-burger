@@ -1,15 +1,14 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components'
 import styles from './burger-ingredients.module.css';
 import IngredientElement from '../ingredient-element/ingredient-element';
 import PropTypes from 'prop-types';
 import burgerIngredientPropType from '../../utils/types'
-import { IngredientsContext } from '../../services/ingredients-context';
+import { AvalaibleIngredientsContext } from '../../services/ingredients-context';
 
 const BurgerIngredients = () => {
 
-    const [avalaibleIngredients, selectedIngredients, setSelectedIngredients] = useContext(IngredientsContext);
-
+    const [avalaibleIngredients, setAvalaibleIngredients] = useContext(AvalaibleIngredientsContext);
     const buns = React.useRef(null);
     const souces = React.useRef(null);
     const main = React.useRef(null);

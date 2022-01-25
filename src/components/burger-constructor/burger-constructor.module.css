@@ -14,8 +14,9 @@
 .make_order {
     composes: mt-10 mr-4 from "@ya.praktikum/react-developer-burger-ui-components/dist/ui/box.css";
     display: flex;
-    align-items: center;
+    flex: 1;
     justify-content: right;
+    align-items:end;
 }
 
 .price {
@@ -29,6 +30,7 @@
     flex: 50%;
     display: flex;
     justify-content: left;
+    flex-direction:column;
 }
 
 .scroll {
