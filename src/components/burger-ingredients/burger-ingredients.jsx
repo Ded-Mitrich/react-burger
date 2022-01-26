@@ -6,7 +6,7 @@ import { AvalaibleIngredientsContext } from '../../services/ingredients-context'
 
 const BurgerIngredients = () => {
 
-    const [avalaibleIngredients, setAvalaibleIngredients] = useContext(AvalaibleIngredientsContext);
+    const avalaibleIngredients = useContext(AvalaibleIngredientsContext);
     const buns = React.useRef(null);
     const souces = React.useRef(null);
     const main = React.useRef(null);

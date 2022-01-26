@@ -10,14 +10,18 @@ import { OrdersContext } from '../../services/orders-context';
 const url = 'https://norma.nomoreparties.space/api/ingredients';
 
 function App() {
-    const avalaibleIngredientsState = useState([]);
-    const [avalaibleIngredients, setAvalaibleIngredients] = avalaibleIngredientsState;
+    const [avalaibleIngredients, setAvalaibleIngredients] = useState([]);
     const selectedIngredientsState = useState([]);
     const ordersState = useState([]);
 
     useEffect(() => {
         fetch(url, { method: 'GET' })
-            .then(res => { return res.json() })
+            .then(res => {
+                if (res.ok) {
+                    return res.json();
+                }
+                return Promise.reject(res.status);
+            })
             .then(res => setAvalaibleIngredients(res.data))
             .catch(e => console.log(e));
     }, [])
@@ -25,7 +29,7 @@ function App() {
         <>
             <AppHeader />
             <main className={styles.main}>
-                <AvalaibleIngredientsContext.Provider value={avalaibleIngredientsState}>
+                <AvalaibleIngredientsContext.Provider value={avalaibleIngredients}>
                     <SelectedIngredientsContext.Provider value={selectedIngredientsState}>
                         <OrdersContext.Provider value={ordersState}>
                             <BurgerIngredients />

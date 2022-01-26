@@ -25,12 +25,20 @@ const BurgerConstructor = () => {
                 'Content-Type': 'application/json'
             },
         })
-            .then(res => { return res.json() })
+            .then(res => {
+                if (res.ok) {
+                    return res.json();
+                }
+                return Promise.reject(res.status);
+            })
             .then(res => {
                 if (res.success) {
                     setOrders([...orders, { name: res.name, number: res.order.number }]);
                     setShowModal(true);
                     setSelectedIngredients([]);
+                }
+                else {
+                    Promise.reject(res.message)
                 }
             })
             .catch(e => console.log(e));
