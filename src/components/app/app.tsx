@@ -29,14 +29,14 @@ function App() {
         <>
             <AppHeader />
             <main className={styles.main}>
-                <AvalaibleIngredientsContext.Provider value={avalaibleIngredients}>
-                    <SelectedIngredientsContext.Provider value={selectedIngredientsState}>
-                        <OrdersContext.Provider value={ordersState}>
-                            <BurgerIngredients />
-                            <BurgerConstructor />
-                        </OrdersContext.Provider>
-                    </SelectedIngredientsContext.Provider>
-                </AvalaibleIngredientsContext.Provider>
+                <SelectedIngredientsContext.Provider value={selectedIngredientsState}>
+                    <AvalaibleIngredientsContext.Provider value={avalaibleIngredients}>
+                        <BurgerIngredients />
+                    </AvalaibleIngredientsContext.Provider>
+                    <OrdersContext.Provider value={ordersState}>
+                        <BurgerConstructor />
+                    </OrdersContext.Provider>
+                </SelectedIngredientsContext.Provider>
                 <div id="modals" />
             </main>
         </>
