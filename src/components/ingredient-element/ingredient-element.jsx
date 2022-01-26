@@ -23,10 +23,14 @@ const IngredientElement = ({ ingredient }) => {
     function handleClick(e) {
         if (ingredient.type === 'bun') {
             if (selectedIngredients.filter((elem) => elem.type === 'bun').length === 0) {
-                setSelectedIngredients([...selectedIngredients, { ...ingredient, _uid: uid() }]);
+                setSelectedIngredients([...selectedIngredients,
+                { ...ingredient, _uid: uid() },
+                { ...ingredient, _uid: uid() }]);
             }
             else {
-                setSelectedIngredients([...selectedIngredients.filter((elem) => elem.type !== 'bun'), { ...ingredient, _uid: uid() }]);
+                setSelectedIngredients([...selectedIngredients.filter((elem) => elem.type !== 'bun'),
+                { ...ingredient, _uid: uid() },
+                { ...ingredient, _uid: uid() }]);
             }
         }
         else {

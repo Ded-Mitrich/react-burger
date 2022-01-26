@@ -16,7 +16,7 @@
     composes: mr-4 mb-10 from "@ya.praktikum/react-developer-burger-ui-components/dist/ui/box.css";
     display: flex;
     justify-content: right;
-    align-items:end;
+    align-items: end;
 }
 
 .price {
@@ -30,7 +30,7 @@
     flex: 50%;
     display: grid;
     justify-content: left;
-    flex-direction:column;
+    flex-direction: column;
 }
 
 .scroll {

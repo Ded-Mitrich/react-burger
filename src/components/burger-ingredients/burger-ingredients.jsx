@@ -2,8 +2,6 @@ import React, { useContext } from 'react';
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components'
 import styles from './burger-ingredients.module.css';
 import IngredientElement from '../ingredient-element/ingredient-element';
-import PropTypes from 'prop-types';
-import burgerIngredientPropType from '../../utils/types'
 import { AvalaibleIngredientsContext } from '../../services/ingredients-context';
 
 const BurgerIngredients = () => {

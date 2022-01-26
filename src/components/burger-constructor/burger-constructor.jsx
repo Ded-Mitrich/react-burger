@@ -1,8 +1,6 @@
 import React, { useContext } from 'react';
 import styles from './burger-constructor.module.css';
 import { ConstructorElement, CurrencyIcon, DragIcon, Button } from '@ya.praktikum/react-developer-burger-ui-components';
-import PropTypes from 'prop-types';
-import burgerIngredientPropType from '../../utils/types';
 import Modal from '../modal/modal';
 import OrderDetails from '../order-details/order-details';
 import { SelectedIngredientsContext } from '../../services/ingredients-context';
@@ -39,7 +37,7 @@ const BurgerConstructor = () => {
     }
 
     const elementLayout = (elem, type, isLocked) => {
-        return (elem && <span key={elem._uid + type} className={styles.element_holder}>
+        return (elem && <span key={elem._uid} className={styles.element_holder}>
             {!isLocked
                 ? <span className="mr-2"><DragIcon /></span>
                 : <span className="ml-8" />}
@@ -70,7 +68,7 @@ const BurgerConstructor = () => {
                         .map((elem) => (elementLayout(elem, '', false)
                         ))}
                 </div>
-                {elementLayout(selectedIngredients.filter((elem) => elem.type === 'bun')[0], 'bottom', true)}
+                {elementLayout(selectedIngredients.filter((elem) => elem.type === 'bun')[1], 'bottom', true)}
             </div>
             <span className={styles.make_order}>
                 <div className={'text text_type_digits-medium mr-10 mb-4 ' + styles.price}>
