@@ -1,12 +1,14 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import styles from './order-details.module.css';
 import confirmImg from '../../images/Confirm.svg';
+import { OrdersContext } from '../../services/orders-context';
 
 const OrderDetails = () => {
+    const [orders, setOrders] = useContext(OrdersContext);
     return (
         <>
             <div className={"mt-10 mr-25 ml-25 text text_type_digits-large " + styles.order_number}>
-                034536
+                {orders[orders.length - 1].number}
             </div>
             <div className="mt-8 text text_type_main-default">
                 идентификатор заказа

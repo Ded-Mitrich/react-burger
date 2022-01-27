@@ -1,11 +1,12 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components'
 import styles from './burger-ingredients.module.css';
 import IngredientElement from '../ingredient-element/ingredient-element';
-import PropTypes from 'prop-types';
-import burgerIngredientPropType from '../../utils/types'
+import { AvalaibleIngredientsContext } from '../../services/ingredients-context';
 
-const BurgerIngredients = ({ ingredients }) => {
+const BurgerIngredients = () => {
+
+    const avalaibleIngredients = useContext(AvalaibleIngredientsContext);
     const buns = React.useRef(null);
     const souces = React.useRef(null);
     const main = React.useRef(null);
@@ -17,7 +18,7 @@ const BurgerIngredients = ({ ingredients }) => {
     };
 
     const ingredientGroup = (type) => {
-        const src = ingredients.filter(ingredient => ingredient.type === type);
+        const src = avalaibleIngredients.filter(ingredient => ingredient.type === type);
         return (
             <div className={styles.ingredients_container}>
                 {
@@ -64,10 +65,6 @@ const BurgerIngredients = ({ ingredients }) => {
         </section >
     );
 }
-
-BurgerIngredients.propTypes = {
-    ingredients: PropTypes.arrayOf(burgerIngredientPropType).isRequired
-};
 
 export default BurgerIngredients
 
