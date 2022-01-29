@@ -1,58 +1,63 @@
-﻿import React, { useContext } from 'react';
+﻿import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { CurrencyIcon, Counter } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './ingredient-element.module.css';
-import burgerIngredientPropType from '../../utils/types'
+import burgerIngredientPropType, { BUN_TYPE, FILAMENT_TYPE } from '../../utils/types'
 import Modal from '../modal/modal';
 import IngredientDetails from '../ingredient-details/ingredient-details';
-import { SelectedIngredientsContext } from '../../services/ingredients-context';
+import { useDrag } from 'react-dnd';
+import { SHOW_INGREDIENT_DETAILS, CLOSE_INGREDIENT_DETAILS, } from '../../services/actions';
 
 const IngredientElement = ({ ingredient }) => {
-    const [showModal, setShowModal] = React.useState(false);
-    const [selectedIngredients, setSelectedIngredients] = useContext(SelectedIngredientsContext);
+    const selectedIngredients = useSelector(store => store.ingredients.selected);
+    const { ingredientDetails } = useSelector(store => store.ingredients);
+    const dispatch = useDispatch();
+
+    const [, drag] = useDrag({
+        type: ingredient.type === 'bun' ? BUN_TYPE : FILAMENT_TYPE,
+        item: {
+            id: ingredient._id,
+            type: ingredient.type
+        },
+        collect: monitor => ({
+            isDrag: monitor.isDragging()
+        })
+    });
 
     const modal = (
-        <Modal header='Детали ингредиента' onClose={() => setShowModal(false)}>
+        <Modal header='Детали ингредиента' onClose={() => closeDetails()}>
             <IngredientDetails ingredient={ingredient} />
         </Modal>
     );
 
-    const uid = function () {
-        return Date.now().toString(36) + Math.random().toString(36).substr(2);
+    function showDetails(id) {
+        dispatch({
+            type: SHOW_INGREDIENT_DETAILS,
+            id,
+        })
+    }
+
+    function closeDetails() {
+        dispatch({
+            type: CLOSE_INGREDIENT_DETAILS,
+        })
     }
 
     function handleClick(e) {
-        if (ingredient.type === 'bun') {
-            if (selectedIngredients.filter((elem) => elem.type === 'bun').length === 0) {
-                setSelectedIngredients([...selectedIngredients,
-                { ...ingredient, _uid: uid() },
-                { ...ingredient, _uid: uid() }]);
-            }
-            else {
-                setSelectedIngredients([...selectedIngredients.filter((elem) => elem.type !== 'bun'),
-                { ...ingredient, _uid: uid() },
-                { ...ingredient, _uid: uid() }]);
-            }
-        }
-        else {
-            setSelectedIngredients([...selectedIngredients, { ...ingredient, _uid: uid(), }]);
-        }
-    }
-
-    function handleContextMenu(e) {
         e.preventDefault();
-        setShowModal(true);
+        showDetails(ingredient._id);
     }
 
     return (
-        <div className={styles.ingredient_container}>
-            <img className={styles.ingredient_image} src={ingredient.image} alt={ingredient.name} onClick={handleClick} onContextMenu={handleContextMenu} />
+        <div ref={drag} className={styles.ingredient_container}>
+            <img className={styles.ingredient_image} src={ingredient.image} alt={ingredient.name} onClick={handleClick} />
             <Counter count={selectedIngredients.filter((elem) => elem._id === ingredient._id).length} size="default" />
             <span className={'mt-1 text text_type_digits-default ' + styles.price}>
                 <span style={{ marginRight: 9 }} >{ingredient.price}</span>
                 <CurrencyIcon type="primary" />
             </span>
             <span className={'mt-1 text text_type_main-default ' + styles.ingredient_text}>{ingredient.name}</span>
-            {showModal && modal}
+            {ingredientDetails && modal}
         </div>
     );
 };

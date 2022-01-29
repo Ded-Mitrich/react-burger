@@ -15,4 +15,8 @@ const burgerIngredientPropType = PropTypes.shape({
     __v: PropTypes.number,
 });
 
-export default burgerIngredientPropType
+export default burgerIngredientPropType;
+
+export const FILAMENT_TYPE = 'FILAMENT';
+export const BUN_TYPE = 'BUN';
+export const REORDER_INGREDIENT_TYPE = 'REORDER_INGREDIENT_TYPE';

@@ -1,16 +1,16 @@
-import React, { useContext } from 'react';
+import React, { useState, useRef } from 'react';
+import { useSelector } from 'react-redux';
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components'
 import styles from './burger-ingredients.module.css';
 import IngredientElement from '../ingredient-element/ingredient-element';
-import { AvalaibleIngredientsContext } from '../../services/ingredients-context';
+
 
 const BurgerIngredients = () => {
-
-    const avalaibleIngredients = useContext(AvalaibleIngredientsContext);
-    const buns = React.useRef(null);
-    const souces = React.useRef(null);
-    const main = React.useRef(null);
-    const [current, setCurrent] = React.useState({ type: 'Булки', scrollTo: buns });
+    const avalaibleIngredients = useSelector(store => store.ingredients.avalaible);
+    const buns = useRef(null);
+    const souces = useRef(null);
+    const main = useRef(null);
+    const [current, setCurrent] = useState({ type: 'Булки', scrollTo: buns });
 
     const onTabClick = (value) => {
         setCurrent(value);

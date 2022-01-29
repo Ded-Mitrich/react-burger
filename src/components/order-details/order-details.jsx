@@ -1,14 +1,15 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import styles from './order-details.module.css';
 import confirmImg from '../../images/Confirm.svg';
-import { OrdersContext } from '../../services/orders-context';
+import { useSelector } from 'react-redux';
 
 const OrderDetails = () => {
-    const [orders, setOrders] = useContext(OrdersContext);
-    return (
+    const { currentItem } = useSelector(store => store.orders);
+
+    const content = (
         <>
             <div className={"mt-10 mr-25 ml-25 text text_type_digits-large " + styles.order_number}>
-                {orders[orders.length - 1].number}
+                {currentItem.number}
             </div>
             <div className="mt-8 text text_type_main-default">
                 идентификатор заказа
@@ -20,8 +21,14 @@ const OrderDetails = () => {
             <div className="mt-2 mb-30 text text_type_main-small text_color_inactive">
                 Дождитесь готовности на орбитальной станции
             </div>
+        </>);
+
+    return (
+        <>
+            {currentItem && content}
         </>
     )
+
 }
 
 export default OrderDetails

@@ -1,26 +1,88 @@
-import React, { useContext } from 'react';
+import React, { useCallback } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import styles from './burger-constructor.module.css';
-import { ConstructorElement, CurrencyIcon, DragIcon, Button } from '@ya.praktikum/react-developer-burger-ui-components';
+import { CurrencyIcon, Button, ConstructorElement } from '@ya.praktikum/react-developer-burger-ui-components';
 import Modal from '../modal/modal';
 import OrderDetails from '../order-details/order-details';
-import { SelectedIngredientsContext } from '../../services/ingredients-context';
-import { OrdersContext } from '../../services/orders-context';
+import {
+    MAKE_ORDER_SUCCESSFUL,
+    MAKE_ORDER_FAILURE,
+    CLEAR_INGREDIENTS,
+    CLOSE_ORDER_MODAL,
+    REPLACE_INGREDIENT,
+    SET_BUNS,
+    addIngredient
+} from '../../services/actions';
+import { BUN_TYPE, FILAMENT_TYPE } from '../../utils/types';
+import { useDrop } from 'react-dnd';
+import { v4 as uuidv4 } from 'uuid';
+import { ConstructorElementLayout } from './constructor-element-layout';
 
 const makeOrderUrl = 'https://norma.nomoreparties.space/api/orders';
 
 const BurgerConstructor = () => {
-    const [selectedIngredients, setSelectedIngredients] = useContext(SelectedIngredientsContext);
-    const [orders, setOrders] = useContext(OrdersContext);
-    const [showModal, setShowModal] = React.useState(false);
+    const dispatch = useDispatch();
+    const selectedIngredients = useSelector(store => store.ingredients.selected);
+    const selectedBuns = useSelector(store => store.ingredients.buns);
+    const currentOrder = useSelector(store => store.orders.currentItem);
 
-    function deleteIngredient(uid) {
-        setSelectedIngredients(selectedIngredients.filter((e) => e._uid !== uid));
+    const [{ canDropFilament }, drop] = useDrop({
+        accept: FILAMENT_TYPE,
+        collect: monitor => ({
+            canDropFilament: monitor.canDrop(),
+        }),
+        drop(item) {
+            dispatch(addIngredient(item.id, uuidv4()));
+        },
+    });
+
+    const [{ canDropBuns }, dropBuns] = useDrop({
+        accept: BUN_TYPE,
+        collect: monitor => ({
+            canDropBuns: monitor.canDrop(),
+        }),
+        drop(item) {
+            setBuns(item.id);
+        },
+    });
+
+    function clearConstructor() {
+        dispatch({
+            type: CLEAR_INGREDIENTS,
+        })
+    }
+
+    function closeModal() {
+        dispatch({
+            type: CLOSE_ORDER_MODAL,
+        })
+    }
+
+    function addOrder(item) {
+        dispatch({
+            type: MAKE_ORDER_SUCCESSFUL,
+            item
+        })
+    }
+
+    function setBuns(id) {
+        dispatch({
+            type: SET_BUNS,
+            id
+        })
+    }
+
+    function makeOrderFailure(errorMessage) {
+        dispatch({
+            type: MAKE_ORDER_FAILURE,
+            errorMessage
+        })
     }
 
     function makeOrder(e) {
         fetch(makeOrderUrl, {
             method: 'POST',
-            body: JSON.stringify({ ingredients: selectedIngredients.map((elem) => elem._id) }),
+            body: JSON.stringify({ ingredients: selectedBuns.concat(selectedIngredients).map((elem) => elem._id) }),
             headers: {
                 'Content-Type': 'application/json'
             },
@@ -29,54 +91,66 @@ const BurgerConstructor = () => {
                 if (res.ok) {
                     return res.json();
                 }
+                makeOrderFailure(res.statusText);
                 return Promise.reject(res.status);
             })
             .then(res => {
                 if (res.success) {
-                    setOrders([...orders, { name: res.name, number: res.order.number }]);
-                    setShowModal(true);
-                    setSelectedIngredients([]);
+                    addOrder({ name: res.name, number: res.order.number });
+                    clearConstructor();
                 }
                 else {
+                    makeOrderFailure(res.message);
                     Promise.reject(res.message)
                 }
             })
             .catch(e => console.log(e));
     }
 
-    const elementLayout = (elem, type, isLocked) => {
-        return (elem && <span key={elem._uid} className={styles.element_holder}>
-            {!isLocked
-                ? <span className="mr-2"><DragIcon /></span>
-                : <span className="ml-8" />}
+    const moveLayout = useCallback((dragIndex, hoverIndex) => {
+        dispatch({
+            type: REPLACE_INGREDIENT,
+            dragIndex,
+            hoverIndex
+        })
+    }, [selectedIngredients]);
+
+    function elementLayout(elem, index) {
+        return (elem && <div key={elem._uid} >
+            <ConstructorElementLayout elem={elem} index={index} moveLayout={moveLayout} />
+        </div>)
+    }
+
+    const bunLayout = (elem, type) => {
+        return (elem && <span className={styles.element_holder} >
+            <span className="ml-8" />
             <ConstructorElement
                 type={type}
-                isLocked={isLocked}
+                isLocked={true}
                 text={elem.name + (type === 'top' ? ' (верх)' : type === 'bottom' ? ' (низ)' : '')}
                 price={elem.price}
                 thumbnail={elem.image}
-                handleClose={() => deleteIngredient(elem._uid)}
             />
         </span>)
-    }
+    };
 
     const modal = (
-        <Modal header='' onClose={() => setShowModal(false)}>
+        <Modal header='' onClose={() => closeModal()}>
             <OrderDetails />
         </Modal>
     );
 
     return (
         <section className={styles.main_holder}>
-            <div className={styles.elements_container}>
-                {elementLayout(selectedIngredients.filter((elem) => elem.type === 'bun')[0], 'top', true)}
-                <div className={styles.scroll}>
+            <div ref={dropBuns} className={canDropBuns ? styles.highlight_border_buns : styles.elements_container}>
+                {bunLayout(selectedBuns[0], 'top')}
+                <div ref={drop} className={canDropFilament ? styles.highlight_border_filament : styles.scroll}>
                     {selectedIngredients
                         .filter((elem) => elem.type !== 'bun')
-                        .map((elem) => (elementLayout(elem, '', false)
+                        .map((elem, index) => (elementLayout(elem, index)
                         ))}
                 </div>
-                {elementLayout(selectedIngredients.filter((elem) => elem.type === 'bun')[1], 'bottom', true)}
+                {bunLayout(selectedBuns[1], 'bottom')}
             </div>
             <span className={styles.make_order}>
                 <div className={'text text_type_digits-medium mr-10 mb-4 ' + styles.price}>
@@ -85,7 +159,7 @@ const BurgerConstructor = () => {
                 </div>
                 <Button type="primary" size="large" onClick={makeOrder}>Оформить заказ</Button>
             </span>
-            {showModal && modal}
+            {currentOrder && modal}
         </section>
     );
 }

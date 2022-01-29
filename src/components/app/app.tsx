@@ -1,18 +1,24 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import styles from './app.module.css';
 import AppHeader from '../app-header/app-header';
 import BurgerIngredients from '../burger-ingredients/burger-ingredients';
 import BurgerConstructor from '../burger-constructor/burger-constructor';
-import { AvalaibleIngredientsContext } from '../../services/ingredients-context';
-import { SelectedIngredientsContext } from '../../services/ingredients-context';
-import { OrdersContext } from '../../services/orders-context';
+import { useDispatch } from 'react-redux';
+import { SET_AVALAIBLE_INGREDIENTS } from '../../services/actions';
+import { DndProvider } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
 
 const url = 'https://norma.nomoreparties.space/api/ingredients';
 
 function App() {
-    const [avalaibleIngredients, setAvalaibleIngredients] = useState([]);
-    const selectedIngredientsState = useState([]);
-    const ordersState = useState([]);
+    const dispatch = useDispatch();
+
+    const setAvalaibleIngredients = (items: object[]) => {
+        dispatch({
+            type: SET_AVALAIBLE_INGREDIENTS,
+            items
+        })
+    };
 
     useEffect(() => {
         fetch(url, { method: 'GET' })
@@ -25,18 +31,15 @@ function App() {
             .then(res => setAvalaibleIngredients(res.data))
             .catch(e => console.log(e));
     }, [])
+
     return (
         <>
             <AppHeader />
             <main className={styles.main}>
-                <SelectedIngredientsContext.Provider value={selectedIngredientsState}>
-                    <AvalaibleIngredientsContext.Provider value={avalaibleIngredients}>
-                        <BurgerIngredients />
-                    </AvalaibleIngredientsContext.Provider>
-                    <OrdersContext.Provider value={ordersState}>
-                        <BurgerConstructor />
-                    </OrdersContext.Provider>
-                </SelectedIngredientsContext.Provider>
+                <DndProvider backend={HTML5Backend}>
+                    <BurgerIngredients />
+                    <BurgerConstructor />
+                </DndProvider>
                 <div id="modals" />
             </main>
         </>
