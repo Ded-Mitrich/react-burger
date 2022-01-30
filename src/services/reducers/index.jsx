@@ -11,7 +11,7 @@ import {
     CLOSE_INGREDIENT_DETAILS,
     REPLACE_INGREDIENT,
     SET_BUNS
-} from '../actions';
+} from '../actions/action-creators';
 import update from 'immutability-helper';
 
 const ingredientsInitialState = {
@@ -136,7 +136,6 @@ export const ordersReducer = (state = ordersInitialState, action) => {
         }
     }
 }
-
 
 export const rootReducer = combineReducers({
     ingredients: ingredientsReducer,

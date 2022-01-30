@@ -1,34 +1,64 @@
-export const SET_AVALAIBLE_INGREDIENTS = 'SET_AVALAIBLE_INGREDIENTS';
-export const ADD_INGREDIENT = 'ADD_INGREDIENT';
-export const DELETE_INGREDIENT = 'DELETE_INGREDIENT';
-export const MAKE_ORDER_SUCCESSFUL = 'MAKE_ORDER_SUCCESSFUL';
-export const MAKE_ORDER_FAILURE = 'MAKE_ORDER_FAILURE';
-export const CLEAR_INGREDIENTS = 'CLEAR_INGREDIENTS';
-export const CLOSE_ORDER_MODAL = 'CLOSE_ORDER_MODAL';
-export const SHOW_INGREDIENT_DETAILS = 'SHOW_INGREDIENT_DETAILS';
-export const CLOSE_INGREDIENT_DETAILS = 'CLOSE_INGREDIENT_DETAILS';
-export const REPLACE_INGREDIENT = 'REPLACE_INGREDIENT';
-export const SET_BUNS = 'SET_BUNS';
+import {
+    avalaibleIngredientsRequest,
+    clearIngredients,
+    makeOrderFailure,
+    sendOrderRequest,
+    sendOrderSuccessful,
+    setAvalaibleIngredients,
+    setAvalaibleIngredientsFailed
+} from "./action-creators";
+
+const apiBaseUrl = 'https://norma.nomoreparties.space/api';
 
 
-export function deleteIngredient(uid) {
-    return function (dispatch) {
-        dispatch({
-            type: DELETE_INGREDIENT,
-            id: uid
-        })
-    };
+function checkResponse(res) {
+    if (res.ok) {
+        return res;
+    }
+    return Promise.reject(res.status);
 }
 
-export function addIngredient(id, uid) {
+export function getAvalaibleIngredients() {
     return function (dispatch) {
-        dispatch({
-            type: ADD_INGREDIENT,
-            id: id,
-            uid: uid
-        })
-    };
+        dispatch(avalaibleIngredientsRequest());
+        fetch(apiBaseUrl + '/ingredients', { method: 'GET' })
+            .then(res => checkResponse(res))
+            .then(res => res.json())
+            .then(res => {
+                dispatch(setAvalaibleIngredients(res.data))
+            }).catch(err => {
+                dispatch(setAvalaibleIngredientsFailed(err))
+            })
+    }
 }
+
+export function sendOrder(items) {
+    return function (dispatch) {
+        dispatch(sendOrderRequest());
+        fetch(apiBaseUrl + '/orders', {
+            method: 'POST',
+            body: JSON.stringify({ ingredients: items.map((elem) => elem._id) }),
+            headers: {
+                'Content-Type': 'application/json'
+            },
+        })
+            .then(res => checkResponse(res))
+            .then(res => res.json())
+            .then(res => {
+                if (res.success) {
+                    dispatch(sendOrderSuccessful({ name: res.name, number: res.order.number }));
+                    dispatch(clearIngredients());
+                }
+                else {
+                    dispatch(makeOrderFailure(res.message));
+                }
+            }).catch(err => {
+                dispatch(makeOrderFailure(err.message));
+            })
+    }
+}
+
+
 
 
 

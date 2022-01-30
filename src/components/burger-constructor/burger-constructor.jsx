@@ -5,20 +5,17 @@ import { CurrencyIcon, Button, ConstructorElement } from '@ya.praktikum/react-de
 import Modal from '../modal/modal';
 import OrderDetails from '../order-details/order-details';
 import {
-    MAKE_ORDER_SUCCESSFUL,
-    MAKE_ORDER_FAILURE,
-    CLEAR_INGREDIENTS,
-    CLOSE_ORDER_MODAL,
-    REPLACE_INGREDIENT,
-    SET_BUNS,
-    addIngredient
-} from '../../services/actions';
+    addIngredient,
+    setBuns,
+    replaceIngredient,
+    closeOrderModal,
+} from '../../services/actions/action-creators';
 import { BUN_TYPE, FILAMENT_TYPE } from '../../utils/types';
 import { useDrop } from 'react-dnd';
 import { v4 as uuidv4 } from 'uuid';
 import { ConstructorElementLayout } from './constructor-element-layout';
+import { sendOrder } from '../../services/actions';
 
-const makeOrderUrl = 'https://norma.nomoreparties.space/api/orders';
 
 const BurgerConstructor = () => {
     const dispatch = useDispatch();
@@ -42,77 +39,13 @@ const BurgerConstructor = () => {
             canDropBuns: monitor.canDrop(),
         }),
         drop(item) {
-            setBuns(item.id);
+            dispatch(setBuns(item.id));
         },
     });
 
-    function clearConstructor() {
-        dispatch({
-            type: CLEAR_INGREDIENTS,
-        })
-    }
-
-    function closeModal() {
-        dispatch({
-            type: CLOSE_ORDER_MODAL,
-        })
-    }
-
-    function addOrder(item) {
-        dispatch({
-            type: MAKE_ORDER_SUCCESSFUL,
-            item
-        })
-    }
-
-    function setBuns(id) {
-        dispatch({
-            type: SET_BUNS,
-            id
-        })
-    }
-
-    function makeOrderFailure(errorMessage) {
-        dispatch({
-            type: MAKE_ORDER_FAILURE,
-            errorMessage
-        })
-    }
-
-    function makeOrder(e) {
-        fetch(makeOrderUrl, {
-            method: 'POST',
-            body: JSON.stringify({ ingredients: selectedBuns.concat(selectedIngredients).map((elem) => elem._id) }),
-            headers: {
-                'Content-Type': 'application/json'
-            },
-        })
-            .then(res => {
-                if (res.ok) {
-                    return res.json();
-                }
-                makeOrderFailure(res.statusText);
-                return Promise.reject(res.status);
-            })
-            .then(res => {
-                if (res.success) {
-                    addOrder({ name: res.name, number: res.order.number });
-                    clearConstructor();
-                }
-                else {
-                    makeOrderFailure(res.message);
-                    Promise.reject(res.message)
-                }
-            })
-            .catch(e => console.log(e));
-    }
 
     const moveLayout = useCallback((dragIndex, hoverIndex) => {
-        dispatch({
-            type: REPLACE_INGREDIENT,
-            dragIndex,
-            hoverIndex
-        })
+        dispatch(replaceIngredient(dragIndex, hoverIndex))
     }, [selectedIngredients]);
 
     function elementLayout(elem, index) {
@@ -135,7 +68,7 @@ const BurgerConstructor = () => {
     };
 
     const modal = (
-        <Modal header='' onClose={() => closeModal()}>
+        <Modal header='' onClose={() => dispatch(closeOrderModal())}>
             <OrderDetails />
         </Modal>
     );
@@ -157,7 +90,7 @@ const BurgerConstructor = () => {
                     <span className="mr-2">{selectedIngredients.reduce((sm, a) => sm + a.price, 0)}</span>
                     <CurrencyIcon type="primary" />
                 </div>
-                <Button type="primary" size="large" onClick={makeOrder}>Оформить заказ</Button>
+                <Button disabled={selectedBuns.length === 0} type="primary" size="large" onClick={() => dispatch(sendOrder(selectedBuns.concat(selectedIngredients)))}>Оформить заказ</Button>
             </span>
             {currentOrder && modal}
         </section>
