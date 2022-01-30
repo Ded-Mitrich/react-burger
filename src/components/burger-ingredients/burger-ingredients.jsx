@@ -4,6 +4,7 @@ import { Tab } from '@ya.praktikum/react-developer-burger-ui-components'
 import styles from './burger-ingredients.module.css';
 import IngredientElement from '../ingredient-element/ingredient-element';
 
+const topConstantContent = 284;
 
 const BurgerIngredients = () => {
     const avalaibleIngredients = useSelector(store => store.ingredients.avalaible);
@@ -16,6 +17,22 @@ const BurgerIngredients = () => {
         setCurrent(value);
         value.scrollTo.current.scrollIntoView({ behavior: "smooth" });
     };
+
+    const onScrollHandler = (e) => {
+        const bunsTop = Math.abs(buns.current.getBoundingClientRect().top - topConstantContent);
+        const soucesTop = Math.abs(souces.current.getBoundingClientRect().top - topConstantContent);
+        const mainTop = Math.abs(main.current.getBoundingClientRect().top - topConstantContent);
+        const min = Math.min(bunsTop, soucesTop, mainTop);
+        if (bunsTop === min) {
+            setCurrent({ type: 'Булки', scrollTo: buns });
+        }
+        else if (mainTop === min) {
+            setCurrent({ type: 'Начинки', scrollTo: main });
+        }
+        else if (soucesTop === min) {
+            setCurrent({ type: 'Соусы', scrollTo: souces });
+        }
+    }
 
     const ingredientGroup = (type) => {
         const src = avalaibleIngredients.filter(ingredient => ingredient.type === type);
@@ -47,7 +64,7 @@ const BurgerIngredients = () => {
                         Начинки
                     </Tab>
                 </div>
-                <div className={styles.scroll}>
+                <div className={styles.scroll} onScroll={onScrollHandler}>
                     <div ref={buns} className="mt-10 mb-6 text text_type_main-medium">
                         Булки
                         {ingredientGroup('bun')}
