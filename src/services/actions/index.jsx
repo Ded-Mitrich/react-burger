@@ -22,7 +22,7 @@ export function getAvalaibleIngredients() {
     return function (dispatch) {
         dispatch(avalaibleIngredientsRequest());
         fetch(apiBaseUrl + '/ingredients', { method: 'GET' })
-            .then(res => checkResponse(res))
+            .then(checkResponse)
             .then(res => res.json())
             .then(res => {
                 dispatch(setAvalaibleIngredients(res.data))
@@ -42,7 +42,7 @@ export function sendOrder(items) {
                 'Content-Type': 'application/json'
             },
         })
-            .then(res => checkResponse(res))
+            .then(checkResponse)
             .then(res => res.json())
             .then(res => {
                 if (res.success) {
