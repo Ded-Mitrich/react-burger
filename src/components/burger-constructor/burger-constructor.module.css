@@ -35,6 +35,20 @@
 
 .scroll {
     composes: custom-scroll from "@ya.praktikum/react-developer-burger-ui-components/dist/ui/common.css";
-    max-height: calc(100vh - 554px);
+    height: calc(100vh - 554px);
     overflow: auto;
+}
+
+.highlight_border_filament {
+    composes: scroll;
+    border: 2px solid rgba(76, 76, 255, 1);
+    box-sizing: border-box;
+    border-radius: 20px;
+}
+
+.highlight_border_buns {
+    composes: elements_container;
+    border: 2px solid rgba(76, 76, 255, 1);
+    box-sizing: border-box;
+    border-radius: 20px;
 }
