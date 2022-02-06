@@ -1,9 +1,6 @@
-import React from 'react';
 import styles from './ingredient-details.module.css';
-import { useSelector } from 'react-redux';
 
-const IngredientDetails = () => {
-    const ingredient = useSelector(store => store.ingredients.ingredientDetails);
+const IngredientDetails = ({ ingredient}) => {
     return (
         <>
             <img src={ingredient.image_large} style={{ maxHeight: 240, objectFit: 'contain' }} />
