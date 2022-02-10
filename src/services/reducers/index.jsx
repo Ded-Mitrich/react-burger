@@ -10,7 +10,13 @@ import {
     SHOW_INGREDIENT_DETAILS,
     CLOSE_INGREDIENT_DETAILS,
     REPLACE_INGREDIENT,
-    SET_BUNS
+    SET_BUNS,
+    SET_USER,
+    LOGIN_SUCCESSFUL,
+    RESET_PASSWORD_SUCCESSFUL,
+    RESET_PASSWORD_FAILED,
+    FORGOT_PASSWORD_FAILED,
+    FORGOT_PASSWORD_SUCCESSFUL
 } from '../actions/action-creators';
 import update from 'immutability-helper';
 
@@ -25,6 +31,11 @@ const ordersInitialState = {
     items: [],
     errorMessage: null,
     currentItem: null
+};
+
+const authInitialState = {
+    user: null,
+    resetPassword : false
 };
 
 export const ingredientsReducer = (state = ingredientsInitialState, action) => {
@@ -137,7 +148,52 @@ export const ordersReducer = (state = ordersInitialState, action) => {
     }
 }
 
+export const authReducer = (state = authInitialState, action) => {
+    switch (action.type) {
+
+        case FORGOT_PASSWORD_FAILED: {
+            return {
+                ...state,
+                resetPassword: false,
+            };
+        }
+
+        case FORGOT_PASSWORD_SUCCESSFUL: {
+            return {
+                ...state,
+                resetPassword: true,
+            };
+        }
+
+        case RESET_PASSWORD_SUCCESSFUL: {
+            return {
+                ...state,
+                resetPassword: false,
+            };
+        }
+
+        case RESET_PASSWORD_FAILED: {
+            return {
+                ...state,
+                resetPassword: false,
+            };
+        }
+
+        case SET_USER: {
+            return {
+                ...state,
+                user: action.user,
+            };
+        }
+
+        default: {
+            return state;
+        }
+    }
+}
+
 export const rootReducer = combineReducers({
     ingredients: ingredientsReducer,
-    orders: ordersReducer
+    orders: ordersReducer,
+    auth: authReducer
 }) 

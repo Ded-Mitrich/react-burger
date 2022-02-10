@@ -7,15 +7,18 @@ import RegisterPage from '../../pages/register-page';
 import ForgotPasswordPage from '../../pages/forgot-password-page';
 import ResetPasswordPage from '../../pages/reset-password-page';
 import ProfilePage from '../../pages/profile-page';
+import NotFound404Page from '../../pages/not-found-page';
 import IngredientInfoPage from '../../pages/ingredient-info-page';
 import { useDispatch } from 'react-redux';
 import { useEffect } from 'react';
-import { getAvalaibleIngredients } from '../../services/actions';
+import { getAvalaibleIngredients, getUser } from '../../services/actions';
+import { ProtectedRoute } from '../protected-route/protected-route';
 
 function App() {
     const dispatch = useDispatch();
 
     useEffect(() => {
+        dispatch(getUser());
         dispatch(getAvalaibleIngredients());
     }, [])
 
@@ -31,6 +34,9 @@ function App() {
                         <Route path="/login">
                             <LoginPage />
                         </Route>
+                        <Route path="/logout">
+                            <Redirect to="/login" />
+                        </Route>
                         <Route path="/register">
                             <RegisterPage />
                         </Route>
@@ -40,14 +46,17 @@ function App() {
                         <Route path="/reset-password">
                             <ResetPasswordPage />
                         </Route>
-                        <Route path="/profile">
+                        <ProtectedRoute path="/profile">
                             <ProfilePage />
-                        </Route>
+                        </ProtectedRoute>
                         <Route path="/constructor">
                             <BurgerConstructorPage />
                         </Route>
                         <Route path="/ingredient-info">
                             <IngredientInfoPage />
+                        </Route>
+                        <Route>
+                            <NotFound404Page />
                         </Route>
                     </Switch>
                 </main>
