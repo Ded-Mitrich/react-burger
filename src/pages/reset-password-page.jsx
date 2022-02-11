@@ -1,4 +1,4 @@
-import React, { useState, useCallback} from 'react';
+import { useState, useCallback } from 'react';
 import styles from './reset-password-page.module.css';
 import { PasswordInput, Input, Button } from '@ya.praktikum/react-developer-burger-ui-components';
 import { Link, Redirect, useHistory } from 'react-router-dom';

@@ -12,7 +12,6 @@ import {
     REPLACE_INGREDIENT,
     SET_BUNS,
     SET_USER,
-    LOGIN_SUCCESSFUL,
     RESET_PASSWORD_SUCCESSFUL,
     RESET_PASSWORD_FAILED,
     FORGOT_PASSWORD_FAILED,
@@ -24,7 +23,7 @@ const ingredientsInitialState = {
     avalaible: [],
     selected: [],
     buns: [],
-    ingredientDetails: null
+    ingredientDetails: false
 };
 
 const ordersInitialState = {
@@ -97,14 +96,14 @@ export const ingredientsReducer = (state = ingredientsInitialState, action) => {
         case SHOW_INGREDIENT_DETAILS: {
             return {
                 ...state,
-                ingredientDetails: state.avalaible.find((item) => item._id === action.id)
+                ingredientDetails: true
             };
         }
 
         case CLOSE_INGREDIENT_DETAILS: {
             return {
                 ...state,
-                ingredientDetails: null
+                ingredientDetails: false
             };
         }
 

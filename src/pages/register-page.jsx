@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import { useCallback, useState } from 'react';
 import styles from './register-page.module.css';
 import { EmailInput, PasswordInput, Button, Input } from '@ya.praktikum/react-developer-burger-ui-components';
 import { Link, Redirect, useHistory } from 'react-router-dom';
@@ -8,7 +8,7 @@ import { useDispatch, useSelector } from 'react-redux';
 const RegisterPage = () => {
 
     const auth = useSelector(store => store.auth);
-    const [form, setValue] = useState({ email: '', password: '', name:'' });
+    const [form, setValue] = useState({ email: '', password: '', name: '' });
     const history = useHistory();
     const dispatch = useDispatch();
 

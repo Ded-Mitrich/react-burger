@@ -12,11 +12,11 @@ function AppHeader() {
                 <div className={styles.holder_fill}>
                     <div className={styles.holder}>
                         <BurgerIcon />
-                        <Link to="/constructor" className={"text text_type_main-default " + styles.link}>Конструктор</Link>
+                        <Link to="/" className={"text text_type_main-default " + styles.link}>Конструктор</Link>
                     </div>
                     <div className={styles.holder}>
                         <ListIcon />
-                        <Link to="/ingredient-info" className={"text text_type_main-default " + styles.link}>Лента заказов</Link>
+                        <Link to="/orders" className={"text text_type_main-default " + styles.link}>Лента заказов</Link>
                     </div>
                 </div>
                 <span className={styles.logo}>

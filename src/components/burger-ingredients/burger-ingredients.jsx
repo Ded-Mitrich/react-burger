@@ -1,18 +1,13 @@
-import React, { useState, useRef } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useState, useRef } from 'react';
+import { useSelector } from 'react-redux';
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components'
 import styles from './burger-ingredients.module.css';
 import IngredientElement from '../ingredient-element/ingredient-element';
-import Modal from '../modal/modal';
-import IngredientDetails from '../ingredient-details/ingredient-details';
-import { closeIngredientDetails } from '../../services/actions/action-creators';
 
 const topConstantContent = 284;
 
 const BurgerIngredients = () => {
-    const dispatch = useDispatch();
     const avalaibleIngredients = useSelector(store => store.ingredients.avalaible);
-    const { ingredientDetails } = useSelector(store => store.ingredients);
     const buns = useRef(null);
     const souces = useRef(null);
     const main = useRef(null);
@@ -38,12 +33,6 @@ const BurgerIngredients = () => {
             setCurrent({ type: 'Соусы', scrollTo: souces });
         }
     }
-
-    const modal = (
-        <Modal header='Детали ингредиента' onClose={() => dispatch(closeIngredientDetails())}>
-            <IngredientDetails ingredient={ingredientDetails} />
-        </Modal>
-    );
 
     const ingredientGroup = (type) => {
         const src = avalaibleIngredients.filter(ingredient => ingredient.type === type);
@@ -89,7 +78,6 @@ const BurgerIngredients = () => {
                         {ingredientGroup('main')}
                     </div>
                 </div>
-                {ingredientDetails && modal}
             </div>
         </section >
     );

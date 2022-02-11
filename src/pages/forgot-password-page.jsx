@@ -7,7 +7,7 @@ import { useDispatch } from 'react-redux';
 
 const ForgotPasswordPage = () => {
 
-    const [form, setValue] = useState({ email: ''});
+    const [form, setValue] = useState({ email: '' });
     const dispatch = useDispatch();
     const onChange = e => {
         setValue({ ...form, [e.target.name]: e.target.value });
@@ -30,7 +30,7 @@ const ForgotPasswordPage = () => {
                 Восстановление пароля
             </h3>
             <div className="mt-6">
-                <EmailInput onChange={onChange} value={form.email} name={'email'}/>
+                <EmailInput onChange={onChange} value={form.email} name={'email'} />
             </div>
             <div className="mt-6">
                 <Button onClick={onClick} type="primary" size="medium">

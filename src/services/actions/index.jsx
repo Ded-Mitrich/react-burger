@@ -53,6 +53,64 @@ function setTokens(res) {
     }
 }
 
+function refreshTokens() {
+    const token = getCookie(refreshTokenCookieName);
+    if (token) {
+        fetch(apiBaseUrl + '/auth/token', {
+            method: 'POST',
+            mode: 'cors',
+            body: JSON.stringify({ token: token }),
+            cache: 'no-cache',
+            credentials: 'same-origin',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            redirect: 'follow',
+            referrerPolicy: 'no-referrer',
+        })
+            .then(checkResponse)
+            .then(res => res.json())
+            .then(res => {
+                if (res.success) {
+                    setTokens(res);
+                    return { accessToken: res.accessToken, refreshToken: res.refreshToken };
+                }
+                else {
+                    return null;
+                }
+            }).catch(err => {
+                console.log(err);
+                return null;
+            })
+    }
+    else return null;
+}
+
+const fetchWithRefresh = async (url, options) => {
+    const res = await fetch(url, options);
+
+    if (res.ok) {
+        return res.json();
+    }
+
+    const json = await res.json();
+
+    if (json.message === "jwt expired") {
+        const tokens = refreshTokens();
+
+        if (!tokens) {
+            return Promise.reject(res.status);
+        }
+
+        options.headers.Authorization = tokens.accessToken;
+
+        const res = await fetch(url, options);
+        return res.ok ? res.json() : Promise.reject(res.status);
+    } else {
+        return json;
+    }
+};
+
 export function login(form) {
     return function (dispatch) {
         dispatch(loginRequest());
@@ -153,7 +211,7 @@ export function getUser() {
         dispatch(getUserReguest());
         const authToken = getCookie(authTokenCookieName);
         if (authToken) {
-            fetch(apiBaseUrl + '/auth/user', {
+            fetchWithRefresh(apiBaseUrl + '/auth/user', {
                 method: 'GET',
                 mode: 'cors',
                 cache: 'no-cache',
@@ -165,8 +223,6 @@ export function getUser() {
                 redirect: 'follow',
                 referrerPolicy: 'no-referrer',
             })
-                .then(checkResponse)
-                .then(res => res.json())
                 .then(res => {
                     if (res.success) {
                         dispatch(setUser({ email: res.user.email, name: res.user.name }));
@@ -241,43 +297,12 @@ export function resetPassword(form) {
     }
 }
 
-export function refreshToken() {
-    return function (dispatch) {
-        dispatch(refreshTokenRequest());
-        const token = getCookie(refreshTokenCookieName);
-        fetch(apiBaseUrl + '/auth/token', {
-            method: 'POST',
-            body: JSON.stringify({ token: { token } }),
-            mode: 'cors',
-            cache: 'no-cache',
-            credentials: 'same-origin',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            redirect: 'follow',
-            referrerPolicy: 'no-referrer',
-        })
-            .then(checkResponse)
-            .then(res => res.json())
-            .then(res => {
-                if (res.success) {
-                    setTokens(res);
-                    dispatch(setUser({ email: res.user.email, name: res.user.name }));
-                }
-                else {
-                    dispatch(refreshTokenFailed(res.message));
-                }
-            }).catch(err => {
-                dispatch(refreshTokenFailed(err.message));
-            })
-    }
-}
 
 export function updateUser(form) {
     return function (dispatch) {
         dispatch(updateUserRequest());
         const authToken = getCookie(authTokenCookieName);
-        fetch(apiBaseUrl + '/auth/user', {
+        fetchWithRefresh(apiBaseUrl + '/auth/user', {
             method: 'PATCH',
             body: JSON.stringify(form),
             mode: 'cors',
@@ -290,8 +315,6 @@ export function updateUser(form) {
             redirect: 'follow',
             referrerPolicy: 'no-referrer',
         })
-            .then(checkResponse)
-            .then(res => res.json())
             .then(res => {
                 if (res.success) {
                     dispatch(setUser({ email: res.user.email, name: res.user.name }));
