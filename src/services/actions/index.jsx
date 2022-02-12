@@ -7,23 +7,11 @@ import {
     sendOrderSuccessful,
     setAvalaibleIngredients,
     setAvalaibleIngredientsFailed,
-    loginRequest,
-    logoutRequest,
-    registerRequest,
-    refreshTokenRequest,
-    refreshTokenFailed,
-    logoutFailed,
-    registerFailed,
-    resetPasswordRequest,
-    forgotPasswordRequest,
     forgotPasswordFailed,
     forgotPasswordSuccessful,
-    loginFailed,
     setUser,
     resetPasswordSuccessful,
     resetPasswordFailed,
-    updateUserRequest,
-    updateUserFailed,
     getUserReguest,
     getUserFailed
 } from "./action-creators";
@@ -40,16 +28,15 @@ function checkResponse(res) {
 }
 
 function setTokens(res) {
-    let authToken;
     if (res.accessToken.indexOf('Bearer') === 0) {
-        authToken = res.accessToken.split('Bearer ')[1];
+        const authToken = res.accessToken.split('Bearer ')[1];
         if (authToken) {
             setCookie(authTokenCookieName, authToken, { expires: 1200 });
         }
     }
 
     if (res.refreshToken) {
-        setCookie(refreshTokenCookieName, res.refreshToken, { expires: 1200 });
+        setCookie(refreshTokenCookieName, res.refreshToken, { expires: 31536000 });
     }
 }
 
@@ -113,7 +100,6 @@ const fetchWithRefresh = async (url, options) => {
 
 export function login(form) {
     return function (dispatch) {
-        dispatch(loginRequest());
         fetch(apiBaseUrl + '/auth/login', {
             method: 'POST',
             body: JSON.stringify(form),
@@ -134,17 +120,16 @@ export function login(form) {
                     dispatch(setUser({ email: res.user.email, name: res.user.name }));
                 }
                 else {
-                    dispatch(loginFailed(res.message));
+                    console.log(res.message);
                 }
             }).catch(err => {
-                dispatch(loginFailed(err.message));
+                console.log(err.message);
             })
     }
 }
 
 export function register(form) {
     return function (dispatch) {
-        dispatch(registerRequest());
         fetch(apiBaseUrl + '/auth/register', {
             method: 'POST',
             body: JSON.stringify(form),
@@ -165,17 +150,16 @@ export function register(form) {
                     dispatch(setUser({ email: res.user.email, name: res.user.name }));
                 }
                 else {
-                    dispatch(registerFailed(res.message));
+                    console.log(res.message);
                 }
             }).catch(err => {
-                dispatch(registerFailed(err.message));
+                console.log(err.message);
             })
     }
 }
 
 export function logout() {
     return function (dispatch) {
-        dispatch(logoutRequest());
         const token = getCookie(refreshTokenCookieName);
         fetch(apiBaseUrl + '/auth/logout', {
             method: 'POST',
@@ -198,19 +182,19 @@ export function logout() {
                     dispatch(setUser(null));
                 }
                 else {
-                    dispatch(logoutFailed(res.message));
+                    console.log(res.message);
                 }
             }).catch(err => {
-                dispatch(logoutFailed(err.message));
+                console.log(err.message);
             })
     }
 }
 
 export function getUser() {
     return function (dispatch) {
-        dispatch(getUserReguest());
         const authToken = getCookie(authTokenCookieName);
         if (authToken) {
+            dispatch(getUserReguest());
             fetchWithRefresh(apiBaseUrl + '/auth/user', {
                 method: 'GET',
                 mode: 'cors',
@@ -234,12 +218,17 @@ export function getUser() {
                     dispatch(getUserFailed(err.message));
                 })
         }
+        else {
+            const refToken = refreshTokens();
+            if (refToken) {
+                getUser();
+            }
+        }
     }
 }
 
 export function forgotPassword(form) {
     return function (dispatch) {
-        dispatch(forgotPasswordRequest());
         fetch(apiBaseUrl + '/password-reset', {
             method: 'POST',
             body: JSON.stringify(form),
@@ -269,7 +258,6 @@ export function forgotPassword(form) {
 
 export function resetPassword(form) {
     return function (dispatch) {
-        dispatch(resetPasswordRequest());
         fetch(apiBaseUrl + '/password-reset/reset', {
             method: 'POST',
             body: JSON.stringify(form),
@@ -300,7 +288,6 @@ export function resetPassword(form) {
 
 export function updateUser(form) {
     return function (dispatch) {
-        dispatch(updateUserRequest());
         const authToken = getCookie(authTokenCookieName);
         fetchWithRefresh(apiBaseUrl + '/auth/user', {
             method: 'PATCH',
@@ -320,10 +307,10 @@ export function updateUser(form) {
                     dispatch(setUser({ email: res.user.email, name: res.user.name }));
                 }
                 else {
-                    dispatch(updateUserFailed(res.message));
+                    console.log(res.message);
                 }
             }).catch(err => {
-                dispatch(updateUserFailed(err.message));
+                console.log(err.message);
             })
     }
 }

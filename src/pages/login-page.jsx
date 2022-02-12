@@ -15,7 +15,7 @@ const LoginPage = () => {
         setValue({ ...form, [e.target.name]: e.target.value });
     };
 
-    const onLoginClick = useCallback(
+    const onFormSubmit = useCallback(
         e => {
             e.preventDefault();
             dispatch(login(form));
@@ -31,9 +31,10 @@ const LoginPage = () => {
 
     return (
         <div className={styles.root_container}>
-            <h3 className="text text_type_main-small">
+            <h1 className="text text_type_main-medium">
                 Вход
-            </h3>
+            </h1>
+            <form onSubmit={onFormSubmit} className={styles.form}>
             <div className="mt-6">
                 <EmailInput onChange={onChange} value={form.email} name={'email'} />
             </div>
@@ -41,15 +42,16 @@ const LoginPage = () => {
                 <PasswordInput onChange={onChange} value={form.password} name={'password'} />
             </div>
             <div className="mt-6">
-                <Button type="primary" size="medium" onClick={onLoginClick}>
+                <Button type="primary" size="medium">
                     Войти
                 </Button>
             </div>
-            <div className="mt-20">
-                Вы — новый пользователь? <Link className={styles.link} to='/register'>Зарегистрироваться</Link>
+            </form>
+            <div className="mt-20 text text_color_inactive text_type_main-small">
+                Вы — новый пользователь?<Link className={"ml-4 " + styles.link} to='/register'>Зарегистрироваться</Link>
             </div>
-            <div className="mt-4">
-                Забыли пароль? <Link className={styles.link} to='/forgot-password'>Восстановить пароль</Link>
+            <div className="mt-4 text text_color_inactive text_type_main-small">
+                Забыли пароль?<Link className={"ml-4 " + styles.link} to='/forgot-password'>Восстановить пароль</Link>
             </div>
         </div>
     )

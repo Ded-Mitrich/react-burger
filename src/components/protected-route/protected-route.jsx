@@ -7,10 +7,13 @@ export function ProtectedRoute({ children, ...rest }) {
     return (
         <Route
             {...rest}
-            render={({ location }) =>
-                auth.user
-                    ? (children)
-                    : (<Redirect to={{ pathname: '/login', state: { from: location } }} />)
+            render={({ location }) => {
+                console.log(auth.loading);
+                return auth.loading !== null && !auth.loading &&
+                    (auth.user
+                        ? (children)
+                        : (<Redirect to={{ pathname: '/login', state: { from: location } }} />))
+            }
             }
         />
     );

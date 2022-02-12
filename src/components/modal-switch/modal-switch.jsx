@@ -12,17 +12,15 @@ import IngredientInfoPage from '../../pages/ingredient-info-page';
 import { useDispatch } from 'react-redux';
 import { ProtectedRoute } from '../protected-route/protected-route';
 import Modal from '../modal/modal';
-import { closeIngredientDetails } from '../../services/actions/action-creators';
 import IngredientDetails from '../ingredient-details/ingredient-details';
 
 export const ModalSwitch = () => {
     const dispatch = useDispatch();
     const location = useLocation();
     const history = useHistory();
-    let background = location.state && location.state.background;
+    const background = location.state && location.state.background;
 
     const handleModalClose = () => {
-        dispatch(closeIngredientDetails());
         history.goBack();
     };
 

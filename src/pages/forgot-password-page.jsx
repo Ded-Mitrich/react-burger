@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from 'react';
-import styles from './forgot-password.module.css';
+import styles from './forgot-password-page.module.css';
 import { EmailInput, Button } from '@ya.praktikum/react-developer-burger-ui-components';
 import { Link, useHistory } from 'react-router-dom';
 import { forgotPassword } from '../services/actions';
@@ -15,7 +15,7 @@ const ForgotPasswordPage = () => {
 
     const history = useHistory();
 
-    const onClick = useCallback(
+    const onFormSubmit = useCallback(
         e => {
             e.preventDefault();
             dispatch(forgotPassword(form));
@@ -26,19 +26,21 @@ const ForgotPasswordPage = () => {
 
     return (
         <div className={styles.root_container}>
-            <h3 className="text text_type_main-small">
+            <h1 className="text text_type_main-medium">
                 Восстановление пароля
-            </h3>
-            <div className="mt-6">
+            </h1>
+            <form onSubmit={onFormSubmit} className={styles.form}>
+            <div className="mt-6" >
                 <EmailInput onChange={onChange} value={form.email} name={'email'} />
             </div>
             <div className="mt-6">
-                <Button onClick={onClick} type="primary" size="medium">
+                <Button type="primary" size="medium">
                     Восстановить
                 </Button>
             </div>
-            <div className="mt-20">
-                Вспомнили пароль? <Link className={styles.link} to='/login'>Войти</Link>
+            </form>
+            <div className="mt-20 text_type_main-small text_color_inactive">
+                Вспомнили пароль?<Link className={"ml-4 " + styles.link} to='/login'>Войти</Link>
             </div>
         </div>
     )

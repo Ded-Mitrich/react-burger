@@ -1,7 +1,7 @@
 import { useCallback, useState } from 'react';
 import styles from './register-page.module.css';
 import { EmailInput, PasswordInput, Button, Input } from '@ya.praktikum/react-developer-burger-ui-components';
-import { Link, Redirect, useHistory } from 'react-router-dom';
+import { Link, Redirect, useLocation } from 'react-router-dom';
 import { register } from '../services/actions';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -9,33 +9,33 @@ const RegisterPage = () => {
 
     const auth = useSelector(store => store.auth);
     const [form, setValue] = useState({ email: '', password: '', name: '' });
-    const history = useHistory();
+    const location = useLocation();
     const dispatch = useDispatch();
 
     const onChange = e => {
         setValue({ ...form, [e.target.name]: e.target.value });
     };
 
-    const registerClick = useCallback(
+    const onFormSubmit = useCallback(
         e => {
             e.preventDefault();
             dispatch(register(form));
-            history.replace({ pathname: '/' });
         },
         [auth, form]
     );
 
     if (auth.user) {
         return (
-            <Redirect to={{ pathname: '/' }} />
+            <Redirect to={location?.state?.from || { pathname: '/' }} />
         );
     }
 
     return (
         <div className={styles.root_container}>
-            <h3 className="text text_type_main-small">
+            <h1 className="text text_type_main-medium">
                 Регистрация
-            </h3>
+            </h1>
+            <form onSubmit={onFormSubmit} className={styles.form}>
             <div className="mt-6">
                 <Input
                     type={'text'}
@@ -52,12 +52,13 @@ const RegisterPage = () => {
                 <PasswordInput onChange={onChange} value={form.password} name={'password'} />
             </div>
             <div className="mt-6">
-                <Button type="primary" size="medium" onClick={registerClick}>
+                <Button type="primary" size="medium">
                     Зарегистрироваться
                 </Button>
             </div>
-            <div className="mt-20">
-                Уже зарегистрированы? <Link className={styles.link} to='/login'>Войти</Link>
+            </form>
+            <div className="mt-20 text text_color_inactive text_type_main-small">
+                Уже зарегистрированы?<Link className={"ml-4 " + styles.link} to='/login'>Войти</Link>
             </div>
         </div>
     )

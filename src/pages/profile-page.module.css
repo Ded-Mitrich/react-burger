@@ -7,11 +7,13 @@
     align-items: center;
     min-width: 480px;
 }
+
 .links_container {
     display: flex;
     flex-direction: column;
     width: 320px;
 }
+
 .profile_container {
     composes: ml-15 from "@ya.praktikum/react-developer-burger-ui-components/dist/ui/box.css";
     display: flex;
@@ -20,7 +22,17 @@
 
 .content_container {
     display: flex;
+    flex-direction : row;
+    align-items:flex-start;
+    justify-content:left;
+    min-width: 705px;
+    min-height: 320px;
+}
+
+.buttons {
+    display: flex;
     flex-direction: row;
+    
 }
 
 .menu_item {

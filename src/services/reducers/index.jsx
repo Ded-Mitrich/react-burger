@@ -7,15 +7,15 @@ import {
     MAKE_ORDER_FAILURE,
     CLEAR_INGREDIENTS,
     CLOSE_ORDER_MODAL,
-    SHOW_INGREDIENT_DETAILS,
-    CLOSE_INGREDIENT_DETAILS,
     REPLACE_INGREDIENT,
     SET_BUNS,
     SET_USER,
     RESET_PASSWORD_SUCCESSFUL,
     RESET_PASSWORD_FAILED,
     FORGOT_PASSWORD_FAILED,
-    FORGOT_PASSWORD_SUCCESSFUL
+    FORGOT_PASSWORD_SUCCESSFUL,
+    GET_USER_REQUEST,
+    GET_USER_FAILED
 } from '../actions/action-creators';
 import update from 'immutability-helper';
 
@@ -23,7 +23,6 @@ const ingredientsInitialState = {
     avalaible: [],
     selected: [],
     buns: [],
-    ingredientDetails: false
 };
 
 const ordersInitialState = {
@@ -34,7 +33,8 @@ const ordersInitialState = {
 
 const authInitialState = {
     user: null,
-    resetPassword : false
+    resetPassword : false,
+    loading: null
 };
 
 export const ingredientsReducer = (state = ingredientsInitialState, action) => {
@@ -90,20 +90,6 @@ export const ingredientsReducer = (state = ingredientsInitialState, action) => {
                 ...state,
                 selected: [],
                 buns: []
-            };
-        }
-
-        case SHOW_INGREDIENT_DETAILS: {
-            return {
-                ...state,
-                ingredientDetails: true
-            };
-        }
-
-        case CLOSE_INGREDIENT_DETAILS: {
-            return {
-                ...state,
-                ingredientDetails: false
             };
         }
 
@@ -178,10 +164,25 @@ export const authReducer = (state = authInitialState, action) => {
             };
         }
 
+        case GET_USER_REQUEST: {
+            return {
+                ...state,
+                loading: true,
+            };
+        }
+
+        case GET_USER_FAILED: {
+            return {
+                ...state,
+                loading: false,
+            };
+        }
+
         case SET_USER: {
             return {
                 ...state,
                 user: action.user,
+                loading: false,
             };
         }
 
