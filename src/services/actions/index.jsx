@@ -83,7 +83,7 @@ const fetchWithRefresh = async (url, options) => {
     const json = await res.json();
 
     if (json.message === "jwt expired") {
-        const tokens = refreshTokens();
+        const tokens = await refreshTokens();
 
         if (!tokens) {
             return Promise.reject(res.status);
@@ -221,7 +221,9 @@ export function getUser() {
         else {
             const refToken = refreshTokens();
             if (refToken) {
-                getUser();
+                refToken().then(res => {
+                    getUser();
+                });
             }
             else {
                 dispatch(getUserFailed('there are no tokens'));
