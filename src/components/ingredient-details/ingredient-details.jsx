@@ -1,10 +1,14 @@
-import React from 'react';
-import styles from './ingredient-details.module.css';
 import { useSelector } from 'react-redux';
+import { useParams } from 'react-router';
+import styles from './ingredient-details.module.css';
 
 const IngredientDetails = () => {
-    const ingredient = useSelector(store => store.ingredients.ingredientDetails);
-    return (
+
+    const avalaibleIngredients = useSelector(store => store.ingredients.avalaible);
+    const { ingredientId } = useParams();
+    const ingredient = avalaibleIngredients.find(e => e._id === ingredientId);
+
+    return (ingredient ?
         <>
             <img src={ingredient.image_large} style={{ maxHeight: 240, objectFit: 'contain' }} />
             <h3 className="mt-4 text text_type_main-medium">
@@ -28,7 +32,7 @@ const IngredientDetails = () => {
                     <span className="text_type_digits-default">{ingredient.carbohydrates}</span>
                 </span>
             </div>
-        </>
+        </> : <></>
     )
 }
 

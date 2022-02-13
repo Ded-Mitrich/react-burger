@@ -5,13 +5,72 @@ export const MAKE_ORDER_SUCCESSFUL = 'MAKE_ORDER_SUCCESSFUL';
 export const MAKE_ORDER_FAILURE = 'MAKE_ORDER_FAILURE';
 export const CLEAR_INGREDIENTS = 'CLEAR_INGREDIENTS';
 export const CLOSE_ORDER_MODAL = 'CLOSE_ORDER_MODAL';
-export const SHOW_INGREDIENT_DETAILS = 'SHOW_INGREDIENT_DETAILS';
-export const CLOSE_INGREDIENT_DETAILS = 'CLOSE_INGREDIENT_DETAILS';
 export const REPLACE_INGREDIENT = 'REPLACE_INGREDIENT';
 export const AVALAIBLE_INGREDIENTS_REQUEST = 'AVALAIBLE_INGREDIENTS_REQUEST';
 export const AVALAIBLE_INGREDIENTS_FAILED = 'AVALAIBLE_INGREDIENTS_FAILED';
 export const SET_BUNS = 'SET_BUNS';
 export const SEND_ORDER_REQUEST = 'SEND_ORDER_REQUEST';
+export const FORGOT_PASSWORD_REQUEST = 'FORGOT_PASSWORD_REQUEST';
+export const FORGOT_PASSWORD_SUCCESSFUL = 'FORGOT_PASSWORD_SUCCESSFUL';
+export const FORGOT_PASSWORD_FAILED = 'FORGOT_PASSWORD_FAILED';
+export const RESET_PASSWORD_SUCCESSFUL = 'RESET_PASSWORD_SUCCESSFUL';
+export const RESET_PASSWORD_FAILED = 'RESET_PASSWORD_FAILED';
+export const REGISTER_SUCCESSFUL = 'REGISTER_SUCCESSFUL';
+export const REGISTER_FAILED = 'REGISTER_FAILED';
+export const GET_USER_REQUEST = 'GET_USER_REQUEST';
+export const GET_USER_FAILED = 'GET_USER_FAILED';
+export const SET_USER = 'SET_USER';
+
+
+export function forgotPasswordRequest() {
+    return {
+        type: FORGOT_PASSWORD_REQUEST,
+    }
+}
+
+export function forgotPasswordFailed() {
+    return {
+        type: FORGOT_PASSWORD_FAILED,
+    }
+}
+
+export function forgotPasswordSuccessful() {
+    return {
+        type: FORGOT_PASSWORD_SUCCESSFUL,
+    }
+}
+
+export function resetPasswordFailed() {
+    return {
+        type: RESET_PASSWORD_FAILED,
+    }
+}
+
+export function resetPasswordSuccessful() {
+    return {
+        type: RESET_PASSWORD_SUCCESSFUL,
+    }
+}
+
+export function getUserReguest() {
+    return {
+        type: GET_USER_REQUEST,
+    }
+}
+
+export function getUserFailed(error) {
+    return {
+        type: GET_USER_FAILED,
+        error
+    }
+}
+
+export function setUser(user) {
+    return {
+        type: SET_USER,
+        user
+    }
+}
 
 export function closeOrderModal() {
     return {
@@ -46,19 +105,6 @@ export function replaceIngredient(dragIndex, hoverIndex) {
         type: REPLACE_INGREDIENT,
         dragIndex,
         hoverIndex
-    }
-}
-
-export function showDetails(id) {
-    return {
-        type: SHOW_INGREDIENT_DETAILS,
-        id,
-    }
-}
-
-export function closeIngredientDetails() {
-    return {
-        type: CLOSE_INGREDIENT_DETAILS,
     }
 }
 

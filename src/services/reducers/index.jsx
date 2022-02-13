@@ -7,10 +7,15 @@ import {
     MAKE_ORDER_FAILURE,
     CLEAR_INGREDIENTS,
     CLOSE_ORDER_MODAL,
-    SHOW_INGREDIENT_DETAILS,
-    CLOSE_INGREDIENT_DETAILS,
     REPLACE_INGREDIENT,
-    SET_BUNS
+    SET_BUNS,
+    SET_USER,
+    RESET_PASSWORD_SUCCESSFUL,
+    RESET_PASSWORD_FAILED,
+    FORGOT_PASSWORD_FAILED,
+    FORGOT_PASSWORD_SUCCESSFUL,
+    GET_USER_REQUEST,
+    GET_USER_FAILED
 } from '../actions/action-creators';
 import update from 'immutability-helper';
 
@@ -18,13 +23,18 @@ const ingredientsInitialState = {
     avalaible: [],
     selected: [],
     buns: [],
-    ingredientDetails: null
 };
 
 const ordersInitialState = {
     items: [],
     errorMessage: null,
     currentItem: null
+};
+
+const authInitialState = {
+    user: null,
+    resetPassword : false,
+    loading: null
 };
 
 export const ingredientsReducer = (state = ingredientsInitialState, action) => {
@@ -83,20 +93,6 @@ export const ingredientsReducer = (state = ingredientsInitialState, action) => {
             };
         }
 
-        case SHOW_INGREDIENT_DETAILS: {
-            return {
-                ...state,
-                ingredientDetails: state.avalaible.find((item) => item._id === action.id)
-            };
-        }
-
-        case CLOSE_INGREDIENT_DETAILS: {
-            return {
-                ...state,
-                ingredientDetails: null
-            };
-        }
-
         default: {
             return state;
         }
@@ -137,7 +133,67 @@ export const ordersReducer = (state = ordersInitialState, action) => {
     }
 }
 
+export const authReducer = (state = authInitialState, action) => {
+    switch (action.type) {
+
+        case FORGOT_PASSWORD_FAILED: {
+            return {
+                ...state,
+                resetPassword: false,
+            };
+        }
+
+        case FORGOT_PASSWORD_SUCCESSFUL: {
+            return {
+                ...state,
+                resetPassword: true,
+            };
+        }
+
+        case RESET_PASSWORD_SUCCESSFUL: {
+            return {
+                ...state,
+                resetPassword: false,
+            };
+        }
+
+        case RESET_PASSWORD_FAILED: {
+            return {
+                ...state,
+                resetPassword: false,
+            };
+        }
+
+        case GET_USER_REQUEST: {
+            return {
+                ...state,
+                loading: true,
+            };
+        }
+
+        case GET_USER_FAILED: {
+            return {
+                ...state,
+                loading: false,
+            };
+        }
+
+        case SET_USER: {
+            return {
+                ...state,
+                user: action.user,
+                loading: false,
+            };
+        }
+
+        default: {
+            return state;
+        }
+    }
+}
+
 export const rootReducer = combineReducers({
     ingredients: ingredientsReducer,
-    orders: ordersReducer
+    orders: ordersReducer,
+    auth: authReducer
 }) 
