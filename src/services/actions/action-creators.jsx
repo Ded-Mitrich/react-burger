@@ -58,9 +58,10 @@ export function getUserReguest() {
     }
 }
 
-export function getUserFailed() {
+export function getUserFailed(error) {
     return {
         type: GET_USER_FAILED,
+        error
     }
 }
 

@@ -223,6 +223,9 @@ export function getUser() {
             if (refToken) {
                 getUser();
             }
+            else {
+                dispatch(getUserFailed('there are no tokens'));
+            }
         }
     }
 }

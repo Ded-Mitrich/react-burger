@@ -9,13 +9,11 @@ import ResetPasswordPage from '../../pages/reset-password-page';
 import ProfilePage from '../../pages/profile-page';
 import NotFound404Page from '../../pages/not-found-page';
 import IngredientInfoPage from '../../pages/ingredient-info-page';
-import { useDispatch } from 'react-redux';
 import { ProtectedRoute } from '../protected-route/protected-route';
 import Modal from '../modal/modal';
 import IngredientDetails from '../ingredient-details/ingredient-details';
 
 export const ModalSwitch = () => {
-    const dispatch = useDispatch();
     const location = useLocation();
     const history = useHistory();
     const background = location.state && location.state.background;
