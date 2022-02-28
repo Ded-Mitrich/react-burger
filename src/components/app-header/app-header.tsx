@@ -4,8 +4,9 @@ import { ListIcon } from '@ya.praktikum/react-developer-burger-ui-components'
 import { BurgerIcon } from '@ya.praktikum/react-developer-burger-ui-components'
 import styles from './app-header.module.css';
 import { NavLink, useLocation } from 'react-router-dom';
+import { FunctionComponent } from 'react';
 
-function AppHeader() {
+export const AppHeader : FunctionComponent = () => {
 
     const location = useLocation();
     
@@ -49,5 +50,3 @@ function AppHeader() {
         </header>
     );
 }
-
-export default AppHeader

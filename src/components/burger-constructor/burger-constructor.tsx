@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import { FunctionComponent, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styles from './burger-constructor.module.css';
 import { CurrencyIcon, Button, ConstructorElement } from '@ya.praktikum/react-developer-burger-ui-components';
@@ -10,19 +10,21 @@ import {
     replaceIngredient,
     closeOrderModal,
 } from '../../services/actions/action-creators';
-import { BUN_TYPE, FILAMENT_TYPE } from '../../utils/types';
+import { BUN_TYPE, FILAMENT_TYPE, TBurgerIngredient } from '../../utils/types';
 import { useDrop } from 'react-dnd';
 import { v4 as uuidv4 } from 'uuid';
 import { ConstructorElementLayout } from './constructor-element-layout';
 import { sendOrder } from '../../services/actions';
 import { useHistory } from 'react-router';
+import { IRootState } from '../../services/reducers';
+import * as React from 'react';
 
-const BurgerConstructor = () => {
+const BurgerConstructor : FunctionComponent = () => {
     const dispatch = useDispatch();
-    const selectedIngredients = useSelector(store => store.ingredients.selected);
-    const selectedBuns = useSelector(store => store.ingredients.buns);
-    const currentOrder = useSelector(store => store.orders.currentItem);
-    const auth = useSelector(store => store.auth);
+    const selectedIngredients = useSelector((store: IRootState) => store.ingredients.selected);
+    const selectedBuns = useSelector((store: IRootState) => store.ingredients.buns);
+    const currentOrder = useSelector((store: IRootState) => store.orders.currentItem);
+    const auth = useSelector((store: IRootState) => store.auth);
     const history = useHistory();
 
     const tryMakeOrder = (e) => {

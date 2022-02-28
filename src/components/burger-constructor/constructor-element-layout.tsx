@@ -1,12 +1,16 @@
-import React, { useRef } from 'react';
+import { FunctionComponent, useRef } from 'react';
 import { useDispatch } from 'react-redux';
 import styles from './burger-constructor.module.css';
 import { ConstructorElement, DragIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import { deleteIngredient } from '../../services/actions/action-creators';
-import { REORDER_INGREDIENT_TYPE } from '../../utils/types';
+import { REORDER_INGREDIENT_TYPE, TBurgerIngredient } from '../../utils/types';
 import { useDrop, useDrag } from 'react-dnd';
+import * as React from 'react';
 
-export const ConstructorElementLayout = ({ elem, index, moveLayout }) => {
+export const ConstructorElementLayout: FunctionComponent<{
+    elem: TBurgerIngredient, index: number, moveLayout: (dIndex: number, hIndex: number) => void
+}> = ({ elem, index, moveLayout }) => {
+
     const dispatch = useDispatch();
     const ref = useRef(null);
     const [{ handlerId }, drop] = useDrop({
@@ -54,7 +58,7 @@ export const ConstructorElementLayout = ({ elem, index, moveLayout }) => {
     drag(drop(ref));
 
     return (elem && <span ref={ref} style={{ opacity }} data-handler-id={handlerId} className={styles.element_holder} >
-        <span className="mr-2"><DragIcon /></span>
+        <span className="mr-2"><DragIcon type={'primary'} /></span>
         <ConstructorElement
             isLocked={false}
             text={elem.name}

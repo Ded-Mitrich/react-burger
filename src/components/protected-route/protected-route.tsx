@@ -1,8 +1,10 @@
 import { Route, Redirect } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+import { FunctionComponent } from 'react';
+import { IRootState } from '../../services/reducers';
 
-export function ProtectedRoute({ children, ...rest }) {
-    const auth = useSelector(store => store.auth);
+export const ProtectedRoute : FunctionComponent = ({ children, ...rest }) => {
+    const auth = useSelector((store: IRootState) => store.auth);
 
     return (
         <Route

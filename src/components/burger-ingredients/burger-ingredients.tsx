@@ -1,13 +1,15 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, FunctionComponent } from 'react';
 import { useSelector } from 'react-redux';
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components'
 import styles from './burger-ingredients.module.css';
-import IngredientElement from '../ingredient-element/ingredient-element';
+import { IngredientElement } from '../ingredient-element/ingredient-element';
+import { IRootState } from '../../services/reducers';
+import * as React from 'react';
 
 const topConstantContent = 284;
 
-const BurgerIngredients = () => {
-    const avalaibleIngredients = useSelector(store => store.ingredients.avalaible);
+const BurgerIngredients: FunctionComponent = () => {
+    const avalaibleIngredients = useSelector((store: IRootState) => store.ingredients.avalaible);
     const buns = useRef(null);
     const souces = useRef(null);
     const main = useRef(null);

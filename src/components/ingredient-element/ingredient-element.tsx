@@ -1,12 +1,15 @@
 ﻿import { useSelector } from 'react-redux';
 import { CurrencyIcon, Counter } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './ingredient-element.module.css';
-import burgerIngredientPropType, { BUN_TYPE, FILAMENT_TYPE } from '../../utils/types'
+import { BUN_TYPE, FILAMENT_TYPE, TBurgerIngredient } from '../../utils/types'
 import { useDrag } from 'react-dnd';
 import { Link, useLocation } from 'react-router-dom';
+import * as React from 'react';
+import { FunctionComponent } from 'react';
+import { IRootState } from '../../services/reducers';
 
-const IngredientElement = ({ ingredient }) => {
-    const selectedIngredients = useSelector(store => store.ingredients.selected);
+export const IngredientElement: FunctionComponent<{ ingredient: TBurgerIngredient }> = ({ ingredient }) => {
+    const selectedIngredients = useSelector((store: IRootState) => store.ingredients.selected);
 
     const [, drag] = useDrag({
         type: ingredient.type === 'bun' ? BUN_TYPE : FILAMENT_TYPE,
@@ -40,8 +43,3 @@ const IngredientElement = ({ ingredient }) => {
     );
 };
 
-IngredientElement.propTypes = {
-    ingredient: burgerIngredientPropType.isRequired
-};
-
-export default IngredientElement

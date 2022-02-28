@@ -1,10 +1,12 @@
-import React from 'react';
+import { FunctionComponent } from 'react';
 import styles from './order-details.module.css';
 import confirmImg from '../../images/Confirm.svg';
 import { useSelector } from 'react-redux';
+import { IRootState } from '../../services/reducers';
+import * as React from 'react';
 
-const OrderDetails = () => {
-    const { currentItem } = useSelector(store => store.orders);
+const OrderDetails : FunctionComponent = () => {
+    const { currentItem } = useSelector((store: IRootState) => store.orders);
 
     const content = (
         <>

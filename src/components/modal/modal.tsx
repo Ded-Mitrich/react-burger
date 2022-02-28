@@ -1,11 +1,11 @@
-import React, { useEffect } from 'react';
-import ReactDOM from 'react-dom';
+import { FunctionComponent, useEffect } from 'react';
 import { CloseIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './modal.module.css';
 import ModalOverLay from './modal-overlay';
-import PropTypes from 'prop-types';
+import * as React from 'react';
+import * as ReactDOM from 'react-dom';
 
-const Modal = ({ onClose, header, children }) => {
+const Modal: FunctionComponent<{ onClose: () => void, header: string}> = ({ onClose, header, children }) => {
 
     const escFunction = (e) => {
         e.stopPropagation();
@@ -28,7 +28,7 @@ const Modal = ({ onClose, header, children }) => {
                 <h2 className={"text text_type_main-large " + styles.modal_header}>
                     {header}
                     <div className={styles.icon_holder}>
-                        <CloseIcon onClick={onClose} />
+                        <CloseIcon onClick={onClose} type={'primary'} />
                     </div>
                 </h2>
                 {children}
@@ -36,11 +36,5 @@ const Modal = ({ onClose, header, children }) => {
         </div>,
         document.getElementById("modals"))
 }
-
-Modal.propTypes = {
-    onClose: PropTypes.func.isRequired,
-    header: PropTypes.string,
-    children: PropTypes.any
-};
 
 export default Modal

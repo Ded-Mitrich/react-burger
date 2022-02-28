@@ -1,12 +1,9 @@
 import { deleteCookie, getCookie, setCookie } from "../../utils/utils";
 import {
-    avalaibleIngredientsRequest,
     clearIngredients,
     makeOrderFailure,
-    sendOrderRequest,
     sendOrderSuccessful,
     setAvalaibleIngredients,
-    setAvalaibleIngredientsFailed,
     forgotPasswordFailed,
     forgotPasswordSuccessful,
     setUser,
@@ -74,7 +71,7 @@ function refreshTokens() {
 }
 
 const fetchWithRefresh = async (url, options) => {
-    const res = await fetch(url, options);
+    let res = await fetch(url, options);
 
     if (res.ok) {
         return res.json();
@@ -91,7 +88,7 @@ const fetchWithRefresh = async (url, options) => {
 
         options.headers.Authorization = tokens.accessToken;
 
-        const res = await fetch(url, options);
+        res = await fetch(url, options);
         return res.ok ? res.json() : Promise.reject(res.status);
     } else {
         return json;
@@ -253,10 +250,10 @@ export function forgotPassword(form) {
                     dispatch(forgotPasswordSuccessful());
                 }
                 else {
-                    dispatch(forgotPasswordFailed(res.message));
+                    dispatch(forgotPasswordFailed());
                 }
             }).catch(err => {
-                dispatch(forgotPasswordFailed(err.message));
+                dispatch(forgotPasswordFailed());
             })
     }
 }
@@ -282,10 +279,10 @@ export function resetPassword(form) {
                     dispatch(resetPasswordSuccessful());
                 }
                 else {
-                    dispatch(resetPasswordFailed(res.message));
+                    dispatch(resetPasswordFailed());
                 }
             }).catch(err => {
-                dispatch(resetPasswordFailed(err.message));
+                dispatch(resetPasswordFailed());
             })
     }
 }
@@ -322,21 +319,19 @@ export function updateUser(form) {
 
 export function getAvalaibleIngredients() {
     return function (dispatch) {
-        dispatch(avalaibleIngredientsRequest());
         fetch(apiBaseUrl + '/ingredients', { method: 'GET' })
             .then(checkResponse)
             .then(res => res.json())
             .then(res => {
                 dispatch(setAvalaibleIngredients(res.data))
             }).catch(err => {
-                dispatch(setAvalaibleIngredientsFailed(err))
+                console.log(err);
             })
     }
 }
 
 export function sendOrder(items) {
     return function (dispatch) {
-        dispatch(sendOrderRequest());
         fetch(apiBaseUrl + '/orders', {
             method: 'POST',
             body: JSON.stringify({ ingredients: items.map((elem) => elem._id) }),
