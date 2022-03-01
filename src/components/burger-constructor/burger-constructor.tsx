@@ -1,4 +1,4 @@
-import { FunctionComponent, useCallback } from 'react';
+import { FunctionComponent, SyntheticEvent, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styles from './burger-constructor.module.css';
 import { CurrencyIcon, Button, ConstructorElement } from '@ya.praktikum/react-developer-burger-ui-components';
@@ -10,14 +10,13 @@ import {
     replaceIngredient,
     closeOrderModal,
 } from '../../services/actions/action-creators';
-import { BUN_TYPE, FILAMENT_TYPE, TBurgerIngredient } from '../../utils/types';
+import { BUN_TYPE, FILAMENT_TYPE, TBurgerIngredient, TDragObject } from '../../utils/types';
 import { useDrop } from 'react-dnd';
 import { v4 as uuidv4 } from 'uuid';
 import { ConstructorElementLayout } from './constructor-element-layout';
 import { sendOrder } from '../../services/actions';
 import { useHistory } from 'react-router';
 import { IRootState } from '../../services/reducers';
-import * as React from 'react';
 
 const BurgerConstructor : FunctionComponent = () => {
     const dispatch = useDispatch();
@@ -27,7 +26,7 @@ const BurgerConstructor : FunctionComponent = () => {
     const auth = useSelector((store: IRootState) => store.auth);
     const history = useHistory();
 
-    const tryMakeOrder = (e) => {
+    const tryMakeOrder = (e: SyntheticEvent) => {
         e.preventDefault();
         if (!auth.user) {
             history.replace({ pathname: '/login' });
@@ -37,7 +36,7 @@ const BurgerConstructor : FunctionComponent = () => {
         }
     }
 
-    const [{ canDropFilament }, drop] = useDrop({
+    const [{ canDropFilament }, drop] = useDrop<TDragObject, void, { canDropFilament: boolean }>({
         accept: FILAMENT_TYPE,
         collect: monitor => ({
             canDropFilament: monitor.canDrop(),
@@ -52,7 +51,7 @@ const BurgerConstructor : FunctionComponent = () => {
         collect: monitor => ({
             canDropBuns: monitor.canDrop(),
         }),
-        drop(item) {
+        drop(item: TDragObject) {
             dispatch(setBuns(item.id));
         },
     });
@@ -62,13 +61,13 @@ const BurgerConstructor : FunctionComponent = () => {
         dispatch(replaceIngredient(dragIndex, hoverIndex))
     }, [selectedIngredients]);
 
-    function elementLayout(elem, index) {
+    function elementLayout(elem : TBurgerIngredient, index : number) {
         return (elem && <div key={elem._uid} >
             <ConstructorElementLayout elem={elem} index={index} moveLayout={moveLayout} />
         </div>)
     }
 
-    const bunLayout = (elem, type) => {
+    const bunLayout = (elem: TBurgerIngredient, type: 'top' | 'bottom') => {
         return (elem && <span className={styles.element_holder} >
             <span className="ml-8" />
             <ConstructorElement

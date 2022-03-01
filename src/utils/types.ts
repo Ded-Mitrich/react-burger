@@ -1,9 +1,8 @@
-
 export type TBurgerIngredient = {
     _uid: string,
     _id: string,
     name: string,
-    type: string,
+    type: 'bun' | 'main' | 'sauce',
     proteins: number,
     fat: number,
     carbohydrates: number,
@@ -96,6 +95,25 @@ export interface IUserState {
     user: TUser | null,
     resetPassword: boolean,
     loading: boolean
+}
+
+export type TDragObject = {
+    id: string,
+    type: string,
+    index: number
+}
+
+export interface Location<S = unknown> {
+    pathname: string;
+    search: string;
+    state: S;
+    hash: string;
+    key?: string | undefined;
+}
+
+export interface ILocationState {
+    background?: Location<ILocationState>
+    from?: Location<ILocationState>
 }
 
 export const FILAMENT_TYPE = 'FILAMENT';

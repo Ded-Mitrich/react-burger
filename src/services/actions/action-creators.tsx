@@ -1,4 +1,4 @@
-import { IngredientActions, OrdersActions, UserActions } from "../../utils/types"
+import { IngredientActions, OrdersActions, TBurgerIngredient, TOrder, TUser, UserActions } from "../../utils/types"
 
 export function forgotPasswordFailed() {
     return {
@@ -30,28 +30,28 @@ export function getUserReguest() {
     }
 }
 
-export function getUserFailed(error) {
+export function getUserFailed(error : string) {
     return {
         type: UserActions.GET_USER_FAILED,
         error
     }
 }
 
-export function setUser(user) {
+export function setUser(user : TUser | null) {
     return {
         type: UserActions.SET_USER,
         user
     }
 }
 
-export function sendOrderSuccessful(item) {
+export function sendOrderSuccessful(item : TOrder) {
     return {
         type: OrdersActions.MAKE_ORDER_SUCCESSFUL,
         item
     }
 }
 
-export function makeOrderFailure(errorMessage) {
+export function makeOrderFailure(errorMessage : string) {
     return {
         type: OrdersActions.MAKE_ORDER_FAILURE,
         errorMessage
@@ -64,21 +64,21 @@ export function closeOrderModal() {
     }
 }
 
-export function setBuns(id) {
+export function setBuns(id : string) {
     return {
         type: IngredientActions.SET_BUNS,
         id
     }
 }
 
-export function deleteIngredient(uid) {
+export function deleteIngredient(uid : string) {
     return {
         type: IngredientActions.DELETE_INGREDIENT,
         id: uid
     }
 }
 
-export function addIngredient(id, uid) {
+export function addIngredient(id: string, uid: string) {
     return {
         type: IngredientActions.ADD_INGREDIENT,
         id: id,
@@ -86,7 +86,7 @@ export function addIngredient(id, uid) {
     }
 }
 
-export function replaceIngredient(dragIndex, hoverIndex) {
+export function replaceIngredient(dragIndex: number, hoverIndex: number) {
     return {
         type: IngredientActions.REPLACE_INGREDIENT,
         dragIndex,
@@ -94,7 +94,7 @@ export function replaceIngredient(dragIndex, hoverIndex) {
     }
 }
 
-export function setAvalaibleIngredients(items) {
+export function setAvalaibleIngredients(items: TBurgerIngredient[]) {
     return {
         type: IngredientActions.SET_AVALAIBLE_INGREDIENTS,
         items

@@ -1,20 +1,22 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, FunctionComponent } from 'react';
 import styles from './reset-password-page.module.css';
 import { PasswordInput, Input, Button } from '@ya.praktikum/react-developer-burger-ui-components';
 import { Link, Redirect, useHistory, useLocation } from 'react-router-dom';
 import { resetPassword } from '../services/actions';
 import { useDispatch, useSelector } from 'react-redux';
+import { ILocationState, Location } from '../utils/types';
+import { IRootState } from '../services/reducers';
 
-const ResetPasswordPage = () => {
-    const auth = useSelector(store => store.auth);
-    const location = useLocation();
+const ResetPasswordPage : FunctionComponent = () => {
+    const auth = useSelector((store: IRootState) => store.auth);
+    const location = useLocation<ILocationState>();
     const dispatch = useDispatch();
     const [form, setValue] = useState({ password: '', token: '' });
-    const onChange = e => {
+    const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setValue({ ...form, [e.target.name]: e.target.value });
     };
 
-    const history = useHistory();
+    const history = useHistory<Location<ILocationState>>();
 
     const onFormSubmit = useCallback(
         e => {

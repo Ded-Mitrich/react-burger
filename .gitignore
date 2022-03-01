@@ -31,3 +31,5 @@ yarn-error.log*
 /obj/Debug/ReactBurger.njsproj.CoreCompileInputs.cache
 /obj/Debug/ReactBurger.njsproj.AssemblyReference.cache
 /bin/Microsoft.NodejsTools.WebRole.dll
+/.vs/ReactBurger/v17/.suo
+/.vs/ReactBurger/v17/fileList.bin

@@ -2,12 +2,11 @@ import { FunctionComponent, useEffect } from 'react';
 import { CloseIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './modal.module.css';
 import ModalOverLay from './modal-overlay';
-import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 
-const Modal: FunctionComponent<{ onClose: () => void, header: string}> = ({ onClose, header, children }) => {
+const Modal: FunctionComponent<{ onClose: () => void, header?: string}> = ({ onClose, header, children }) => {
 
-    const escFunction = (e) => {
+    const escFunction = (e : KeyboardEvent) => {
         e.stopPropagation();
         if (e.key === 'Escape') {
             onClose();
@@ -21,7 +20,9 @@ const Modal: FunctionComponent<{ onClose: () => void, header: string}> = ({ onCl
         }
     }, [onClose])
 
-    return ReactDOM.createPortal(
+    const rootModal = document.getElementById("modals");
+
+    return rootModal && ReactDOM.createPortal(
         <div className={styles.modal_root}>
             <ModalOverLay onClose={onClose} />
             <div className={styles.modal_confirm}>
@@ -34,7 +35,7 @@ const Modal: FunctionComponent<{ onClose: () => void, header: string}> = ({ onCl
                 {children}
             </div>
         </div>,
-        document.getElementById("modals"))
+        rootModal)
 }
 
 export default Modal

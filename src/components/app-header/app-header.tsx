@@ -5,10 +5,11 @@ import { BurgerIcon } from '@ya.praktikum/react-developer-burger-ui-components'
 import styles from './app-header.module.css';
 import { NavLink, useLocation } from 'react-router-dom';
 import { FunctionComponent } from 'react';
+import { ILocationState} from '../../utils/types';
 
 export const AppHeader : FunctionComponent = () => {
 
-    const location = useLocation();
+    const location = useLocation<ILocationState>();
     
     return (
         <header>

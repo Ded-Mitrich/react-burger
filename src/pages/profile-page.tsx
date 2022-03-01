@@ -1,19 +1,21 @@
-import { useCallback, useEffect, useState } from 'react';
+import { FunctionComponent, useCallback, useEffect, useState } from 'react';
 import styles from './profile-page.module.css';
 import { EmailInput, PasswordInput, Input, Button } from '@ya.praktikum/react-developer-burger-ui-components';
-import { Link, NavLink, useLocation } from 'react-router-dom';
+import { NavLink, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { logout, updateUser } from '../services/actions';
+import { IRootState } from '../services/reducers';
+import { ILocationState } from '../utils/types';
 
-const ProfilePage = () => {
+const ProfilePage: FunctionComponent = () => {
     const dispatch = useDispatch();
-    const auth = useSelector(store => store.auth);
+    const auth = useSelector((store: IRootState) => store.auth);
     const [form, setValue] = useState({ email: '', password: '', name: '' });
-    const location = useLocation();
+    const location = useLocation<ILocationState>();
     const [isChanged, setIsChanged] = useState(false);
 
     const setValues = () => {
-        setValue({ email: auth.user.email, password: '', name: auth.user.name });
+        setValue({ email: auth.user?.email ?? '', password: '', name: auth.user?.name ?? '' });
     }
 
     useEffect(() => {
@@ -21,12 +23,12 @@ const ProfilePage = () => {
     }, []);
 
     useEffect(() => {
-        setIsChanged(form.email !== auth.user.email ||
-            form.name !== auth.user.name ||
-            form.password);
+        setIsChanged(form.email !== auth.user?.email ||
+            form.name !== auth.user?.name ||
+            form.password !== '');
     }, [auth, form]);
 
-    const onChange = e => {
+    const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setValue({ ...form, [e.target.name]: e.target.value });
     };
 

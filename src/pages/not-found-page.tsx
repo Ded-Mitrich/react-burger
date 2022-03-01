@@ -1,7 +1,8 @@
+import { FunctionComponent } from 'react';
 import { Link } from 'react-router-dom';
 import styles from './not-found-page.module.css';
 
-function NotFound404Page() {
+const NotFound404Page: FunctionComponent = () => {
     return (
         <div className={styles.wrapper}>
             <div className={styles.container}>
