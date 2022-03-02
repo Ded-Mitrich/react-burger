@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import { FunctionComponent, SyntheticEvent, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styles from './burger-constructor.module.css';
 import { CurrencyIcon, Button, ConstructorElement } from '@ya.praktikum/react-developer-burger-ui-components';
@@ -10,22 +10,23 @@ import {
     replaceIngredient,
     closeOrderModal,
 } from '../../services/actions/action-creators';
-import { BUN_TYPE, FILAMENT_TYPE } from '../../utils/types';
+import { BUN_TYPE, FILAMENT_TYPE, TBurgerIngredient, TDragObject } from '../../utils/types';
 import { useDrop } from 'react-dnd';
 import { v4 as uuidv4 } from 'uuid';
 import { ConstructorElementLayout } from './constructor-element-layout';
 import { sendOrder } from '../../services/actions';
 import { useHistory } from 'react-router';
+import { IRootState } from '../../services/reducers';
 
-const BurgerConstructor = () => {
+const BurgerConstructor : FunctionComponent = () => {
     const dispatch = useDispatch();
-    const selectedIngredients = useSelector(store => store.ingredients.selected);
-    const selectedBuns = useSelector(store => store.ingredients.buns);
-    const currentOrder = useSelector(store => store.orders.currentItem);
-    const auth = useSelector(store => store.auth);
+    const selectedIngredients = useSelector((store: IRootState) => store.ingredients.selected);
+    const selectedBuns = useSelector((store: IRootState) => store.ingredients.buns);
+    const currentOrder = useSelector((store: IRootState) => store.orders.currentItem);
+    const auth = useSelector((store: IRootState) => store.auth);
     const history = useHistory();
 
-    const tryMakeOrder = (e) => {
+    const tryMakeOrder = (e: SyntheticEvent) => {
         e.preventDefault();
         if (!auth.user) {
             history.replace({ pathname: '/login' });
@@ -35,7 +36,7 @@ const BurgerConstructor = () => {
         }
     }
 
-    const [{ canDropFilament }, drop] = useDrop({
+    const [{ canDropFilament }, drop] = useDrop<TDragObject, void, { canDropFilament: boolean }>({
         accept: FILAMENT_TYPE,
         collect: monitor => ({
             canDropFilament: monitor.canDrop(),
@@ -50,7 +51,7 @@ const BurgerConstructor = () => {
         collect: monitor => ({
             canDropBuns: monitor.canDrop(),
         }),
-        drop(item) {
+        drop(item: TDragObject) {
             dispatch(setBuns(item.id));
         },
     });
@@ -60,13 +61,13 @@ const BurgerConstructor = () => {
         dispatch(replaceIngredient(dragIndex, hoverIndex))
     }, [selectedIngredients]);
 
-    function elementLayout(elem, index) {
+    function elementLayout(elem : TBurgerIngredient, index : number) {
         return (elem && <div key={elem._uid} >
             <ConstructorElementLayout elem={elem} index={index} moveLayout={moveLayout} />
         </div>)
     }
 
-    const bunLayout = (elem, type) => {
+    const bunLayout = (elem: TBurgerIngredient, type: 'top' | 'bottom') => {
         return (elem && <span className={styles.element_holder} >
             <span className="ml-8" />
             <ConstructorElement

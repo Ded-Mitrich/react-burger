@@ -1,5 +1,5 @@
 import styles from './modal-switch.module.css';
-import AppHeader from '../app-header/app-header';
+import { AppHeader } from '../app-header/app-header';
 import BurgerConstructorPage from '../../pages/burger-constructor-page';
 import { Redirect, Route, Switch, useHistory, useLocation } from 'react-router-dom';
 import LoginPage from '../../pages/login-page';
@@ -12,9 +12,11 @@ import IngredientInfoPage from '../../pages/ingredient-info-page';
 import { ProtectedRoute } from '../protected-route/protected-route';
 import Modal from '../modal/modal';
 import IngredientDetails from '../ingredient-details/ingredient-details';
+import { FunctionComponent } from 'react';
+import { ILocationState } from '../../utils/types';
 
-export const ModalSwitch = () => {
-    const location = useLocation();
+export const ModalSwitch : FunctionComponent = () => {
+    const location = useLocation<ILocationState>();
     const history = useHistory();
     const background = location.state && location.state.background;
 

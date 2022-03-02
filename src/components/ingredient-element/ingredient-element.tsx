@@ -1,31 +1,34 @@
 ﻿import { useSelector } from 'react-redux';
 import { CurrencyIcon, Counter } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './ingredient-element.module.css';
-import burgerIngredientPropType, { BUN_TYPE, FILAMENT_TYPE } from '../../utils/types'
+import { BUN_TYPE, FILAMENT_TYPE, ILocationState, TBurgerIngredient, TDragObject } from '../../utils/types'
 import { useDrag } from 'react-dnd';
 import { Link, useLocation } from 'react-router-dom';
+import { FunctionComponent } from 'react';
+import { IRootState } from '../../services/reducers';
 
-const IngredientElement = ({ ingredient }) => {
-    const selectedIngredients = useSelector(store => store.ingredients.selected);
+export const IngredientElement: FunctionComponent<{ ingredient: TBurgerIngredient }> = ({ ingredient }) => {
+    const selectedIngredients = useSelector((store: IRootState) => store.ingredients.selected);
 
-    const [, drag] = useDrag({
+    const [, drag] = useDrag<TDragObject, void, { isDrag: boolean }>({
         type: ingredient.type === 'bun' ? BUN_TYPE : FILAMENT_TYPE,
         item: {
             id: ingredient._id,
-            type: ingredient.type
+            type: ingredient.type,
+            index : 0
         },
         collect: monitor => ({
             isDrag: monitor.isDragging()
         })
     });
 
-    const location = useLocation();
+    const location = useLocation<ILocationState>();
 
     return (ingredient &&
         <Link
             key={ingredient._id}
             to={{ pathname: `/ingredients/${ingredient._id}`, state: { background: location } }}
-            style={{textDecoration:'none', color:'white'}}>
+            style={{ textDecoration: 'none', color: 'white' }}>
 
             <div ref={drag} className={styles.ingredient_container}>
                 <img className={styles.ingredient_image} src={ingredient.image} alt={ingredient.name} />
@@ -40,8 +43,3 @@ const IngredientElement = ({ ingredient }) => {
     );
 };
 
-IngredientElement.propTypes = {
-    ingredient: burgerIngredientPropType.isRequired
-};
-
-export default IngredientElement

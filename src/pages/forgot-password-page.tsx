@@ -1,15 +1,15 @@
-import React, { useCallback, useState } from 'react';
+import { FunctionComponent, useCallback, useState } from 'react';
 import styles from './forgot-password-page.module.css';
 import { EmailInput, Button } from '@ya.praktikum/react-developer-burger-ui-components';
 import { Link, useHistory } from 'react-router-dom';
 import { forgotPassword } from '../services/actions';
 import { useDispatch } from 'react-redux';
 
-const ForgotPasswordPage = () => {
+const ForgotPasswordPage: FunctionComponent = () => {
 
     const [form, setValue] = useState({ email: '' });
     const dispatch = useDispatch();
-    const onChange = e => {
+    const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setValue({ ...form, [e.target.name]: e.target.value });
     };
 

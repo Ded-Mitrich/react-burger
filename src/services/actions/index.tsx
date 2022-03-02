@@ -1,12 +1,11 @@
+import { Dispatch } from "redux";
+import { TBurgerIngredient } from "../../utils/types";
 import { deleteCookie, getCookie, setCookie } from "../../utils/utils";
 import {
-    avalaibleIngredientsRequest,
     clearIngredients,
     makeOrderFailure,
-    sendOrderRequest,
     sendOrderSuccessful,
     setAvalaibleIngredients,
-    setAvalaibleIngredientsFailed,
     forgotPasswordFailed,
     forgotPasswordSuccessful,
     setUser,
@@ -20,14 +19,14 @@ const apiBaseUrl = 'https://norma.nomoreparties.space/api';
 const authTokenCookieName = 'authToken';
 const refreshTokenCookieName = 'refreshToken';
 
-function checkResponse(res) {
+function checkResponse(res: Response) {
     if (res.ok) {
         return res;
     }
     return Promise.reject(res.status);
 }
 
-function setTokens(res) {
+function setTokens(res: { accessToken: string, refreshToken: string }) {
     if (res.accessToken.indexOf('Bearer') === 0) {
         const authToken = res.accessToken.split('Bearer ')[1];
         if (authToken) {
@@ -40,7 +39,7 @@ function setTokens(res) {
     }
 }
 
-function refreshTokens() {
+function refreshTokens(): { accessToken: string, refreshToken: string } | null | undefined {
     const token = getCookie(refreshTokenCookieName);
     if (token) {
         fetch(apiBaseUrl + '/auth/token', {
@@ -73,8 +72,8 @@ function refreshTokens() {
     else return null;
 }
 
-const fetchWithRefresh = async (url, options) => {
-    const res = await fetch(url, options);
+const fetchWithRefresh = async (url: string, options: RequestInit) => {
+    let res = await fetch(url, options);
 
     if (res.ok) {
         return res.json();
@@ -89,17 +88,17 @@ const fetchWithRefresh = async (url, options) => {
             return Promise.reject(res.status);
         }
 
-        options.headers.Authorization = tokens.accessToken;
+        options.headers = { Authorization: tokens.accessToken };
 
-        const res = await fetch(url, options);
+        res = await fetch(url, options);
         return res.ok ? res.json() : Promise.reject(res.status);
     } else {
         return json;
     }
 };
 
-export function login(form) {
-    return function (dispatch) {
+export function login(form: { email: string, password: string }) {
+    return function (dispatch: Dispatch) {
         fetch(apiBaseUrl + '/auth/login', {
             method: 'POST',
             body: JSON.stringify(form),
@@ -128,8 +127,8 @@ export function login(form) {
     }
 }
 
-export function register(form) {
-    return function (dispatch) {
+export function register(form: { email: string, password: string, name: string }) {
+    return function (dispatch: Dispatch) {
         fetch(apiBaseUrl + '/auth/register', {
             method: 'POST',
             body: JSON.stringify(form),
@@ -159,7 +158,7 @@ export function register(form) {
 }
 
 export function logout() {
-    return function (dispatch) {
+    return function (dispatch: Dispatch) {
         const token = getCookie(refreshTokenCookieName);
         fetch(apiBaseUrl + '/auth/logout', {
             method: 'POST',
@@ -191,7 +190,7 @@ export function logout() {
 }
 
 export function getUser() {
-    return function (dispatch) {
+    return function (dispatch: Dispatch) {
         const authToken = getCookie(authTokenCookieName);
         if (authToken) {
             dispatch(getUserReguest());
@@ -219,11 +218,8 @@ export function getUser() {
                 })
         }
         else {
-            const refToken = refreshTokens();
-            if (refToken) {
-                refToken().then(res => {
-                    getUser();
-                });
+            if (refreshTokens()) {
+                getUser();
             }
             else {
                 dispatch(getUserFailed('there are no tokens'));
@@ -232,8 +228,8 @@ export function getUser() {
     }
 }
 
-export function forgotPassword(form) {
-    return function (dispatch) {
+export function forgotPassword(form: { email: string }) {
+    return function (dispatch: Dispatch) {
         fetch(apiBaseUrl + '/password-reset', {
             method: 'POST',
             body: JSON.stringify(form),
@@ -253,16 +249,16 @@ export function forgotPassword(form) {
                     dispatch(forgotPasswordSuccessful());
                 }
                 else {
-                    dispatch(forgotPasswordFailed(res.message));
+                    dispatch(forgotPasswordFailed());
                 }
             }).catch(err => {
-                dispatch(forgotPasswordFailed(err.message));
+                dispatch(forgotPasswordFailed());
             })
     }
 }
 
-export function resetPassword(form) {
-    return function (dispatch) {
+export function resetPassword(form: { password: string, token: string }) {
+    return function (dispatch: Dispatch) {
         fetch(apiBaseUrl + '/password-reset/reset', {
             method: 'POST',
             body: JSON.stringify(form),
@@ -282,17 +278,17 @@ export function resetPassword(form) {
                     dispatch(resetPasswordSuccessful());
                 }
                 else {
-                    dispatch(resetPasswordFailed(res.message));
+                    dispatch(resetPasswordFailed());
                 }
             }).catch(err => {
-                dispatch(resetPasswordFailed(err.message));
+                dispatch(resetPasswordFailed());
             })
     }
 }
 
 
-export function updateUser(form) {
-    return function (dispatch) {
+export function updateUser(form: { email: string, password: string, name: string }) {
+    return function (dispatch: Dispatch) {
         const authToken = getCookie(authTokenCookieName);
         fetchWithRefresh(apiBaseUrl + '/auth/user', {
             method: 'PATCH',
@@ -321,22 +317,20 @@ export function updateUser(form) {
 }
 
 export function getAvalaibleIngredients() {
-    return function (dispatch) {
-        dispatch(avalaibleIngredientsRequest());
+    return function (dispatch: Dispatch) {
         fetch(apiBaseUrl + '/ingredients', { method: 'GET' })
             .then(checkResponse)
             .then(res => res.json())
             .then(res => {
                 dispatch(setAvalaibleIngredients(res.data))
             }).catch(err => {
-                dispatch(setAvalaibleIngredientsFailed(err))
+                console.log(err);
             })
     }
 }
 
-export function sendOrder(items) {
-    return function (dispatch) {
-        dispatch(sendOrderRequest());
+export function sendOrder(items: TBurgerIngredient[]) {
+    return function (dispatch: Dispatch) {
         fetch(apiBaseUrl + '/orders', {
             method: 'POST',
             body: JSON.stringify({ ingredients: items.map((elem) => elem._id) }),

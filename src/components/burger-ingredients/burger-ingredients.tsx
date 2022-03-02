@@ -1,40 +1,56 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, FunctionComponent } from 'react';
 import { useSelector } from 'react-redux';
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components'
 import styles from './burger-ingredients.module.css';
-import IngredientElement from '../ingredient-element/ingredient-element';
+import { IngredientElement } from '../ingredient-element/ingredient-element';
+import { IRootState } from '../../services/reducers';
 
 const topConstantContent = 284;
 
-const BurgerIngredients = () => {
-    const avalaibleIngredients = useSelector(store => store.ingredients.avalaible);
-    const buns = useRef(null);
-    const souces = useRef(null);
-    const main = useRef(null);
-    const [current, setCurrent] = useState({ type: 'Булки', scrollTo: buns });
+const BurgerIngredients: FunctionComponent = () => {
+    const avalaibleIngredients = useSelector((store: IRootState) => store.ingredients.avalaible);
+    const buns = useRef<HTMLDivElement>(null);
+    const souces = useRef<HTMLDivElement>(null);
+    const main = useRef<HTMLDivElement>(null);
+    const [current, setCurrent] = useState('Булки');
 
-    const onTabClick = (value) => {
+    const onTabClick = (value: string) => {
         setCurrent(value);
-        value.scrollTo.current.scrollIntoView({ behavior: "smooth" });
+        switch (value) {
+            case 'Булки':
+                buns.current?.scrollIntoView({ behavior: "smooth" });
+                break;
+            case 'Соусы':
+                souces.current?.scrollIntoView({ behavior: "smooth" });
+                break;
+            case 'Начинки':
+                main.current?.scrollIntoView({ behavior: "smooth" });
+                break;
+            default:
+                break;
+        }
     };
 
-    const onScrollHandler = (e) => {
+    const onScrollHandler = () => {
+        if (!(buns.current && souces.current && main.current)) {
+            return;
+        }
         const bunsTop = Math.abs(buns.current.getBoundingClientRect().top - topConstantContent);
         const soucesTop = Math.abs(souces.current.getBoundingClientRect().top - topConstantContent);
         const mainTop = Math.abs(main.current.getBoundingClientRect().top - topConstantContent);
         const min = Math.min(bunsTop, soucesTop, mainTop);
         if (bunsTop === min) {
-            setCurrent({ type: 'Булки', scrollTo: buns });
+            setCurrent('Булки');
         }
         else if (mainTop === min) {
-            setCurrent({ type: 'Начинки', scrollTo: main });
+            setCurrent('Начинки');
         }
         else if (soucesTop === min) {
-            setCurrent({ type: 'Соусы', scrollTo: souces });
+            setCurrent('Соусы');
         }
     }
 
-    const ingredientGroup = (type) => {
+    const ingredientGroup = (type: string) => {
         const src = avalaibleIngredients.filter(ingredient => ingredient.type === type);
         return (
             <div className={styles.ingredients_container}>
@@ -54,13 +70,13 @@ const BurgerIngredients = () => {
                 <h1 className="mt-10 mb-5 text text_type_main-large">Соберите бургер</h1>
 
                 <div className={styles.tabs_container}>
-                    <Tab value={{ type: 'Булки', scrollTo: buns }} active={current.type === 'Булки'} onClick={onTabClick}>
+                    <Tab value='Булки' active={current === 'Булки'} onClick={onTabClick}>
                         Булки
                     </Tab>
-                    <Tab value={{ type: 'Соусы', scrollTo: souces }} active={current.type === 'Соусы'} onClick={onTabClick}>
+                    <Tab value='Соусы' active={current === 'Соусы'} onClick={onTabClick}>
                         Соусы
                     </Tab>
-                    <Tab value={{ type: 'Начинки', scrollTo: main }} active={current.type === 'Начинки'} onClick={onTabClick}>
+                    <Tab value='Начинки' active={current === 'Начинки'} onClick={onTabClick}>
                         Начинки
                     </Tab>
                 </div>

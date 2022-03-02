@@ -1,75 +1,59 @@
 import { combineReducers } from 'redux';
-import {
-    SET_AVALAIBLE_INGREDIENTS,
-    ADD_INGREDIENT,
-    DELETE_INGREDIENT,
-    MAKE_ORDER_SUCCESSFUL,
-    MAKE_ORDER_FAILURE,
-    CLEAR_INGREDIENTS,
-    CLOSE_ORDER_MODAL,
-    REPLACE_INGREDIENT,
-    SET_BUNS,
-    SET_USER,
-    RESET_PASSWORD_SUCCESSFUL,
-    RESET_PASSWORD_FAILED,
-    FORGOT_PASSWORD_FAILED,
-    FORGOT_PASSWORD_SUCCESSFUL,
-    GET_USER_REQUEST,
-    GET_USER_FAILED
-} from '../actions/action-creators';
 import update from 'immutability-helper';
+import { IIngredientAction, IIngredientState, IngredientActions, IOrdersAction, IOrdersState, IUserAction, IUserState, OrdersActions, TBurgerIngredient, UserActions } from '../../utils/types';
 
-const ingredientsInitialState = {
+const ingredientsInitialState: IIngredientState = {
     avalaible: [],
     selected: [],
     buns: [],
 };
 
-const ordersInitialState = {
+const ordersInitialState: IOrdersState = {
     items: [],
-    errorMessage: null,
+    errorMessage : null,
     currentItem: null
 };
 
-const authInitialState = {
+const authInitialState : IUserState = {
     user: null,
     resetPassword : false,
-    loading: null
+    loading: false
 };
 
-export const ingredientsReducer = (state = ingredientsInitialState, action) => {
+export const ingredientsReducer = (state = ingredientsInitialState, action: IIngredientAction): IIngredientState => {
     switch (action.type) {
 
-        case SET_AVALAIBLE_INGREDIENTS: {
+        case IngredientActions.SET_AVALAIBLE_INGREDIENTS: {
             return {
                 ...state,
                 avalaible: action.items
             };
         }
 
-        case SET_BUNS: {
+        case IngredientActions.SET_BUNS: {
             const bun = state.avalaible.find((item) => item._id === action.id)
             return {
                 ...state,
-                buns: [bun, bun]
+                buns: bun ? [bun, bun] : state.buns
             };
         }
 
-        case ADD_INGREDIENT: {
+        case IngredientActions.ADD_INGREDIENT: {
+            const ingredient = state.avalaible.find((item) => item._id === action.id);
             return {
                 ...state,
-                selected: [...state.selected, { ...state.avalaible.find((item) => item._id === action.id), _uid: action.uid }]
+                selected: ingredient ? [...state.selected, { ...ingredient, _uid: action.uid }] : state.selected
             };
         }
 
-        case DELETE_INGREDIENT: {
+        case IngredientActions.DELETE_INGREDIENT: {
             return {
                 ...state,
                 selected: [...state.selected].filter(item => item._uid !== action.id)
             };
         }
 
-        case REPLACE_INGREDIENT: {
+        case IngredientActions.REPLACE_INGREDIENT: {
             if (action.dragIndex === undefined) {
                 return state;
             }
@@ -85,7 +69,7 @@ export const ingredientsReducer = (state = ingredientsInitialState, action) => {
             };
         }
 
-        case CLEAR_INGREDIENTS: {
+        case IngredientActions.CLEAR_INGREDIENTS: {
             return {
                 ...state,
                 selected: [],
@@ -99,10 +83,10 @@ export const ingredientsReducer = (state = ingredientsInitialState, action) => {
     }
 }
 
-export const ordersReducer = (state = ordersInitialState, action) => {
+export const ordersReducer = (state = ordersInitialState, action: IOrdersAction): IOrdersState  => {
     switch (action.type) {
 
-        case MAKE_ORDER_SUCCESSFUL: {
+        case OrdersActions.MAKE_ORDER_SUCCESSFUL: {
             return {
                 ...state,
                 items: [...state.items, action.item],
@@ -111,7 +95,7 @@ export const ordersReducer = (state = ordersInitialState, action) => {
             };
         }
 
-        case MAKE_ORDER_FAILURE: {
+        case OrdersActions.MAKE_ORDER_FAILURE: {
             return {
                 ...state,
                 errorMessage: action.errorMessage,
@@ -119,7 +103,7 @@ export const ordersReducer = (state = ordersInitialState, action) => {
             };
         }
 
-        case CLOSE_ORDER_MODAL: {
+        case OrdersActions.CLOSE_ORDER_MODAL: {
             return {
                 ...state,
                 errorMessage: null,
@@ -133,52 +117,52 @@ export const ordersReducer = (state = ordersInitialState, action) => {
     }
 }
 
-export const authReducer = (state = authInitialState, action) => {
+export const authReducer = (state = authInitialState, action : IUserAction) : IUserState => {
     switch (action.type) {
 
-        case FORGOT_PASSWORD_FAILED: {
+        case UserActions.FORGOT_PASSWORD_FAILED: {
             return {
                 ...state,
                 resetPassword: false,
             };
         }
 
-        case FORGOT_PASSWORD_SUCCESSFUL: {
+        case UserActions.FORGOT_PASSWORD_SUCCESSFUL: {
             return {
                 ...state,
                 resetPassword: true,
             };
         }
 
-        case RESET_PASSWORD_SUCCESSFUL: {
+        case UserActions.RESET_PASSWORD_SUCCESSFUL: {
             return {
                 ...state,
                 resetPassword: false,
             };
         }
 
-        case RESET_PASSWORD_FAILED: {
+        case UserActions.RESET_PASSWORD_FAILED: {
             return {
                 ...state,
                 resetPassword: false,
             };
         }
 
-        case GET_USER_REQUEST: {
+        case UserActions.GET_USER_REQUEST: {
             return {
                 ...state,
                 loading: true,
             };
         }
 
-        case GET_USER_FAILED: {
+        case UserActions.GET_USER_FAILED: {
             return {
                 ...state,
                 loading: false,
             };
         }
 
-        case SET_USER: {
+        case UserActions.SET_USER: {
             return {
                 ...state,
                 user: action.user,
@@ -190,6 +174,12 @@ export const authReducer = (state = authInitialState, action) => {
             return state;
         }
     }
+}
+
+export interface IRootState {
+    ingredients: IIngredientState,
+    orders: IOrdersState,
+    auth: IUserState
 }
 
 export const rootReducer = combineReducers({

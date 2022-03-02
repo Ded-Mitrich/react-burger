@@ -1,17 +1,19 @@
-import { useCallback, useState } from 'react';
+import { FunctionComponent, useCallback, useState } from 'react';
 import styles from './login-page.module.css';
 import { EmailInput, PasswordInput, Button } from '@ya.praktikum/react-developer-burger-ui-components';
 import { Link, Redirect, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { login } from '../services/actions';
+import { IRootState } from '../services/reducers';
+import { ILocationState } from '../utils/types';
 
-const LoginPage = () => {
+const LoginPage: FunctionComponent = () => {
     const dispatch = useDispatch();
-    const auth = useSelector(store => store.auth);
+    const auth = useSelector((store: IRootState) => store.auth);
     const [form, setValue] = useState({ email: '', password: '' });
-    const location = useLocation();
+    const location = useLocation<ILocationState>();
 
-    const onChange = e => {
+    const onChange = (e : React.ChangeEvent<HTMLInputElement>) => {
         setValue({ ...form, [e.target.name]: e.target.value });
     };
 

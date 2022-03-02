@@ -27,3 +27,9 @@ yarn-error.log*
 /obj/x86/Debug/DesignTimeResolveAssemblyReferencesInput.cache
 /obj/x86/Debug/ReactBurger.csproj.AssemblyReference.cache
 /.vs/ReactBurger/v16/.suo
+/obj/Debug/ReactBurger.njsproj.FileListAbsolute.txt
+/obj/Debug/ReactBurger.njsproj.CoreCompileInputs.cache
+/obj/Debug/ReactBurger.njsproj.AssemblyReference.cache
+/bin/Microsoft.NodejsTools.WebRole.dll
+/.vs/ReactBurger/v17/.suo
+/.vs/ReactBurger/v17/fileList.bin
