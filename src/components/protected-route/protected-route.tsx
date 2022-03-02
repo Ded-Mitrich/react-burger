@@ -1,9 +1,9 @@
-import { Route, Redirect } from 'react-router-dom';
+import { Route, Redirect, RouteProps } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { FunctionComponent } from 'react';
 import { IRootState } from '../../services/reducers';
 
-export const ProtectedRoute: FunctionComponent<{ path: string }> = ({ children, path }) => {
+export const ProtectedRoute: FunctionComponent<RouteProps> = ({ children, path }) => {
     const auth = useSelector((store: IRootState) => store.auth);
 
     return (
