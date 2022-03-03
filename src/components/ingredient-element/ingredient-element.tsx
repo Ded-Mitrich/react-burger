@@ -9,6 +9,7 @@ import { IRootState } from '../../services/reducers';
 
 export const IngredientElement: FunctionComponent<{ ingredient: TBurgerIngredient }> = ({ ingredient }) => {
     const selectedIngredients = useSelector((store: IRootState) => store.ingredients.selected);
+    const selectedBuns = useSelector((store: IRootState) => store.ingredients.buns);
 
     const [, drag] = useDrag<TDragObject, void, { isDrag: boolean }>({
         type: ingredient.type === 'bun' ? BUN_TYPE : FILAMENT_TYPE,
@@ -32,7 +33,7 @@ export const IngredientElement: FunctionComponent<{ ingredient: TBurgerIngredien
 
             <div ref={drag} className={styles.ingredient_container}>
                 <img className={styles.ingredient_image} src={ingredient.image} alt={ingredient.name} />
-                <Counter count={selectedIngredients.filter((elem) => elem._id === ingredient._id).length} size="default" />
+                <Counter count={selectedBuns.concat(selectedIngredients).filter((elem) => elem._id === ingredient._id).length} size="default" />
                 <span className={'mt-1 text text_type_digits-default ' + styles.price}>
                     <span style={{ marginRight: 9 }} >{ingredient.price}</span>
                     <CurrencyIcon type="primary" />
