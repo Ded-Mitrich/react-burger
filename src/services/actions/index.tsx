@@ -1,5 +1,5 @@
 import { Dispatch } from "redux";
-import { TBurgerIngredient } from "../../utils/types";
+import { IIngredientAction, IOrdersAction, IUserAction, TBurgerIngredient } from "../../utils/types";
 import { deleteCookie, getCookie, setCookie } from "../../utils/utils";
 import {
     clearIngredients,
@@ -98,7 +98,7 @@ const fetchWithRefresh = async (url: string, options: RequestInit) => {
 };
 
 export function login(form: { email: string, password: string }) {
-    return function (dispatch: Dispatch) {
+    return function (dispatch: Dispatch<IUserAction>) {
         fetch(apiBaseUrl + '/auth/login', {
             method: 'POST',
             body: JSON.stringify(form),
@@ -128,7 +128,7 @@ export function login(form: { email: string, password: string }) {
 }
 
 export function register(form: { email: string, password: string, name: string }) {
-    return function (dispatch: Dispatch) {
+    return function (dispatch: Dispatch<IUserAction>) {
         fetch(apiBaseUrl + '/auth/register', {
             method: 'POST',
             body: JSON.stringify(form),
@@ -158,7 +158,7 @@ export function register(form: { email: string, password: string, name: string }
 }
 
 export function logout() {
-    return function (dispatch: Dispatch) {
+    return function (dispatch: Dispatch<IUserAction>) {
         const token = getCookie(refreshTokenCookieName);
         fetch(apiBaseUrl + '/auth/logout', {
             method: 'POST',
@@ -190,7 +190,7 @@ export function logout() {
 }
 
 export function getUser() {
-    return function (dispatch: Dispatch) {
+    return function (dispatch: Dispatch<IUserAction>) {
         const authToken = getCookie(authTokenCookieName);
         if (authToken) {
             dispatch(getUserReguest());
@@ -229,7 +229,7 @@ export function getUser() {
 }
 
 export function forgotPassword(form: { email: string }) {
-    return function (dispatch: Dispatch) {
+    return function (dispatch: Dispatch<IUserAction>) {
         fetch(apiBaseUrl + '/password-reset', {
             method: 'POST',
             body: JSON.stringify(form),
@@ -258,7 +258,7 @@ export function forgotPassword(form: { email: string }) {
 }
 
 export function resetPassword(form: { password: string, token: string }) {
-    return function (dispatch: Dispatch) {
+    return function (dispatch: Dispatch<IUserAction>) {
         fetch(apiBaseUrl + '/password-reset/reset', {
             method: 'POST',
             body: JSON.stringify(form),
@@ -288,7 +288,7 @@ export function resetPassword(form: { password: string, token: string }) {
 
 
 export function updateUser(form: { email: string, password: string, name: string }) {
-    return function (dispatch: Dispatch) {
+    return function (dispatch: Dispatch<IUserAction>) {
         const authToken = getCookie(authTokenCookieName);
         fetchWithRefresh(apiBaseUrl + '/auth/user', {
             method: 'PATCH',
@@ -317,7 +317,7 @@ export function updateUser(form: { email: string, password: string, name: string
 }
 
 export function getAvalaibleIngredients() {
-    return function (dispatch: Dispatch) {
+    return function (dispatch: Dispatch<IIngredientAction>) {
         fetch(apiBaseUrl + '/ingredients', { method: 'GET' })
             .then(checkResponse)
             .then(res => res.json())
@@ -330,7 +330,7 @@ export function getAvalaibleIngredients() {
 }
 
 export function sendOrder(items: TBurgerIngredient[]) {
-    return function (dispatch: Dispatch) {
+    return function (dispatch: Dispatch<IOrdersAction | IIngredientAction>) {
         fetch(apiBaseUrl + '/orders', {
             method: 'POST',
             body: JSON.stringify({ ingredients: items.map((elem) => elem._id) }),

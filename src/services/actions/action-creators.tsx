@@ -1,4 +1,4 @@
-import { IngredientActions, OrdersActions, TBurgerIngredient, TOrder, TUser, UserActions } from "../../utils/types"
+import { IngredientActions, IngredientDragActions, OrdersActions, TBurgerIngredient, TOrder, TUser, UserActions } from "../../utils/types"
 
 export function forgotPasswordFailed() {
     return {
@@ -88,7 +88,7 @@ export function addIngredient(id: string, uid: string) {
 
 export function replaceIngredient(dragIndex: number, hoverIndex: number) {
     return {
-        type: IngredientActions.REPLACE_INGREDIENT,
+        type: IngredientDragActions.REPLACE_INGREDIENT,
         dragIndex,
         hoverIndex
     }

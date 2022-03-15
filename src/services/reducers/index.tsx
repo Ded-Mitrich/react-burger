@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux';
 import update from 'immutability-helper';
-import { IIngredientAction, IIngredientState, IngredientActions, IOrdersAction, IOrdersState, IUserAction, IUserState, OrdersActions, TBurgerIngredient, UserActions } from '../../utils/types';
+import { IIngredientAction, IIngredientDragAction, IIngredientState, IngredientActions, IngredientDragActions, IOrdersAction, IOrdersState, IUserAction, IUserState, OrdersActions, TBurgerIngredient, UserActions } from '../../utils/types';
 
 const ingredientsInitialState: IIngredientState = {
     avalaible: [],
@@ -20,13 +20,13 @@ const authInitialState : IUserState = {
     loading: false
 };
 
-export const ingredientsReducer = (state = ingredientsInitialState, action: IIngredientAction): IIngredientState => {
+export const ingredientsReducer = (state = ingredientsInitialState, action: IIngredientAction | IIngredientDragAction): IIngredientState => {
     switch (action.type) {
 
         case IngredientActions.SET_AVALAIBLE_INGREDIENTS: {
             return {
                 ...state,
-                avalaible: action.items
+                avalaible: action.items ?? []
             };
         }
 
@@ -53,7 +53,7 @@ export const ingredientsReducer = (state = ingredientsInitialState, action: IIng
             };
         }
 
-        case IngredientActions.REPLACE_INGREDIENT: {
+        case IngredientDragActions.REPLACE_INGREDIENT: {
             if (action.dragIndex === undefined) {
                 return state;
             }
@@ -89,16 +89,16 @@ export const ordersReducer = (state = ordersInitialState, action: IOrdersAction)
         case OrdersActions.MAKE_ORDER_SUCCESSFUL: {
             return {
                 ...state,
-                items: [...state.items, action.item],
+                items: action.item ? [...state.items, action.item] : state.items,
                 errorMessage: null,
-                currentItem: action.item
+                currentItem: action.item ?? null
             };
         }
 
         case OrdersActions.MAKE_ORDER_FAILURE: {
             return {
                 ...state,
-                errorMessage: action.errorMessage,
+                errorMessage: action.errorMessage ?? null,
                 currentItem: null
             };
         }
@@ -165,7 +165,7 @@ export const authReducer = (state = authInitialState, action : IUserAction) : IU
         case UserActions.SET_USER: {
             return {
                 ...state,
-                user: action.user,
+                user: action.user ?? null,
                 loading: false,
             };
         }

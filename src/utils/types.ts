@@ -1,5 +1,5 @@
 export type TBurgerIngredient = {
-    _uid: string,
+    _uid?: string,
     _id: string,
     name: string,
     type: 'bun' | 'main' | 'sauce',
@@ -31,22 +31,16 @@ export interface IOrdersState {
     currentItem: TOrder | null
 }
 
-export interface IIngredientAction {
-    type: IngredientActions;
-    items: TBurgerIngredient[];
-    id: string,
-    uid: string,
-    dragIndex: number,
-    hoverIndex: number
-}
-
 export enum IngredientActions {
     SET_AVALAIBLE_INGREDIENTS = 'SET_AVALAIBLE_INGREDIENTS',
     SET_BUNS = 'SET_BUNS',
     ADD_INGREDIENT = 'ADD_INGREDIENT',
     DELETE_INGREDIENT = 'DELETE_INGREDIENT',
-    REPLACE_INGREDIENT = 'REPLACE_INGREDIENT',
     CLEAR_INGREDIENTS = 'CLEAR_INGREDIENTS',
+}
+
+export enum IngredientDragActions {
+    REPLACE_INGREDIENT = 'REPLACE_INGREDIENT',
 }
 
 export enum OrdersActions {
@@ -57,13 +51,19 @@ export enum OrdersActions {
 
 export interface IOrdersAction {
     type: OrdersActions;
-    item: TOrder;
-    errorMessage: string,
+    item?: TOrder;
+    errorMessage?: string,
 }
 
 export interface IIngredientAction {
     type: IngredientActions;
-    items: TBurgerIngredient[];
+    items?: TBurgerIngredient[];
+    id?: string,
+    uid?: string,
+}
+
+export interface IIngredientDragAction {
+    type: IngredientDragActions;
     id: string,
     uid: string,
     dragIndex: number,
@@ -87,8 +87,7 @@ export enum UserActions {
 
 export interface IUserAction {
     type: UserActions;
-    user: TUser,
-    loading: boolean,
+    user?: TUser | null,
 }
 
 export interface IUserState {
@@ -116,6 +115,9 @@ export interface ILocationState {
     from?: Location<ILocationState>
 }
 
-export const FILAMENT_TYPE = 'FILAMENT';
-export const BUN_TYPE = 'BUN';
-export const REORDER_INGREDIENT_TYPE = 'REORDER_INGREDIENT_TYPE';
+export enum ConstructorElementType {
+    FILAMENT_TYPE = 'FILAMENT',
+    BUN_TYPE = 'BUN',
+    REORDER_INGREDIENT_TYPE = 'REORDER_INGREDIENT_TYPE',
+}
+

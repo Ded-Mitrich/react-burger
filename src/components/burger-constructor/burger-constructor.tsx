@@ -10,7 +10,7 @@ import {
     replaceIngredient,
     closeOrderModal,
 } from '../../services/actions/action-creators';
-import { BUN_TYPE, FILAMENT_TYPE, TBurgerIngredient, TDragObject } from '../../utils/types';
+import { ConstructorElementType, TBurgerIngredient, TDragObject } from '../../utils/types';
 import { useDrop } from 'react-dnd';
 import { v4 as uuidv4 } from 'uuid';
 import { ConstructorElementLayout } from './constructor-element-layout';
@@ -37,7 +37,7 @@ const BurgerConstructor : FunctionComponent = () => {
     }
 
     const [{ canDropFilament }, drop] = useDrop<TDragObject, void, { canDropFilament: boolean }>({
-        accept: FILAMENT_TYPE,
+        accept: ConstructorElementType.FILAMENT_TYPE,
         collect: monitor => ({
             canDropFilament: monitor.canDrop(),
         }),
@@ -47,7 +47,7 @@ const BurgerConstructor : FunctionComponent = () => {
     });
 
     const [{ canDropBuns }, dropBuns] = useDrop({
-        accept: BUN_TYPE,
+        accept: ConstructorElementType.BUN_TYPE,
         collect: monitor => ({
             canDropBuns: monitor.canDrop(),
         }),
