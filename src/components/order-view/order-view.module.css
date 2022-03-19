@@ -1,0 +1,74 @@
+.order_container {
+    composes: mb-10 from "@ya.praktikum/react-developer-burger-ui-components/dist/ui/box.css";
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.04), 0px 0px 2px rgba(0, 0, 0, 0.06), 0px 0px 1px rgba(0, 0, 0, 0.04);
+    border-radius: 40px;
+    width: 640px;
+}
+
+.price {
+    composes: text text_type_digits-default from "@ya.praktikum/react-developer-burger-ui-components/dist/ui/common.css";
+    justify-content: right;
+    display: flex;
+    flex: 1;
+    align-items: center;
+}
+
+.order_footer {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+}
+
+.ingredient_row {
+    composes: mb-4 from "@ya.praktikum/react-developer-burger-ui-components/dist/ui/box.css";
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.order_header_number {
+    composes: text text_type_digits-default from "@ya.praktikum/react-developer-burger-ui-components/dist/ui/common.css";
+    width: 100%;
+    display: flex;
+}
+
+.order_footer_date {
+    composes: text text_type_main-default text_color_inactive from "@ya.praktikum/react-developer-burger-ui-components/dist/ui/common.css";
+    display: flex;
+    justify-content: left;
+    flex: 1;
+}
+
+.order_header_status {
+    composes: text text_type_main-default from "@ya.praktikum/react-developer-burger-ui-components/dist/ui/common.css";
+    display: flex;
+    justify-content: left;
+}
+
+.order_ingredients {
+    composes: custom-scroll from "@ya.praktikum/react-developer-burger-ui-components/dist/ui/common.css";
+    max-height: 320px;
+    overflow: auto;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.ingredient_image {
+    width: 64px;
+    height: 64px;
+    border-radius: 100px;
+    object-fit: cover;
+    background: #1C1C21;
+}
+
+.ingredient_border {
+    padding: 2px;
+    width: 64px;
+    height: 64px;
+    border-radius: 100px;
+    background: linear-gradient(63.18deg, #801AB3 0%, #4C4CFF 100%);
+}

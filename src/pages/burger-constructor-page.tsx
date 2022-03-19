@@ -5,7 +5,7 @@ import BurgerConstructor from '../components/burger-constructor/burger-construct
 import { FunctionComponent } from 'react';
 
 const BurgerConstructorPage: FunctionComponent = () => {
-    
+
     return (
         <>
             <DndProvider backend={HTML5Backend}>

@@ -4,9 +4,9 @@ import styles from './modal.module.css';
 import ModalOverLay from './modal-overlay';
 import * as ReactDOM from 'react-dom';
 
-const Modal: FunctionComponent<{ onClose: () => void, header?: string}> = ({ onClose, header, children }) => {
+const Modal: FunctionComponent<{ onClose: () => void, header?: string }> = ({ onClose, header, children }) => {
 
-    const escFunction = (e : KeyboardEvent) => {
+    const escFunction = (e: KeyboardEvent) => {
         e.stopPropagation();
         if (e.key === 'Escape') {
             onClose();

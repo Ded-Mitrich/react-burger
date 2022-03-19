@@ -1,6 +1,6 @@
 import { Dispatch } from "redux";
-import { IIngredientAction, IOrdersAction, IUserAction, TBurgerIngredient } from "../../utils/types";
-import { deleteCookie, getCookie, setCookie } from "../../utils/utils";
+import { IIngredientAction, IOrdersAction, IUserAction, IWebSocketAction, TBurgerIngredient } from "../../utils/types";
+import { authTokenCookieName, deleteCookie, getCookie, refreshTokenCookieName, setCookie } from "../../utils/utils";
 import {
     clearIngredients,
     makeOrderFailure,
@@ -12,12 +12,12 @@ import {
     resetPasswordSuccessful,
     resetPasswordFailed,
     getUserReguest,
-    getUserFailed
+    getUserFailed,
+    makeOrderRequest,
+    openWsOrderFeedUser
 } from "./action-creators";
 
 const apiBaseUrl = 'https://norma.nomoreparties.space/api';
-const authTokenCookieName = 'authToken';
-const refreshTokenCookieName = 'refreshToken';
 
 function checkResponse(res: Response) {
     if (res.ok) {
@@ -72,7 +72,7 @@ function refreshTokens(): { accessToken: string, refreshToken: string } | null |
     else return null;
 }
 
-const fetchWithRefresh = async (url: string, options: RequestInit) => {
+async function fetchWithRefresh(url: string, options: RequestInit) {
     let res = await fetch(url, options);
 
     if (res.ok) {
@@ -98,7 +98,7 @@ const fetchWithRefresh = async (url: string, options: RequestInit) => {
 };
 
 export function login(form: { email: string, password: string }) {
-    return function (dispatch: Dispatch<IUserAction>) {
+    return function (dispatch: Dispatch<IUserAction | IWebSocketAction>) {
         fetch(apiBaseUrl + '/auth/login', {
             method: 'POST',
             body: JSON.stringify(form),
@@ -117,6 +117,7 @@ export function login(form: { email: string, password: string }) {
                 if (res.success) {
                     setTokens(res);
                     dispatch(setUser({ email: res.user.email, name: res.user.name }));
+                    dispatch(openWsOrderFeedUser());
                 }
                 else {
                     console.log(res.message);
@@ -128,7 +129,7 @@ export function login(form: { email: string, password: string }) {
 }
 
 export function register(form: { email: string, password: string, name: string }) {
-    return function (dispatch: Dispatch<IUserAction>) {
+    return function (dispatch: Dispatch<IUserAction | IWebSocketAction>) {
         fetch(apiBaseUrl + '/auth/register', {
             method: 'POST',
             body: JSON.stringify(form),
@@ -147,6 +148,7 @@ export function register(form: { email: string, password: string, name: string }
                 if (res.success) {
                     setTokens(res);
                     dispatch(setUser({ email: res.user.email, name: res.user.name }));
+                    dispatch(openWsOrderFeedUser());
                 }
                 else {
                     console.log(res.message);
@@ -208,10 +210,10 @@ export function getUser() {
             })
                 .then(res => {
                     if (res.success) {
-                        dispatch(setUser({ email: res.user.email, name: res.user.name }));
+                        dispatch(setUser(res.user ?? null));
                     }
                     else {
-                        dispatch(getUserFailed(res.message));
+                        dispatch(getUserFailed(res.message ?? ''));
                     }
                 }).catch(err => {
                     dispatch(getUserFailed(err.message));
@@ -305,7 +307,7 @@ export function updateUser(form: { email: string, password: string, name: string
         })
             .then(res => {
                 if (res.success) {
-                    dispatch(setUser({ email: res.user.email, name: res.user.name }));
+                    dispatch(setUser(res.user ?? null));
                 }
                 else {
                     console.log(res.message);
@@ -331,22 +333,28 @@ export function getAvalaibleIngredients() {
 
 export function sendOrder(items: TBurgerIngredient[]) {
     return function (dispatch: Dispatch<IOrdersAction | IIngredientAction>) {
-        fetch(apiBaseUrl + '/orders', {
+        dispatch(makeOrderRequest());
+        const authToken = getCookie(authTokenCookieName);
+        fetchWithRefresh(apiBaseUrl + '/orders', {
             method: 'POST',
             body: JSON.stringify({ ingredients: items.map((elem) => elem._id) }),
+            mode: 'cors',
+            cache: 'no-cache',
+            credentials: 'same-origin',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                Authorization: 'Bearer ' + authToken
             },
+            redirect: 'follow',
+            referrerPolicy: 'no-referrer',
         })
-            .then(checkResponse)
-            .then(res => res.json())
             .then(res => {
                 if (res.success) {
-                    dispatch(sendOrderSuccessful({ name: res.name, number: res.order.number }));
+                    dispatch(sendOrderSuccessful(res.order));
                     dispatch(clearIngredients());
                 }
                 else {
-                    dispatch(makeOrderFailure(res.message));
+                    dispatch(makeOrderFailure(res.message ?? ''));
                 }
             }).catch(err => {
                 dispatch(makeOrderFailure(err.message));

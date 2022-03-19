@@ -1,4 +1,4 @@
-import { IngredientActions, IngredientDragActions, OrdersActions, TBurgerIngredient, TOrder, TUser, UserActions } from "../../utils/types"
+import { IngredientActions, IngredientDragActions, OrdersActions, TBurgerIngredient, TOrder, TUser, UserActions, WebSocketActions } from "../../utils/types"
 
 export function forgotPasswordFailed() {
     return {
@@ -30,31 +30,37 @@ export function getUserReguest() {
     }
 }
 
-export function getUserFailed(error : string) {
+export function getUserFailed(error: string) {
     return {
         type: UserActions.GET_USER_FAILED,
         error
     }
 }
 
-export function setUser(user : TUser | null) {
+export function setUser(user: TUser | null) {
     return {
         type: UserActions.SET_USER,
         user
     }
 }
 
-export function sendOrderSuccessful(item : TOrder) {
+export function sendOrderSuccessful(item: TOrder) {
     return {
         type: OrdersActions.MAKE_ORDER_SUCCESSFUL,
         item
     }
 }
 
-export function makeOrderFailure(errorMessage : string) {
+export function makeOrderFailure(errorMessage: string) {
     return {
         type: OrdersActions.MAKE_ORDER_FAILURE,
         errorMessage
+    }
+}
+
+export function makeOrderRequest() {
+    return {
+        type: OrdersActions.MAKE_ORDER_REQUEST,
     }
 }
 
@@ -64,14 +70,14 @@ export function closeOrderModal() {
     }
 }
 
-export function setBuns(id : string) {
+export function setBuns(id: string) {
     return {
         type: IngredientActions.SET_BUNS,
         id
     }
 }
 
-export function deleteIngredient(uid : string) {
+export function deleteIngredient(uid: string) {
     return {
         type: IngredientActions.DELETE_INGREDIENT,
         id: uid
@@ -106,6 +112,19 @@ export function clearIngredients() {
         type: IngredientActions.CLEAR_INGREDIENTS
     }
 }
+
+export function openWsOrderFeedAll() {
+    return {
+        type: WebSocketActions.WS_ALL_CONNECTION_START
+    }
+}
+
+export function openWsOrderFeedUser() {
+    return {
+        type: WebSocketActions.WS_USER_CONNECTION_START,
+    }
+}
+
 
 
 

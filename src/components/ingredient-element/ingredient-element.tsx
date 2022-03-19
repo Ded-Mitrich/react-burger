@@ -16,7 +16,7 @@ export const IngredientElement: FunctionComponent<{ ingredient: TBurgerIngredien
         item: {
             id: ingredient._id,
             type: ingredient.type,
-            index : 0
+            index: 0
         },
         collect: monitor => ({
             isDrag: monitor.isDragging()

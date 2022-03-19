@@ -16,8 +16,15 @@ export type TBurgerIngredient = {
 
 export type TOrder = {
     name: string,
-    number: number
+    number: number,
+    ingredients: TBurgerIngredient[],
+    _id: string,
+    status: TOrderStatus,
+    createdAt: Date,
+    updatedAt: Date,
 }
+
+export type TOrderStatus = 'pending' | 'created' | 'done' | 'cancelled';
 
 export interface IIngredientState {
     avalaible: TBurgerIngredient[],
@@ -28,7 +35,8 @@ export interface IIngredientState {
 export interface IOrdersState {
     items: TOrder[],
     errorMessage: string | null,
-    currentItem: TOrder | null
+    currentItem: TOrder | null,
+    requestSent: boolean
 }
 
 export enum IngredientActions {
@@ -47,6 +55,7 @@ export enum OrdersActions {
     MAKE_ORDER_SUCCESSFUL = 'MAKE_ORDER_SUCCESSFUL',
     MAKE_ORDER_FAILURE = 'MAKE_ORDER_FAILURE',
     CLOSE_ORDER_MODAL = 'CLOSE_ORDER_MODAL',
+    MAKE_ORDER_REQUEST = 'MAKE_ORDER_REQUEST'
 }
 
 export interface IOrdersAction {
@@ -87,7 +96,37 @@ export enum UserActions {
 
 export interface IUserAction {
     type: UserActions;
-    user?: TUser | null,
+    user?: TUser | null;
+}
+
+export enum WebSocketActions {
+    WS_ALL_CONNECTION_START = 'WS_ALL_CONNECTION_START',
+    WS_USER_CONNECTION_START = 'WS_USER_CONNECTION_START',
+    WS_CONNECTION_SUCCESS = 'WS_CONNECTION_SUCCESS',
+    WS_CONNECTION_ERROR = 'WS_CONNECTION_ERROR',
+    WS_GET_USER_ORDERS_MESSAGE = 'WS_GET_USER_ORDERS_MESSAGE',
+    WS_GET_ALL_ORDERS_MESSAGE = 'WS_GET_ALL_ORDERS_MESSAGE',
+    WS_CONNECTION_CLOSED = 'WS_CONNECTION_CLOSED',
+}
+
+export type TWSOrder = Omit<TOrder, 'ingredients'> & { ingredients: string[] }
+
+export type IWebSocketAction = {
+    type: WebSocketActions;
+    data?: {
+        orders: TWSOrder[],
+        total: number,
+        totalToday: number
+    };
+    event?: Event;
+    closeEvent?: CloseEvent;
+}
+
+export interface IWebSoketState {
+    allOrders: TWSOrder[],
+    userOrders: TWSOrder[],
+    total: number,
+    totalToday: number
 }
 
 export interface IUserState {

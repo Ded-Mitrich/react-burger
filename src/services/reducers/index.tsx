@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux';
 import update from 'immutability-helper';
-import { IIngredientAction, IIngredientDragAction, IIngredientState, IngredientActions, IngredientDragActions, IOrdersAction, IOrdersState, IUserAction, IUserState, OrdersActions, TBurgerIngredient, UserActions } from '../../utils/types';
+import { IIngredientAction, IIngredientDragAction, IIngredientState, IngredientActions, IngredientDragActions, IOrdersAction, IOrdersState, IUserAction, IUserState, IWebSocketAction, IWebSoketState, OrdersActions, TBurgerIngredient, UserActions, WebSocketActions } from '../../utils/types';
 
 const ingredientsInitialState: IIngredientState = {
     avalaible: [],
@@ -10,14 +10,22 @@ const ingredientsInitialState: IIngredientState = {
 
 const ordersInitialState: IOrdersState = {
     items: [],
-    errorMessage : null,
-    currentItem: null
+    errorMessage: null,
+    currentItem: null,
+    requestSent: false
 };
 
-const authInitialState : IUserState = {
+const authInitialState: IUserState = {
     user: null,
-    resetPassword : false,
+    resetPassword: false,
     loading: false
+};
+
+const wsInitialState: IWebSoketState = {
+    allOrders: [],
+    userOrders: [],
+    total: 0,
+    totalToday: 0
 };
 
 export const ingredientsReducer = (state = ingredientsInitialState, action: IIngredientAction | IIngredientDragAction): IIngredientState => {
@@ -83,7 +91,7 @@ export const ingredientsReducer = (state = ingredientsInitialState, action: IIng
     }
 }
 
-export const ordersReducer = (state = ordersInitialState, action: IOrdersAction): IOrdersState  => {
+export const ordersReducer = (state = ordersInitialState, action: IOrdersAction): IOrdersState => {
     switch (action.type) {
 
         case OrdersActions.MAKE_ORDER_SUCCESSFUL: {
@@ -91,7 +99,8 @@ export const ordersReducer = (state = ordersInitialState, action: IOrdersAction)
                 ...state,
                 items: action.item ? [...state.items, action.item] : state.items,
                 errorMessage: null,
-                currentItem: action.item ?? null
+                currentItem: action.item ?? null,
+                requestSent: false
             };
         }
 
@@ -99,7 +108,8 @@ export const ordersReducer = (state = ordersInitialState, action: IOrdersAction)
             return {
                 ...state,
                 errorMessage: action.errorMessage ?? null,
-                currentItem: null
+                currentItem: null,
+                requestSent: false
             };
         }
 
@@ -107,8 +117,14 @@ export const ordersReducer = (state = ordersInitialState, action: IOrdersAction)
             return {
                 ...state,
                 errorMessage: null,
-                currentItem: null
+                currentItem: null,
             };
+        }
+        case OrdersActions.MAKE_ORDER_REQUEST: {
+            return {
+                ...state,
+                requestSent: true
+            }
         }
 
         default: {
@@ -117,7 +133,7 @@ export const ordersReducer = (state = ordersInitialState, action: IOrdersAction)
     }
 }
 
-export const authReducer = (state = authInitialState, action : IUserAction) : IUserState => {
+export const authReducer = (state = authInitialState, action: IUserAction): IUserState => {
     switch (action.type) {
 
         case UserActions.FORGOT_PASSWORD_FAILED: {
@@ -176,14 +192,49 @@ export const authReducer = (state = authInitialState, action : IUserAction) : IU
     }
 }
 
+export const wsReducer = (state = wsInitialState, action: IWebSocketAction): IWebSoketState => {
+    switch (action.type) {
+        case WebSocketActions.WS_GET_ALL_ORDERS_MESSAGE: {
+            return {
+                ...state,
+                allOrders: action.data != null ? action.data.orders : state.allOrders,
+                total: action.data != null ? action.data.total : state.total,
+                totalToday: action.data != null ? action.data.totalToday : state.totalToday,
+            };
+        }
+        case WebSocketActions.WS_GET_USER_ORDERS_MESSAGE: {
+            return {
+                ...state,
+                userOrders: action.data != null ? action.data.orders : state.userOrders,
+            };
+        }
+        case WebSocketActions.WS_CONNECTION_SUCCESS: {
+            return state;
+        }
+        case WebSocketActions.WS_CONNECTION_CLOSED: {
+            return state;
+        }
+        case WebSocketActions.WS_CONNECTION_ERROR: {
+            console.log(action.event);
+            return state;
+        }
+
+        default: {
+            return state;
+        }
+    }
+}
+
 export interface IRootState {
     ingredients: IIngredientState,
     orders: IOrdersState,
-    auth: IUserState
+    auth: IUserState,
+    ws: IWebSoketState
 }
 
 export const rootReducer = combineReducers({
     ingredients: ingredientsReducer,
     orders: ordersReducer,
-    auth: authReducer
+    auth: authReducer,
+    ws: wsReducer
 }) 

@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { ILocationState, Location } from '../utils/types';
 import { IRootState } from '../services/reducers';
 
-const ResetPasswordPage : FunctionComponent = () => {
+const ResetPasswordPage: FunctionComponent = () => {
     const auth = useSelector((store: IRootState) => store.auth);
     const location = useLocation<ILocationState>();
     const dispatch = useDispatch();
@@ -39,26 +39,26 @@ const ResetPasswordPage : FunctionComponent = () => {
                 Восстановление пароля
             </h1>
             <form onSubmit={onFormSubmit} className={styles.form}>
-            <div className="mt-6">
-                <PasswordInput
-                    onChange={onChange}
-                    value={form.password}
-                    name='password' />
-            </div>
-            <div className="mt-6">
-                <Input
-                    type={'text'}
-                    placeholder={'Введите код из письма'}
-                    onChange={onChange}
-                    name='token'
-                    value={form.token}
-                />
-            </div>
-            <div className="mt-6">
-                <Button type="primary" size="medium">
-                    Сохранить
-                </Button>
-            </div>
+                <div className="mt-6">
+                    <PasswordInput
+                        onChange={onChange}
+                        value={form.password}
+                        name='password' />
+                </div>
+                <div className="mt-6">
+                    <Input
+                        type={'text'}
+                        placeholder={'Введите код из письма'}
+                        onChange={onChange}
+                        name='token'
+                        value={form.token}
+                    />
+                </div>
+                <div className="mt-6">
+                    <Button type="primary" size="medium">
+                        Сохранить
+                    </Button>
+                </div>
             </form>
             <div className="mt-20 text_type_main-small text_color_inactive">
                 Вспомнили пароль?<Link className={"ml-4 " + styles.link} to='/login'>Войти</Link>

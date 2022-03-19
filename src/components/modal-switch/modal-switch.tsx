@@ -14,8 +14,11 @@ import Modal from '../modal/modal';
 import IngredientDetails from '../ingredient-details/ingredient-details';
 import { FunctionComponent } from 'react';
 import { ILocationState } from '../../utils/types';
+import OrdersFeedPage from '../../pages/orders-feed-page';
+import { OrderView } from '../order-view/order-view';
+import OrderInfoPage from '../../pages/order-info-page';
 
-export const ModalSwitch : FunctionComponent = () => {
+export const ModalSwitch: FunctionComponent = () => {
     const location = useLocation<ILocationState>();
     const history = useHistory();
     const background = location.state && location.state.background;
@@ -44,6 +47,15 @@ export const ModalSwitch : FunctionComponent = () => {
                     <Route path="/reset-password">
                         <ResetPasswordPage />
                     </Route>
+                    <Route path="/feed/:id">
+                        <OrderInfoPage />
+                    </Route>
+                    <Route path="/feed">
+                        <OrdersFeedPage />
+                    </Route>
+                    <ProtectedRoute path="/profile/orders/:id">
+                        <OrderInfoPage />
+                    </ProtectedRoute>
                     <ProtectedRoute path="/profile">
                         <ProfilePage />
                     </ProtectedRoute>
@@ -58,14 +70,31 @@ export const ModalSwitch : FunctionComponent = () => {
                     </Route>
                 </Switch>
                 {background && (
-                    <Route
-                        path='/ingredients/:ingredientId'
-                        children={
-                            <Modal onClose={handleModalClose}>
-                                <IngredientDetails />
-                            </Modal>
-                        }
-                    />
+                    <>
+                        <Route
+                            path='/ingredients/:ingredientId'
+                            children={
+                                <Modal onClose={handleModalClose}>
+                                    <IngredientDetails />
+                                </Modal>
+                            }
+                        />
+                        <Route
+                            path='/feed/:id'
+                            children={
+                                <Modal onClose={handleModalClose}>
+                                    <OrderView />
+                                </Modal>
+                            }
+                        />
+                        <ProtectedRoute path="/profile/orders/:id"
+                            children={
+                                <Modal onClose={handleModalClose}>
+                                    <OrderView />
+                                </Modal>
+                            }
+                        />
+                    </>
                 )}
             </main>
         </>

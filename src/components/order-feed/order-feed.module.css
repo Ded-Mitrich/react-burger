@@ -1,0 +1,11 @@
+.orders_container {
+    composes: custom-scroll from "@ya.praktikum/react-developer-burger-ui-components/dist/ui/common.css";
+    max-height: calc(100vh - 190px);
+    overflow: auto;
+}
+
+.main_holder {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}

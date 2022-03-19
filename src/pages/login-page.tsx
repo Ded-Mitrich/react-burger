@@ -13,7 +13,7 @@ const LoginPage: FunctionComponent = () => {
     const [form, setValue] = useState({ email: '', password: '' });
     const location = useLocation<ILocationState>();
 
-    const onChange = (e : React.ChangeEvent<HTMLInputElement>) => {
+    const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setValue({ ...form, [e.target.name]: e.target.value });
     };
 
@@ -31,23 +31,23 @@ const LoginPage: FunctionComponent = () => {
         );
     }
 
-    return (
+    return (!auth.loading ?
         <div className={styles.root_container}>
             <h1 className="text text_type_main-medium">
                 Вход
             </h1>
             <form onSubmit={onFormSubmit} className={styles.form}>
-            <div className="mt-6">
-                <EmailInput onChange={onChange} value={form.email} name={'email'} />
-            </div>
-            <div className="mt-6">
-                <PasswordInput onChange={onChange} value={form.password} name={'password'} />
-            </div>
-            <div className="mt-6">
-                <Button type="primary" size="medium">
-                    Войти
-                </Button>
-            </div>
+                <div className="mt-6">
+                    <EmailInput onChange={onChange} value={form.email} name={'email'} />
+                </div>
+                <div className="mt-6">
+                    <PasswordInput onChange={onChange} value={form.password} name={'password'} />
+                </div>
+                <div className="mt-6">
+                    <Button type="primary" size="medium">
+                        Войти
+                    </Button>
+                </div>
             </form>
             <div className="mt-20 text text_color_inactive text_type_main-small">
                 Вы — новый пользователь?<Link className={"ml-4 " + styles.link} to='/register'>Зарегистрироваться</Link>
@@ -56,6 +56,7 @@ const LoginPage: FunctionComponent = () => {
                 Забыли пароль?<Link className={"ml-4 " + styles.link} to='/forgot-password'>Восстановить пароль</Link>
             </div>
         </div>
+        : <></>
     )
 
 }

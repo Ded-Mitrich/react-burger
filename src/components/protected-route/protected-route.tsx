@@ -10,7 +10,6 @@ export const ProtectedRoute: FunctionComponent<RouteProps> = ({ children, path }
         <Route
             path={path}
             render={({ location }) => {
-                console.log(auth.loading);
                 return auth.loading !== null && !auth.loading &&
                     (auth.user
                         ? (children)

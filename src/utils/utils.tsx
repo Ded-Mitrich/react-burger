@@ -1,3 +1,8 @@
+import { TOrderStatus } from "./types";
+
+export const authTokenCookieName = 'authToken';
+export const refreshTokenCookieName = 'refreshToken';
+
 export function getCookie(name: string) {
     const matches = document.cookie.match(
         new RegExp('(?:^|; )' + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + '=([^;]*)')
@@ -31,3 +36,20 @@ export function setCookie(name: string, value: string | number | boolean, props:
 export function deleteCookie(name: string) {
     setCookie(name, '', { expires: -1 });
 }
+
+export const getStatus = (status: TOrderStatus): { text: string, color: string } => {
+    switch (status) {
+        case 'created':
+            return { text: 'Создан', color: 'white' }
+        case 'done':
+            return { text: 'Выполнен', color: '#00CCCC' }
+        case 'pending':
+            return { text: 'Готовится', color: 'white' }
+        case 'cancelled':
+            return { text: 'Отменён', color: '#E52B1A' }
+        default:
+            return { text: status, color: 'white' };
+    }
+}
+
+

@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { logout, updateUser } from '../services/actions';
 import { IRootState } from '../services/reducers';
 import { ILocationState } from '../utils/types';
+import { OrderFeed } from '../components/order-feed/order-feed';
 
 const ProfilePage: FunctionComponent = () => {
     const dispatch = useDispatch();
@@ -13,6 +14,7 @@ const ProfilePage: FunctionComponent = () => {
     const [form, setValue] = useState({ email: '', password: '', name: '' });
     const location = useLocation<ILocationState>();
     const [isChanged, setIsChanged] = useState(false);
+    const orders = useSelector((store: IRootState) => store.ws.userOrders);
 
     const setValues = () => {
         setValue({ email: auth.user?.email ?? '', password: '', name: auth.user?.name ?? '' });
@@ -56,6 +58,15 @@ const ProfilePage: FunctionComponent = () => {
         [auth, form]
     );
 
+    const getDescription = (): string => {
+        return location.pathname === '/profile' ?
+            'В этом разделе вы можете изменить свои персональные данные'
+            :
+            location.pathname === '/profile/orders' ?
+                'В этом разделе вы можете просмотреть свою историю заказов'
+                : ''
+    }
+
     return (
         <div className={styles.root_container}>
             <div className={styles.content_container}>
@@ -72,36 +83,42 @@ const ProfilePage: FunctionComponent = () => {
                         exact
                         activeStyle={{ color: 'white' }}
                         className={"text text_type_main-medium mt-10 text_color_inactive " + styles.menu_item}>Выход</NavLink>
-                    <div className="text text_type_main-small text_color_inactive mt-20">В этом разделе вы можете изменить свои персональные данные</div>
+                    <div className="text text_type_main-small text_color_inactive mt-20">{getDescription()}</div>
                 </div>
-                {location.pathname === '/profile' && <form onSubmit={onFormSubmit}>
-                    <div className={styles.profile_container}>
-                        <div>
-                            <Input
-                                type={'text'}
-                                placeholder={'Имя'}
-                                onChange={onChange}
-                                value={form.name}
-                                name='name'
-                            />
-                        </div>
-                        <div className="mt-6">
-                            <EmailInput onChange={onChange} value={form.email} name={'email'} />
-                        </div>
-                        <div className="mt-6">
-                            <PasswordInput onChange={onChange} value={form.password} name={'password'} />
-                        </div>
-                        {isChanged && <div className={"mt-6 " + styles.buttons}>
-                            <Button type="secondary" htmlType="button" size="medium" onClick={onCancelClick}>
-                                Отменить
-                            </Button>
-                            <Button type="primary" size="medium">
-                                Сохранить
-                            </Button>
-                        </div>}
-                    </div>
-                </form>}
             </div>
+
+            {location.pathname === '/profile' && <form onSubmit={onFormSubmit}>
+                <div className={styles.profile_container}>
+                    <div>
+                        <Input
+                            type={'text'}
+                            placeholder={'Имя'}
+                            onChange={onChange}
+                            value={form.name}
+                            name='name'
+                        />
+                    </div>
+                    <div className="mt-6">
+                        <EmailInput onChange={onChange} value={form.email} name={'email'} />
+                    </div>
+                    <div className="mt-6">
+                        <PasswordInput onChange={onChange} value={form.password} name={'password'} />
+                    </div>
+                    {isChanged && <div className={"mt-6 " + styles.buttons}>
+                        <Button type="secondary" htmlType="button" size="medium" onClick={onCancelClick}>
+                            Отменить
+                        </Button>
+                        <Button type="primary" size="medium">
+                            Сохранить
+                        </Button>
+                    </div>}
+                </div>
+            </form>}
+            {location.pathname.startsWith('/profile/orders') &&
+                <div className="ml-15 mt-10">
+                    <OrderFeed orders={orders} showStatus />
+                </div>
+            }
         </div >
     )
 

@@ -25,9 +25,9 @@ export const AppHeader: FunctionComponent = () => {
                         >Конструктор</NavLink>
                     </div>
                     <div className={styles.holder}>
-                        <ListIcon type={location.pathname === "/orders" ? "primary" : "secondary"} />
+                        <ListIcon type={location.pathname === "/feed" ? "primary" : "secondary"} />
                         <NavLink
-                            to="/orders"
+                            to="/feed"
                             className={"text text_type_main-default text_color_inactive " + styles.link}
                             activeStyle={{ color: 'white' }}
                             exact

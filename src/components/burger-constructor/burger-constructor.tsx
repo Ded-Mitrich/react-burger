@@ -18,11 +18,11 @@ import { sendOrder } from '../../services/actions';
 import { useHistory } from 'react-router';
 import { IRootState } from '../../services/reducers';
 
-const BurgerConstructor : FunctionComponent = () => {
+const BurgerConstructor: FunctionComponent = () => {
     const dispatch = useDispatch();
     const selectedIngredients = useSelector((store: IRootState) => store.ingredients.selected);
     const selectedBuns = useSelector((store: IRootState) => store.ingredients.buns);
-    const currentOrder = useSelector((store: IRootState) => store.orders.currentItem);
+    const { currentItem, requestSent } = useSelector((store: IRootState) => store.orders);
     const auth = useSelector((store: IRootState) => store.auth);
     const history = useHistory();
 
@@ -61,7 +61,7 @@ const BurgerConstructor : FunctionComponent = () => {
         dispatch(replaceIngredient(dragIndex, hoverIndex))
     }, [selectedIngredients]);
 
-    function elementLayout(elem : TBurgerIngredient, index : number) {
+    function elementLayout(elem: TBurgerIngredient, index: number) {
         return (elem && <div key={elem._uid} >
             <ConstructorElementLayout elem={elem} index={index} moveLayout={moveLayout} />
         </div>)
@@ -103,9 +103,9 @@ const BurgerConstructor : FunctionComponent = () => {
                     <span className="mr-2">{selectedBuns.concat(selectedIngredients).reduce((sm, a) => sm + a.price, 0)}</span>
                     <CurrencyIcon type="primary" />
                 </div>
-                <Button disabled={selectedBuns.length === 0} type="primary" size="large" onClick={tryMakeOrder}>Оформить заказ</Button>
+                <Button disabled={selectedBuns.length === 0 || requestSent} type="primary" size="large" onClick={tryMakeOrder}>Оформить заказ</Button>
             </span>
-            {currentOrder && modal}
+            {currentItem && modal}
         </section>
     );
 }

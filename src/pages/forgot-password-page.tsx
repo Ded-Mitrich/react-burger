@@ -30,14 +30,14 @@ const ForgotPasswordPage: FunctionComponent = () => {
                 Восстановление пароля
             </h1>
             <form onSubmit={onFormSubmit} className={styles.form}>
-            <div className="mt-6" >
-                <EmailInput onChange={onChange} value={form.email} name={'email'} />
-            </div>
-            <div className="mt-6">
-                <Button type="primary" size="medium">
-                    Восстановить
-                </Button>
-            </div>
+                <div className="mt-6" >
+                    <EmailInput onChange={onChange} value={form.email} name={'email'} />
+                </div>
+                <div className="mt-6">
+                    <Button type="primary" size="medium">
+                        Восстановить
+                    </Button>
+                </div>
             </form>
             <div className="mt-20 text_type_main-small text_color_inactive">
                 Вспомнили пароль?<Link className={"ml-4 " + styles.link} to='/login'>Войти</Link>
