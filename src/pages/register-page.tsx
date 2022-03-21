@@ -2,17 +2,17 @@ import { FunctionComponent, useCallback, useState } from 'react';
 import styles from './register-page.module.css';
 import { EmailInput, PasswordInput, Button, Input } from '@ya.praktikum/react-developer-burger-ui-components';
 import { Link, Redirect, useLocation } from 'react-router-dom';
-import { register } from '../services/actions';
-import { useDispatch, useSelector } from 'react-redux';
-import { IRootState } from '../services/reducers';
 import { ILocationState } from '../utils/types';
+import { register } from '../services/actions/user-actions';
+import { useAppDispatch, useAppSelector } from '../services/store';
+
 
 const RegisterPage : FunctionComponent = () => {
 
-    const auth = useSelector((store: IRootState) => store.auth);
+    const auth = useAppSelector(store => store.auth);
     const [form, setValue] = useState({ email: '', password: '', name: '' });
     const location = useLocation<ILocationState>();
-    const dispatch = useDispatch();
+    const appDispatch = useAppDispatch();
 
     const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setValue({ ...form, [e.target.name]: e.target.value });
@@ -21,7 +21,7 @@ const RegisterPage : FunctionComponent = () => {
     const onFormSubmit = useCallback(
         e => {
             e.preventDefault();
-            dispatch(register(form));
+            appDispatch(register(form));
         },
         [auth, form]
     );

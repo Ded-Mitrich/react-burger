@@ -2,13 +2,13 @@ import { FunctionComponent, useCallback, useState } from 'react';
 import styles from './forgot-password-page.module.css';
 import { EmailInput, Button } from '@ya.praktikum/react-developer-burger-ui-components';
 import { Link, useHistory } from 'react-router-dom';
-import { forgotPassword } from '../services/actions';
-import { useDispatch } from 'react-redux';
+import { forgotPassword } from '../services/actions/user-actions';
+import { useAppDispatch } from '../services/store';
 
 const ForgotPasswordPage: FunctionComponent = () => {
 
     const [form, setValue] = useState({ email: '' });
-    const dispatch = useDispatch();
+    const appDispatch = useAppDispatch();
     const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setValue({ ...form, [e.target.name]: e.target.value });
     };
@@ -18,7 +18,7 @@ const ForgotPasswordPage: FunctionComponent = () => {
     const onFormSubmit = useCallback(
         e => {
             e.preventDefault();
-            dispatch(forgotPassword(form));
+            appDispatch(forgotPassword(form));
             history.replace({ pathname: '/reset-password' });
         },
         [form]

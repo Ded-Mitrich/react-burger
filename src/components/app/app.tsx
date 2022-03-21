@@ -1,21 +1,20 @@
 import { BrowserRouter as Router } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { useEffect } from 'react';
-import { getAvalaibleIngredients, getUser } from '../../services/actions';
 import { ModalSwitch } from '../modal-switch/modal-switch';
 import moment from 'moment';
 import 'moment/locale/ru';
-import { openWsOrderFeedAll, openWsOrderFeedUser } from '../../services/actions/action-creators';
+import { getUser } from '../../services/actions/user-actions';
+import { getAvalaibleIngredients } from '../../services/actions/ingredient-actions';
+import { useAppDispatch } from '../../services/store';
 
 function App() {
-    const dispatch = useDispatch();
+    const appDispatch = useAppDispatch();
 
     useEffect(() => {
         moment.locale('ru');
-        dispatch(getUser());
-        dispatch(getAvalaibleIngredients());
-        dispatch(openWsOrderFeedAll());
-        dispatch(openWsOrderFeedUser());
+        appDispatch(getUser());
+        appDispatch(getAvalaibleIngredients());
     }, [])
 
     return (

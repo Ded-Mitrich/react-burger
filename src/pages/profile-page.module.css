@@ -38,3 +38,11 @@
 .menu_item {
     text-decoration: none;
 }
+
+.order_feed {
+    composes: custom-scroll from "@ya.praktikum/react-developer-burger-ui-components/dist/ui/common.css";
+    max-height: calc(100vh - 130px);
+    overflow-y: auto; 
+    overflow-x: hidden;
+    width: fit-content;
+}

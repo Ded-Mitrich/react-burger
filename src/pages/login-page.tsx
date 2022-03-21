@@ -2,14 +2,13 @@ import { FunctionComponent, useCallback, useState } from 'react';
 import styles from './login-page.module.css';
 import { EmailInput, PasswordInput, Button } from '@ya.praktikum/react-developer-burger-ui-components';
 import { Link, Redirect, useLocation } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
-import { login } from '../services/actions';
-import { IRootState } from '../services/reducers';
 import { ILocationState } from '../utils/types';
+import { login } from '../services/actions/user-actions';
+import { useAppDispatch, useAppSelector } from '../services/store';
 
 const LoginPage: FunctionComponent = () => {
-    const dispatch = useDispatch();
-    const auth = useSelector((store: IRootState) => store.auth);
+    const appDispatch = useAppDispatch();
+    const auth = useAppSelector(store => store.auth);
     const [form, setValue] = useState({ email: '', password: '' });
     const location = useLocation<ILocationState>();
 
@@ -20,7 +19,7 @@ const LoginPage: FunctionComponent = () => {
     const onFormSubmit = useCallback(
         e => {
             e.preventDefault();
-            dispatch(login(form));
+            appDispatch(login(form));
         },
         [auth, form]
     );
@@ -56,7 +55,7 @@ const LoginPage: FunctionComponent = () => {
                 Забыли пароль?<Link className={"ml-4 " + styles.link} to='/forgot-password'>Восстановить пароль</Link>
             </div>
         </div>
-        : <></>
+        : null
     )
 
 }

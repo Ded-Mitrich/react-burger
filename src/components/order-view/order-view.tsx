@@ -4,17 +4,16 @@ import { ILocationState, TBurgerIngredient } from '../../utils/types'
 import { useLocation, useParams } from 'react-router-dom';
 import { FunctionComponent } from 'react';
 import moment from 'moment';
-import { useSelector } from 'react-redux';
-import { IRootState } from '../../services/reducers';
 import { getStatus } from '../../utils/utils';
+import { useAppSelector } from '../../services/store';
 
 export const OrderView: FunctionComponent = () => {
 
     const location = useLocation<ILocationState>();
-    const { allOrders, userOrders } = useSelector((store: IRootState) => store.ws);
-    const ingredients = useSelector((store: IRootState) => store.ingredients.avalaible);
+    const { orders } = useAppSelector(store => store.ws);
+    const ingredients = useAppSelector(store => store.ingredients.avalaible);
     const { id } = useParams<{ id: string }>();
-    const order = (location.pathname.startsWith('/feed') ? allOrders : userOrders).find(o => o._id === id);
+    const order = orders.find(o => o._id === id);
     const orderIngredients = order?.ingredients.map(oi => ingredients.find(i => i._id === oi));
     const background = location.state && location.state.background;
 
@@ -66,7 +65,7 @@ export const OrderView: FunctionComponent = () => {
                     <span className="ml-3 mt-1"><CurrencyIcon type="primary" /></span>
                 </span>
             </div>
-        </div> : <></>
+        </div> : null
     );
 };
 

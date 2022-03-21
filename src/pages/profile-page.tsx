@@ -2,19 +2,20 @@ import { FunctionComponent, useCallback, useEffect, useState } from 'react';
 import styles from './profile-page.module.css';
 import { EmailInput, PasswordInput, Input, Button } from '@ya.praktikum/react-developer-burger-ui-components';
 import { NavLink, useLocation } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
-import { logout, updateUser } from '../services/actions';
-import { IRootState } from '../services/reducers';
 import { ILocationState } from '../utils/types';
 import { OrderFeed } from '../components/order-feed/order-feed';
+import { logout, updateUser } from '../services/actions/user-actions';
+import { clearWsData, closeWsOrders, openWsOrders } from '../services/actions/action-creators';
+import { authTokenCookieName, getCookie, refreshTokens, wsBaseUrl } from '../utils/utils';
+import { useAppDispatch, useAppSelector } from '../services/store';
 
 const ProfilePage: FunctionComponent = () => {
-    const dispatch = useDispatch();
-    const auth = useSelector((store: IRootState) => store.auth);
+    const appDispatch = useAppDispatch();
+    const auth = useAppSelector(store => store.auth);
     const [form, setValue] = useState({ email: '', password: '', name: '' });
     const location = useLocation<ILocationState>();
     const [isChanged, setIsChanged] = useState(false);
-    const orders = useSelector((store: IRootState) => store.ws.userOrders);
+    const orders = useAppSelector(store => store.ws.orders);
 
     const setValues = () => {
         setValue({ email: auth.user?.email ?? '', password: '', name: auth.user?.name ?? '' });
@@ -22,6 +23,21 @@ const ProfilePage: FunctionComponent = () => {
 
     useEffect(() => {
         setValues();
+        let authToken = getCookie(authTokenCookieName);
+        if (authToken) {
+            appDispatch(openWsOrders(`${wsBaseUrl}?token=${authToken}`));
+        }
+        else {
+            refreshTokens();
+            authToken = getCookie(authTokenCookieName);
+            if (authToken) {
+                appDispatch(openWsOrders(`${wsBaseUrl}?token=${authToken}`));
+            }
+        }
+        return () => {
+            appDispatch(closeWsOrders());
+            appDispatch(clearWsData());
+        };
     }, []);
 
     useEffect(() => {
@@ -37,7 +53,7 @@ const ProfilePage: FunctionComponent = () => {
     const logoutHandle = useCallback(
         e => {
             e.preventDefault();
-            dispatch(logout());
+            appDispatch(logout());
         },
         []
     );
@@ -45,7 +61,7 @@ const ProfilePage: FunctionComponent = () => {
     const onFormSubmit = useCallback(
         e => {
             e.preventDefault();
-            dispatch(updateUser(form));
+            appDispatch(updateUser(form));
         },
         [auth, form]
     );
@@ -115,7 +131,7 @@ const ProfilePage: FunctionComponent = () => {
                 </div>
             </form>}
             {location.pathname.startsWith('/profile/orders') &&
-                <div className="ml-15 mt-10">
+                <div className={"ml-15 mt-10 " + styles.order_feed}>
                     <OrderFeed orders={orders} showStatus />
                 </div>
             }

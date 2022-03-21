@@ -72,7 +72,7 @@ export interface IIngredientAction {
 }
 
 export interface IIngredientDragAction {
-    type: IngredientDragActions;
+    type?: IngredientDragActions;
     id: string,
     uid: string,
     dragIndex: number,
@@ -100,13 +100,13 @@ export interface IUserAction {
 }
 
 export enum WebSocketActions {
-    WS_ALL_CONNECTION_START = 'WS_ALL_CONNECTION_START',
-    WS_USER_CONNECTION_START = 'WS_USER_CONNECTION_START',
+    WS_CONNECTION_START = 'WS_ALL_CONNECTION_START',
     WS_CONNECTION_SUCCESS = 'WS_CONNECTION_SUCCESS',
     WS_CONNECTION_ERROR = 'WS_CONNECTION_ERROR',
-    WS_GET_USER_ORDERS_MESSAGE = 'WS_GET_USER_ORDERS_MESSAGE',
-    WS_GET_ALL_ORDERS_MESSAGE = 'WS_GET_ALL_ORDERS_MESSAGE',
+    WS_GET_MESSAGE = 'WS_GET_ALL_ORDERS_MESSAGE',
     WS_CONNECTION_CLOSED = 'WS_CONNECTION_CLOSED',
+    WS_CONNECTION_CLOSE = 'WS_CONNECTION_CLOSE',
+    WS_CLEAR_DATA = 'WS_CLEAR_DATA'
 }
 
 export type TWSOrder = Omit<TOrder, 'ingredients'> & { ingredients: string[] }
@@ -120,11 +120,11 @@ export type IWebSocketAction = {
     };
     event?: Event;
     closeEvent?: CloseEvent;
+    payload?: { url?: string, token?: string };
 }
 
 export interface IWebSoketState {
-    allOrders: TWSOrder[],
-    userOrders: TWSOrder[],
+    orders: TWSOrder[],
     total: number,
     totalToday: number
 }

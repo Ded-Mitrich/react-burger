@@ -4,7 +4,7 @@ import { FunctionComponent } from 'react';
 
 export const OrderFeedSummary: FunctionComponent<{ orders: TWSOrder[], total: number, totalToday: number }> = ({ orders, total, totalToday }) => {
 
-    return (orders &&
+    return (orders.length > 0 ?
         <section className={styles.main_holder}>
             <div className={styles.orders_container}>
                 <div className={styles.orders_done_container}>
@@ -22,20 +22,15 @@ export const OrderFeedSummary: FunctionComponent<{ orders: TWSOrder[], total: nu
                     </div>
                 </div>
             </div>
-            {total && totalToday ?
-                <>
-                    <div className="mt-15">
-                        <div className="text text_type_main-medium">Выполнено за все время:</div>
-                        <div className={"text text_type_digits-large " + styles.number_shadow}>{total}</div>
-                    </div>
-                    <div className="mt-15">
-                        <div className="text text_type_main-medium">Выполнено за сегодня:</div>
-                        <div className={"text text_type_digits-large " + styles.number_shadow}>{totalToday}</div>
-                    </div>
-                </>
-                : <></>
-            }
+            <div className="mt-15">
+                <div className="text text_type_main-medium">Выполнено за все время:</div>
+                <div className={"text text_type_digits-large " + styles.number_shadow}>{total}</div>
+            </div>
+            <div className="mt-15">
+                <div className="text text_type_main-medium">Выполнено за сегодня:</div>
+                <div className={"text text_type_digits-large " + styles.number_shadow}>{totalToday}</div>
+            </div>
         </section>
-    );
+        : null);
 };
 

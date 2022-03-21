@@ -1,5 +1,4 @@
 import { FunctionComponent, SyntheticEvent, useCallback } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import styles from './burger-constructor.module.css';
 import { CurrencyIcon, Button, ConstructorElement } from '@ya.praktikum/react-developer-burger-ui-components';
 import Modal from '../modal/modal';
@@ -9,21 +8,22 @@ import {
     setBuns,
     replaceIngredient,
     closeOrderModal,
+    clearIngredients,
 } from '../../services/actions/action-creators';
 import { ConstructorElementType, TBurgerIngredient, TDragObject } from '../../utils/types';
 import { useDrop } from 'react-dnd';
 import { v4 as uuidv4 } from 'uuid';
 import { ConstructorElementLayout } from './constructor-element-layout';
-import { sendOrder } from '../../services/actions';
 import { useHistory } from 'react-router';
-import { IRootState } from '../../services/reducers';
+import { sendOrder } from '../../services/actions/order-actions';
+import { useAppDispatch, useAppSelector } from '../../services/store';
 
 const BurgerConstructor: FunctionComponent = () => {
-    const dispatch = useDispatch();
-    const selectedIngredients = useSelector((store: IRootState) => store.ingredients.selected);
-    const selectedBuns = useSelector((store: IRootState) => store.ingredients.buns);
-    const { currentItem, requestSent } = useSelector((store: IRootState) => store.orders);
-    const auth = useSelector((store: IRootState) => store.auth);
+    const appDispatch = useAppDispatch();
+    const selectedIngredients = useAppSelector(store => store.ingredients.selected);
+    const selectedBuns = useAppSelector(store => store.ingredients.buns);
+    const { currentItem, requestSent } = useAppSelector(store => store.orders);
+    const auth = useAppSelector(store => store.auth);
     const history = useHistory();
 
     const tryMakeOrder = (e: SyntheticEvent) => {
@@ -32,7 +32,8 @@ const BurgerConstructor: FunctionComponent = () => {
             history.replace({ pathname: '/login' });
         }
         else {
-            dispatch(sendOrder(selectedBuns.concat(selectedIngredients)));
+            appDispatch(sendOrder(selectedBuns.concat(selectedIngredients)));
+            appDispatch(clearIngredients());
         }
     }
 
@@ -42,7 +43,7 @@ const BurgerConstructor: FunctionComponent = () => {
             canDropFilament: monitor.canDrop(),
         }),
         drop(item) {
-            dispatch(addIngredient(item.id, uuidv4()));
+            appDispatch(addIngredient(item.id, uuidv4()));
         },
     });
 
@@ -52,13 +53,13 @@ const BurgerConstructor: FunctionComponent = () => {
             canDropBuns: monitor.canDrop(),
         }),
         drop(item: TDragObject) {
-            dispatch(setBuns(item.id));
+            appDispatch(setBuns(item.id));
         },
     });
 
 
     const moveLayout = useCallback((dragIndex, hoverIndex) => {
-        dispatch(replaceIngredient(dragIndex, hoverIndex))
+        appDispatch(replaceIngredient(dragIndex, hoverIndex))
     }, [selectedIngredients]);
 
     function elementLayout(elem: TBurgerIngredient, index: number) {
@@ -81,7 +82,7 @@ const BurgerConstructor: FunctionComponent = () => {
     };
 
     const modal = (
-        <Modal header='' onClose={() => dispatch(closeOrderModal())}>
+        <Modal header='' onClose={() => appDispatch(closeOrderModal())}>
             <OrderDetails />
         </Modal>
     );

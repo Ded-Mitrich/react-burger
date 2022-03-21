@@ -1,16 +1,16 @@
 import { FunctionComponent, useRef } from 'react';
-import { useDispatch } from 'react-redux';
 import styles from './burger-constructor.module.css';
 import { ConstructorElement, DragIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import { deleteIngredient } from '../../services/actions/action-creators';
 import { ConstructorElementType, TBurgerIngredient, TDragObject } from '../../utils/types';
 import { useDrop, useDrag } from 'react-dnd';
+import { useAppDispatch } from '../../services/store';
 
 export const ConstructorElementLayout: FunctionComponent<{
     elem: TBurgerIngredient, index: number, moveLayout: (dIndex: number, hIndex: number) => void
 }> = ({ elem, index, moveLayout }) => {
 
-    const dispatch = useDispatch();
+    const appDispatch = useAppDispatch();
     const ref = useRef<HTMLSpanElement>(null);
     const [{ handlerId }, drop] = useDrop<TDragObject, void, { handlerId: null | string | symbol }>({
         accept: ConstructorElementType.REORDER_INGREDIENT_TYPE,
@@ -65,7 +65,7 @@ export const ConstructorElementLayout: FunctionComponent<{
             thumbnail={elem.image}
             handleClose={() => {
                 if (elem._uid) {
-                    dispatch(deleteIngredient(elem._uid))
+                    appDispatch(deleteIngredient(elem._uid))
                 }
             }}
         />

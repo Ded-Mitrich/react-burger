@@ -17,11 +17,15 @@ import { ILocationState } from '../../utils/types';
 import OrdersFeedPage from '../../pages/orders-feed-page';
 import { OrderView } from '../order-view/order-view';
 import OrderInfoPage from '../../pages/order-info-page';
+import loadingImg from '../../images/loading.gif';
+import { useAppSelector } from '../../services/store';
+
 
 export const ModalSwitch: FunctionComponent = () => {
     const location = useLocation<ILocationState>();
     const history = useHistory();
     const background = location.state && location.state.background;
+    const { requestSent } = useAppSelector(store => store.orders);
 
     const handleModalClose = () => {
         history.goBack();
@@ -97,6 +101,9 @@ export const ModalSwitch: FunctionComponent = () => {
                     </>
                 )}
             </main>
+            {requestSent && <div className={styles.loading_overlay}>
+                <img style={{ width: 100, height: 100 }} src={loadingImg} />
+            </div>}
         </>
     );
 }

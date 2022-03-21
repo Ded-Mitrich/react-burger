@@ -1,13 +1,12 @@
-import { shallowEqual, useSelector } from 'react-redux';
 import styles from './order-feed.module.css';
 import { TWSOrder } from '../../utils/types'
 import { FunctionComponent } from 'react';
-import { IRootState } from '../../services/reducers';
+import { useAppSelector } from '../../services/store';
 import { OrderFeedItem } from '../order-feed-item/order-feed-item';
 
 export const OrderFeed: FunctionComponent<{ orders: TWSOrder[], showStatus?: boolean }> = ({ orders, showStatus }) => {
-    const { avalaible } = useSelector((store: IRootState) => store.ingredients);
-    const data = orders.map(o => ({ ...o, ingredients: o.ingredients.map(oi => avalaible.find(i => i._id === oi)) }));
+    const { avalaible } = useAppSelector(store => store.ingredients);
+    const data = orders.map(o => ({ ...o, ingredients: o.ingredients.filter(x => x !== null).map(oi => avalaible.find(i => i._id === oi)).filter(x => x !== undefined) }));
     return (data && avalaible &&
         <section className={styles.main_holder}>
             <div className={styles.orders_container}>

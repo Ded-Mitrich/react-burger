@@ -19,6 +19,9 @@
     display: flex;
     justify-content: right;
     width: 50%;
+    composes: custom-scroll from "@ya.praktikum/react-developer-burger-ui-components/dist/ui/common.css";
+    max-height: calc(100vh - 190px);
+    overflow: auto;
 }
 
 .order_summary {

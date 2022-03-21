@@ -113,15 +113,22 @@ export function clearIngredients() {
     }
 }
 
-export function openWsOrderFeedAll() {
+export function openWsOrders(url: string, token?: string) {
     return {
-        type: WebSocketActions.WS_ALL_CONNECTION_START
+        type: WebSocketActions.WS_CONNECTION_START,
+        payload: { url, token }
     }
 }
 
-export function openWsOrderFeedUser() {
+export function closeWsOrders() {
     return {
-        type: WebSocketActions.WS_USER_CONNECTION_START,
+        type: WebSocketActions.WS_CONNECTION_CLOSE,
+    }
+}
+
+export function clearWsData() {
+    return {
+        type: WebSocketActions.WS_CLEAR_DATA,
     }
 }
 

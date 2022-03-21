@@ -1,12 +1,23 @@
 import { FunctionComponent } from 'react';
-import { useSelector } from 'react-redux';
 import { OrderFeedSummary } from '../components/order-feed-summary/order-feed-summary';
 import { OrderFeed } from '../components/order-feed/order-feed';
-import { IRootState } from '../services/reducers';
+import { openWsOrders, closeWsOrders, clearWsData } from '../services/actions/action-creators';
 import styles from './orders-feed-page.module.css';
+import { useEffect } from 'react';
+import { wsBaseUrl } from '../utils/utils';
+import { useAppDispatch, useAppSelector } from '../services/store';
 
 const OrdersFeedPage: FunctionComponent = () => {
-    const { allOrders, total, totalToday } = useSelector((store: IRootState) => store.ws);
+    const { orders, total, totalToday } = useAppSelector(store => store.ws);
+    const appDispatch = useAppDispatch();
+
+    useEffect(() => {
+        appDispatch(openWsOrders(`${wsBaseUrl}/all`));
+        return () => {
+            appDispatch(closeWsOrders());
+            appDispatch(clearWsData());
+        };
+    }, [])
 
     return (
         <div className={styles.main_container}>
@@ -15,10 +26,10 @@ const OrdersFeedPage: FunctionComponent = () => {
             </div>
             <div className={styles.root_container}>
                 <div className={styles.order_feed}>
-                    <OrderFeed orders={allOrders} />
+                    <OrderFeed orders={orders} />
                 </div>
                 <div className={styles.order_summary}>
-                    <OrderFeedSummary orders={allOrders} total={total} totalToday={totalToday} />
+                    <OrderFeedSummary orders={orders} total={total} totalToday={totalToday} />
                 </div>
             </div>
         </div>

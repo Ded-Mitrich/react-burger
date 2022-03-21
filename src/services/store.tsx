@@ -1,7 +1,17 @@
 import { rootReducer } from './reducers';
-import { compose, createStore, applyMiddleware } from 'redux';
+import { compose, createStore, applyMiddleware, Action, AnyAction, ActionCreator } from 'redux';
 import thunk from 'redux-thunk';
 import { socketMiddleware } from '../middleware/socket-middleware';
+import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
+import { ThunkDispatch } from '@reduxjs/toolkit';
+import { IOrdersAction } from '../utils/types';
+
+export type AppDispatch = typeof store.dispatch;
+export type RootState = ReturnType<typeof store.getState>;
+export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector
+export type ThunkAction<R, S, E, A extends Action> = (dispatch: ThunkDispatch<S, E, A>, getState: () => S, extraArgument: E) => R
+export type AppThunk<TReturn = void> = ActionCreator<ThunkAction<TReturn, Action, RootState, IOrdersAction>>;
+export const useAppDispatch = () => useDispatch<AppDispatch | AppThunk>();
 
 declare global {
     interface Window {
@@ -14,5 +24,4 @@ const enhancer = composeEnhancers(applyMiddleware(thunk, socketMiddleware()));
 
 export const store = createStore(rootReducer, enhancer);
 
-export type AppDispatch = typeof store.dispatch;
-export type RootState = ReturnType<typeof store.getState>; 
+
