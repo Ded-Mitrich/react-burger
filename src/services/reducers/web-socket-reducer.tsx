@@ -11,9 +11,9 @@ export const wsReducer = (state = wsInitialState, action: IWebSocketAction): IWe
         case WebSocketActions.WS_GET_MESSAGE: {
             return {
                 ...state,
-                orders: action.data != null ? action.data.orders : state.orders,
-                total: action.data != null ? action.data.total : state.total,
-                totalToday: action.data != null ? action.data.totalToday : state.totalToday,
+                orders: action.payload != null ? action.payload.orders : state.orders,
+                total: action.payload != null ? action.payload.total : state.total,
+                totalToday: action.payload != null ? action.payload.totalToday : state.totalToday,
             };
         }
         case WebSocketActions.WS_CONNECTION_SUCCESS: {

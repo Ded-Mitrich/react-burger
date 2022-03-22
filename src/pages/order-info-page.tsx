@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useLocation } from 'react-router';
 import { OrderView } from '../components/order-view/order-view';
-import { closeWsOrders, openWsOrders } from '../services/actions/action-creators';
+import { ordersDiconnect, ordersConnect } from '../services/actions/action-creators';
 import { useAppDispatch } from '../services/store';
 import { ILocationState } from '../utils/types';
 import { authTokenCookieName, getCookie, wsBaseUrl } from '../utils/utils';
@@ -15,14 +15,14 @@ function OrderInfoPage() {
         if (location.pathname.startsWith("/profile/orders/")) {
             const authToken = getCookie(authTokenCookieName);
             if (authToken) {
-                appDispatch(openWsOrders(`${wsBaseUrl}?token=${authToken}`));
+                appDispatch(ordersConnect(`${wsBaseUrl}?token=${authToken}`));
             }
         }
         else {
-            appDispatch(openWsOrders(`${wsBaseUrl}/all`));
+            appDispatch(ordersConnect(`${wsBaseUrl}/all`));
         }
         return () => {
-            appDispatch(closeWsOrders());
+            appDispatch(ordersDiconnect());
         };
     }, []);
     return (

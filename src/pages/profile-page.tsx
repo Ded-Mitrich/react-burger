@@ -5,7 +5,7 @@ import { NavLink, useLocation } from 'react-router-dom';
 import { ILocationState } from '../utils/types';
 import { OrderFeed } from '../components/order-feed/order-feed';
 import { logout, updateUser } from '../services/actions/user-actions';
-import { clearWsData, closeWsOrders, openWsOrders } from '../services/actions/action-creators';
+import { clearWsData, ordersDiconnect, ordersConnect} from '../services/actions/action-creators';
 import { authTokenCookieName, getCookie, refreshTokens, wsBaseUrl } from '../utils/utils';
 import { useAppDispatch, useAppSelector } from '../services/store';
 
@@ -25,17 +25,17 @@ const ProfilePage: FunctionComponent = () => {
         setValues();
         let authToken = getCookie(authTokenCookieName);
         if (authToken) {
-            appDispatch(openWsOrders(`${wsBaseUrl}?token=${authToken}`));
+            appDispatch(ordersConnect(`${wsBaseUrl}?token=${authToken}`));
         }
         else {
             refreshTokens();
             authToken = getCookie(authTokenCookieName);
             if (authToken) {
-                appDispatch(openWsOrders(`${wsBaseUrl}?token=${authToken}`));
+                appDispatch(ordersConnect(`${wsBaseUrl}?token=${authToken}`));
             }
         }
         return () => {
-            appDispatch(closeWsOrders());
+            appDispatch(ordersDiconnect());
             appDispatch(clearWsData());
         };
     }, []);

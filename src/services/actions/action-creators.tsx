@@ -1,4 +1,5 @@
-import { IngredientActions, IngredientDragActions, OrdersActions, TBurgerIngredient, TOrder, TUser, UserActions, WebSocketActions } from "../../utils/types"
+import { createAction } from "@reduxjs/toolkit"
+import { IngredientActions, IngredientDragActions, OrdersActions, TBurgerIngredient, TOrder, TUser, TWSOrder, UserActions, WebSocketActions } from "../../utils/types"
 
 export function forgotPasswordFailed() {
     return {
@@ -113,24 +114,18 @@ export function clearIngredients() {
     }
 }
 
-export function openWsOrders(url: string, token?: string) {
-    return {
-        type: WebSocketActions.WS_CONNECTION_START,
-        payload: { url, token }
-    }
-}
-
-export function closeWsOrders() {
-    return {
-        type: WebSocketActions.WS_CONNECTION_CLOSE,
-    }
-}
-
 export function clearWsData() {
     return {
         type: WebSocketActions.WS_CLEAR_DATA,
     }
 }
+
+export const ordersConnect = createAction<string, WebSocketActions>(WebSocketActions.WS_CONNECT);
+export const ordersDiconnect = createAction(WebSocketActions.WS_DISCONNECT);
+export const wsGetMessage = createAction<{ orders: TWSOrder[], total: number, totalToday: number }, WebSocketActions>(WebSocketActions.WS_GET_MESSAGE);
+export const wsOnClose = createAction<CloseEvent, WebSocketActions>(WebSocketActions.WS_CONNECTION_CLOSED);
+export const wsOnOpen = createAction<Event, WebSocketActions>(WebSocketActions.WS_CONNECTION_SUCCESS);
+export const wsOnError = createAction<Event, WebSocketActions>(WebSocketActions.WS_CONNECTION_ERROR);
 
 
 

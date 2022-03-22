@@ -1,3 +1,5 @@
+import { ActionCreatorWithoutPayload, ActionCreatorWithPayload } from "@reduxjs/toolkit";
+
 export type TBurgerIngredient = {
     _uid?: string,
     _id: string,
@@ -100,12 +102,12 @@ export interface IUserAction {
 }
 
 export enum WebSocketActions {
-    WS_CONNECTION_START = 'WS_ALL_CONNECTION_START',
+    WS_CONNECT = 'WS_CONNECT',
     WS_CONNECTION_SUCCESS = 'WS_CONNECTION_SUCCESS',
     WS_CONNECTION_ERROR = 'WS_CONNECTION_ERROR',
-    WS_GET_MESSAGE = 'WS_GET_ALL_ORDERS_MESSAGE',
+    WS_GET_MESSAGE = 'WS_GET_MESSAGE',
     WS_CONNECTION_CLOSED = 'WS_CONNECTION_CLOSED',
-    WS_CONNECTION_CLOSE = 'WS_CONNECTION_CLOSE',
+    WS_DISCONNECT = 'WS_DISCONNECT',
     WS_CLEAR_DATA = 'WS_CLEAR_DATA'
 }
 
@@ -113,14 +115,13 @@ export type TWSOrder = Omit<TOrder, 'ingredients'> & { ingredients: string[] }
 
 export type IWebSocketAction = {
     type: WebSocketActions;
-    data?: {
+    payload?: {
         orders: TWSOrder[],
         total: number,
         totalToday: number
     };
     event?: Event;
     closeEvent?: CloseEvent;
-    payload?: { url?: string, token?: string };
 }
 
 export interface IWebSoketState {
@@ -159,4 +160,14 @@ export enum ConstructorElementType {
     BUN_TYPE = 'BUN',
     REORDER_INGREDIENT_TYPE = 'REORDER_INGREDIENT_TYPE',
 }
+
+export type TWSActionTypes = {
+    wsConnect: ActionCreatorWithPayload<string>;
+    wsDisconnect: ActionCreatorWithoutPayload;
+    wsSendMessage?: ActionCreatorWithPayload<any>;
+    onOpen: ActionCreatorWithPayload<Event>;
+    onClose: ActionCreatorWithPayload<CloseEvent>;
+    onError: ActionCreatorWithPayload<Event>;
+    onMessage: ActionCreatorWithPayload<any>;
+};
 

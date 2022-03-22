@@ -1,7 +1,7 @@
 import { FunctionComponent } from 'react';
 import { OrderFeedSummary } from '../components/order-feed-summary/order-feed-summary';
 import { OrderFeed } from '../components/order-feed/order-feed';
-import { openWsOrders, closeWsOrders, clearWsData } from '../services/actions/action-creators';
+import { clearWsData, ordersConnect, ordersDiconnect } from '../services/actions/action-creators';
 import styles from './orders-feed-page.module.css';
 import { useEffect } from 'react';
 import { wsBaseUrl } from '../utils/utils';
@@ -12,9 +12,9 @@ const OrdersFeedPage: FunctionComponent = () => {
     const appDispatch = useAppDispatch();
 
     useEffect(() => {
-        appDispatch(openWsOrders(`${wsBaseUrl}/all`));
+        appDispatch(ordersConnect(`${wsBaseUrl}/all`));
         return () => {
-            appDispatch(closeWsOrders());
+            appDispatch(ordersDiconnect());
             appDispatch(clearWsData());
         };
     }, [])
