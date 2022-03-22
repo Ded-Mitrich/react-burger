@@ -1,5 +1,7 @@
+import { ActionCreatorWithoutPayload, ActionCreatorWithPayload } from "@reduxjs/toolkit";
+
 export type TBurgerIngredient = {
-    _uid: string,
+    _uid?: string,
     _id: string,
     name: string,
     type: 'bun' | 'main' | 'sauce',
@@ -16,8 +18,15 @@ export type TBurgerIngredient = {
 
 export type TOrder = {
     name: string,
-    number: number
+    number: number,
+    ingredients: TBurgerIngredient[],
+    _id: string,
+    status: TOrderStatus,
+    createdAt: Date,
+    updatedAt: Date,
 }
+
+export type TOrderStatus = 'pending' | 'created' | 'done' | 'cancelled';
 
 export interface IIngredientState {
     avalaible: TBurgerIngredient[],
@@ -28,16 +37,8 @@ export interface IIngredientState {
 export interface IOrdersState {
     items: TOrder[],
     errorMessage: string | null,
-    currentItem: TOrder | null
-}
-
-export interface IIngredientAction {
-    type: IngredientActions;
-    items: TBurgerIngredient[];
-    id: string,
-    uid: string,
-    dragIndex: number,
-    hoverIndex: number
+    currentItem: TOrder | null,
+    requestSent: boolean
 }
 
 export enum IngredientActions {
@@ -45,25 +46,35 @@ export enum IngredientActions {
     SET_BUNS = 'SET_BUNS',
     ADD_INGREDIENT = 'ADD_INGREDIENT',
     DELETE_INGREDIENT = 'DELETE_INGREDIENT',
-    REPLACE_INGREDIENT = 'REPLACE_INGREDIENT',
     CLEAR_INGREDIENTS = 'CLEAR_INGREDIENTS',
+}
+
+export enum IngredientDragActions {
+    REPLACE_INGREDIENT = 'REPLACE_INGREDIENT',
 }
 
 export enum OrdersActions {
     MAKE_ORDER_SUCCESSFUL = 'MAKE_ORDER_SUCCESSFUL',
     MAKE_ORDER_FAILURE = 'MAKE_ORDER_FAILURE',
     CLOSE_ORDER_MODAL = 'CLOSE_ORDER_MODAL',
+    MAKE_ORDER_REQUEST = 'MAKE_ORDER_REQUEST'
 }
 
 export interface IOrdersAction {
     type: OrdersActions;
-    item: TOrder;
-    errorMessage: string,
+    item?: TOrder;
+    errorMessage?: string,
 }
 
 export interface IIngredientAction {
     type: IngredientActions;
-    items: TBurgerIngredient[];
+    items?: TBurgerIngredient[];
+    id?: string,
+    uid?: string,
+}
+
+export interface IIngredientDragAction {
+    type?: IngredientDragActions;
     id: string,
     uid: string,
     dragIndex: number,
@@ -87,8 +98,36 @@ export enum UserActions {
 
 export interface IUserAction {
     type: UserActions;
-    user: TUser,
-    loading: boolean,
+    user?: TUser | null;
+}
+
+export enum WebSocketActions {
+    WS_CONNECT = 'WS_CONNECT',
+    WS_CONNECTION_SUCCESS = 'WS_CONNECTION_SUCCESS',
+    WS_CONNECTION_ERROR = 'WS_CONNECTION_ERROR',
+    WS_GET_MESSAGE = 'WS_GET_MESSAGE',
+    WS_CONNECTION_CLOSED = 'WS_CONNECTION_CLOSED',
+    WS_DISCONNECT = 'WS_DISCONNECT',
+    WS_CLEAR_DATA = 'WS_CLEAR_DATA'
+}
+
+export type TWSOrder = Omit<TOrder, 'ingredients'> & { ingredients: string[] }
+
+export type IWebSocketAction = {
+    type: WebSocketActions;
+    payload?: {
+        orders: TWSOrder[],
+        total: number,
+        totalToday: number
+    };
+    event?: Event;
+    closeEvent?: CloseEvent;
+}
+
+export interface IWebSoketState {
+    orders: TWSOrder[],
+    total: number,
+    totalToday: number
 }
 
 export interface IUserState {
@@ -116,6 +155,19 @@ export interface ILocationState {
     from?: Location<ILocationState>
 }
 
-export const FILAMENT_TYPE = 'FILAMENT';
-export const BUN_TYPE = 'BUN';
-export const REORDER_INGREDIENT_TYPE = 'REORDER_INGREDIENT_TYPE';
+export enum ConstructorElementType {
+    FILAMENT_TYPE = 'FILAMENT',
+    BUN_TYPE = 'BUN',
+    REORDER_INGREDIENT_TYPE = 'REORDER_INGREDIENT_TYPE',
+}
+
+export type TWSActionTypes = {
+    wsConnect: ActionCreatorWithPayload<string>;
+    wsDisconnect: ActionCreatorWithoutPayload;
+    wsSendMessage?: ActionCreatorWithPayload<any>;
+    onOpen: ActionCreatorWithPayload<Event>;
+    onClose: ActionCreatorWithPayload<CloseEvent>;
+    onError: ActionCreatorWithPayload<Event>;
+    onMessage: ActionCreatorWithPayload<any>;
+};
+

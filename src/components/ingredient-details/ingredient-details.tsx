@@ -1,12 +1,11 @@
 import { FunctionComponent } from 'react';
-import { useSelector } from 'react-redux';
 import { useParams } from 'react-router';
-import { IRootState } from '../../services/reducers';
+import { useAppSelector } from '../../services/store';
 import styles from './ingredient-details.module.css';
 
 const IngredientDetails: FunctionComponent = () => {
 
-    const avalaibleIngredients = useSelector((store: IRootState) => store.ingredients.avalaible);
+    const avalaibleIngredients = useAppSelector(store => store.ingredients.avalaible);
     const { ingredientId } = useParams<{ ingredientId: string }>();
     const ingredient = avalaibleIngredients.find(e => e._id === ingredientId);
 
@@ -34,7 +33,7 @@ const IngredientDetails: FunctionComponent = () => {
                     <span className="text_type_digits-default">{ingredient.carbohydrates}</span>
                 </span>
             </div>
-        </> : <></>
+        </> : null
     )
 }
 

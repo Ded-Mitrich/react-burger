@@ -1,4 +1,5 @@
-import { IngredientActions, OrdersActions, TBurgerIngredient, TOrder, TUser, UserActions } from "../../utils/types"
+import { createAction } from "@reduxjs/toolkit"
+import { IngredientActions, IngredientDragActions, OrdersActions, TBurgerIngredient, TOrder, TUser, TWSOrder, UserActions, WebSocketActions } from "../../utils/types"
 
 export function forgotPasswordFailed() {
     return {
@@ -30,31 +31,37 @@ export function getUserReguest() {
     }
 }
 
-export function getUserFailed(error : string) {
+export function getUserFailed(error: string) {
     return {
         type: UserActions.GET_USER_FAILED,
         error
     }
 }
 
-export function setUser(user : TUser | null) {
+export function setUser(user: TUser | null) {
     return {
         type: UserActions.SET_USER,
         user
     }
 }
 
-export function sendOrderSuccessful(item : TOrder) {
+export function sendOrderSuccessful(item: TOrder) {
     return {
         type: OrdersActions.MAKE_ORDER_SUCCESSFUL,
         item
     }
 }
 
-export function makeOrderFailure(errorMessage : string) {
+export function makeOrderFailure(errorMessage: string) {
     return {
         type: OrdersActions.MAKE_ORDER_FAILURE,
         errorMessage
+    }
+}
+
+export function makeOrderRequest() {
+    return {
+        type: OrdersActions.MAKE_ORDER_REQUEST,
     }
 }
 
@@ -64,14 +71,14 @@ export function closeOrderModal() {
     }
 }
 
-export function setBuns(id : string) {
+export function setBuns(id: string) {
     return {
         type: IngredientActions.SET_BUNS,
         id
     }
 }
 
-export function deleteIngredient(uid : string) {
+export function deleteIngredient(uid: string) {
     return {
         type: IngredientActions.DELETE_INGREDIENT,
         id: uid
@@ -88,7 +95,7 @@ export function addIngredient(id: string, uid: string) {
 
 export function replaceIngredient(dragIndex: number, hoverIndex: number) {
     return {
-        type: IngredientActions.REPLACE_INGREDIENT,
+        type: IngredientDragActions.REPLACE_INGREDIENT,
         dragIndex,
         hoverIndex
     }
@@ -106,6 +113,20 @@ export function clearIngredients() {
         type: IngredientActions.CLEAR_INGREDIENTS
     }
 }
+
+export function clearWsData() {
+    return {
+        type: WebSocketActions.WS_CLEAR_DATA,
+    }
+}
+
+export const ordersConnect = createAction<string, WebSocketActions>(WebSocketActions.WS_CONNECT);
+export const ordersDiconnect = createAction(WebSocketActions.WS_DISCONNECT);
+export const wsGetMessage = createAction<{ orders: TWSOrder[], total: number, totalToday: number }, WebSocketActions>(WebSocketActions.WS_GET_MESSAGE);
+export const wsOnClose = createAction<CloseEvent, WebSocketActions>(WebSocketActions.WS_CONNECTION_CLOSED);
+export const wsOnOpen = createAction<Event, WebSocketActions>(WebSocketActions.WS_CONNECTION_SUCCESS);
+export const wsOnError = createAction<Event, WebSocketActions>(WebSocketActions.WS_CONNECTION_ERROR);
+
 
 
 

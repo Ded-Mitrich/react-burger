@@ -2,15 +2,14 @@ import { useState, useCallback, FunctionComponent } from 'react';
 import styles from './reset-password-page.module.css';
 import { PasswordInput, Input, Button } from '@ya.praktikum/react-developer-burger-ui-components';
 import { Link, Redirect, useHistory, useLocation } from 'react-router-dom';
-import { resetPassword } from '../services/actions';
-import { useDispatch, useSelector } from 'react-redux';
 import { ILocationState, Location } from '../utils/types';
-import { IRootState } from '../services/reducers';
+import { resetPassword } from '../services/actions/user-actions';
+import { useAppDispatch, useAppSelector } from '../services/store';
 
-const ResetPasswordPage : FunctionComponent = () => {
-    const auth = useSelector((store: IRootState) => store.auth);
+const ResetPasswordPage: FunctionComponent = () => {
+    const auth = useAppSelector(store => store.auth);
     const location = useLocation<ILocationState>();
-    const dispatch = useDispatch();
+    const appDispatch = useAppDispatch();
     const [form, setValue] = useState({ password: '', token: '' });
     const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setValue({ ...form, [e.target.name]: e.target.value });
@@ -21,7 +20,7 @@ const ResetPasswordPage : FunctionComponent = () => {
     const onFormSubmit = useCallback(
         e => {
             e.preventDefault();
-            dispatch(resetPassword(form));
+            appDispatch(resetPassword(form));
             history.replace({ pathname: '/login' });
         },
         [auth, form]
@@ -39,31 +38,31 @@ const ResetPasswordPage : FunctionComponent = () => {
                 Восстановление пароля
             </h1>
             <form onSubmit={onFormSubmit} className={styles.form}>
-            <div className="mt-6">
-                <PasswordInput
-                    onChange={onChange}
-                    value={form.password}
-                    name='password' />
-            </div>
-            <div className="mt-6">
-                <Input
-                    type={'text'}
-                    placeholder={'Введите код из письма'}
-                    onChange={onChange}
-                    name='token'
-                    value={form.token}
-                />
-            </div>
-            <div className="mt-6">
-                <Button type="primary" size="medium">
-                    Сохранить
-                </Button>
-            </div>
+                <div className="mt-6">
+                    <PasswordInput
+                        onChange={onChange}
+                        value={form.password}
+                        name='password' />
+                </div>
+                <div className="mt-6">
+                    <Input
+                        type={'text'}
+                        placeholder={'Введите код из письма'}
+                        onChange={onChange}
+                        name='token'
+                        value={form.token}
+                    />
+                </div>
+                <div className="mt-6">
+                    <Button type="primary" size="medium">
+                        Сохранить
+                    </Button>
+                </div>
             </form>
             <div className="mt-20 text_type_main-small text_color_inactive">
                 Вспомнили пароль?<Link className={"ml-4 " + styles.link} to='/login'>Войти</Link>
             </div>
-        </div> : <></>
+        </div> : null
     )
 
 }

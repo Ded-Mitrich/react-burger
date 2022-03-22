@@ -1,19 +1,19 @@
 import { FunctionComponent, useRef } from 'react';
-import { useDispatch } from 'react-redux';
 import styles from './burger-constructor.module.css';
 import { ConstructorElement, DragIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import { deleteIngredient } from '../../services/actions/action-creators';
-import { REORDER_INGREDIENT_TYPE, TBurgerIngredient, TDragObject } from '../../utils/types';
+import { ConstructorElementType, TBurgerIngredient, TDragObject } from '../../utils/types';
 import { useDrop, useDrag } from 'react-dnd';
+import { useAppDispatch } from '../../services/store';
 
 export const ConstructorElementLayout: FunctionComponent<{
     elem: TBurgerIngredient, index: number, moveLayout: (dIndex: number, hIndex: number) => void
 }> = ({ elem, index, moveLayout }) => {
 
-    const dispatch = useDispatch();
+    const appDispatch = useAppDispatch();
     const ref = useRef<HTMLSpanElement>(null);
     const [{ handlerId }, drop] = useDrop<TDragObject, void, { handlerId: null | string | symbol }>({
-        accept: REORDER_INGREDIENT_TYPE,
+        accept: ConstructorElementType.REORDER_INGREDIENT_TYPE,
         collect(monitor) {
             return {
                 handlerId: monitor.getHandlerId(),
@@ -44,7 +44,7 @@ export const ConstructorElementLayout: FunctionComponent<{
     });
 
     const [{ isDragging }, drag] = useDrag({
-        type: REORDER_INGREDIENT_TYPE,
+        type: ConstructorElementType.REORDER_INGREDIENT_TYPE,
         item: () => {
             return { id: elem._uid, index };
         },
@@ -63,7 +63,11 @@ export const ConstructorElementLayout: FunctionComponent<{
             text={elem.name}
             price={elem.price}
             thumbnail={elem.image}
-            handleClose={() => dispatch(deleteIngredient(elem._uid))}
+            handleClose={() => {
+                if (elem._uid) {
+                    appDispatch(deleteIngredient(elem._uid))
+                }
+            }}
         />
     </span>)
 }

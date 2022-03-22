@@ -1,5 +1,4 @@
 import { FunctionComponent, SyntheticEvent, useCallback } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import styles from './burger-constructor.module.css';
 import { CurrencyIcon, Button, ConstructorElement } from '@ya.praktikum/react-developer-burger-ui-components';
 import Modal from '../modal/modal';
@@ -9,21 +8,22 @@ import {
     setBuns,
     replaceIngredient,
     closeOrderModal,
+    clearIngredients,
 } from '../../services/actions/action-creators';
-import { BUN_TYPE, FILAMENT_TYPE, TBurgerIngredient, TDragObject } from '../../utils/types';
+import { ConstructorElementType, TBurgerIngredient, TDragObject } from '../../utils/types';
 import { useDrop } from 'react-dnd';
 import { v4 as uuidv4 } from 'uuid';
 import { ConstructorElementLayout } from './constructor-element-layout';
-import { sendOrder } from '../../services/actions';
 import { useHistory } from 'react-router';
-import { IRootState } from '../../services/reducers';
+import { sendOrder } from '../../services/actions/order-actions';
+import { useAppDispatch, useAppSelector } from '../../services/store';
 
-const BurgerConstructor : FunctionComponent = () => {
-    const dispatch = useDispatch();
-    const selectedIngredients = useSelector((store: IRootState) => store.ingredients.selected);
-    const selectedBuns = useSelector((store: IRootState) => store.ingredients.buns);
-    const currentOrder = useSelector((store: IRootState) => store.orders.currentItem);
-    const auth = useSelector((store: IRootState) => store.auth);
+const BurgerConstructor: FunctionComponent = () => {
+    const appDispatch = useAppDispatch();
+    const selectedIngredients = useAppSelector(store => store.ingredients.selected);
+    const selectedBuns = useAppSelector(store => store.ingredients.buns);
+    const { currentItem, requestSent } = useAppSelector(store => store.orders);
+    const auth = useAppSelector(store => store.auth);
     const history = useHistory();
 
     const tryMakeOrder = (e: SyntheticEvent) => {
@@ -32,36 +32,37 @@ const BurgerConstructor : FunctionComponent = () => {
             history.replace({ pathname: '/login' });
         }
         else {
-            dispatch(sendOrder(selectedBuns.concat(selectedIngredients)));
+            appDispatch(sendOrder(selectedBuns.concat(selectedIngredients)));
+            appDispatch(clearIngredients());
         }
     }
 
     const [{ canDropFilament }, drop] = useDrop<TDragObject, void, { canDropFilament: boolean }>({
-        accept: FILAMENT_TYPE,
+        accept: ConstructorElementType.FILAMENT_TYPE,
         collect: monitor => ({
             canDropFilament: monitor.canDrop(),
         }),
         drop(item) {
-            dispatch(addIngredient(item.id, uuidv4()));
+            appDispatch(addIngredient(item.id, uuidv4()));
         },
     });
 
     const [{ canDropBuns }, dropBuns] = useDrop({
-        accept: BUN_TYPE,
+        accept: ConstructorElementType.BUN_TYPE,
         collect: monitor => ({
             canDropBuns: monitor.canDrop(),
         }),
         drop(item: TDragObject) {
-            dispatch(setBuns(item.id));
+            appDispatch(setBuns(item.id));
         },
     });
 
 
     const moveLayout = useCallback((dragIndex, hoverIndex) => {
-        dispatch(replaceIngredient(dragIndex, hoverIndex))
+        appDispatch(replaceIngredient(dragIndex, hoverIndex))
     }, [selectedIngredients]);
 
-    function elementLayout(elem : TBurgerIngredient, index : number) {
+    function elementLayout(elem: TBurgerIngredient, index: number) {
         return (elem && <div key={elem._uid} >
             <ConstructorElementLayout elem={elem} index={index} moveLayout={moveLayout} />
         </div>)
@@ -81,7 +82,7 @@ const BurgerConstructor : FunctionComponent = () => {
     };
 
     const modal = (
-        <Modal header='' onClose={() => dispatch(closeOrderModal())}>
+        <Modal header='' onClose={() => appDispatch(closeOrderModal())}>
             <OrderDetails />
         </Modal>
     );
@@ -103,9 +104,9 @@ const BurgerConstructor : FunctionComponent = () => {
                     <span className="mr-2">{selectedBuns.concat(selectedIngredients).reduce((sm, a) => sm + a.price, 0)}</span>
                     <CurrencyIcon type="primary" />
                 </div>
-                <Button disabled={selectedBuns.length === 0} type="primary" size="large" onClick={tryMakeOrder}>Оформить заказ</Button>
+                <Button disabled={selectedBuns.length === 0 || requestSent} type="primary" size="large" onClick={tryMakeOrder}>Оформить заказ</Button>
             </span>
-            {currentOrder && modal}
+            {currentItem && modal}
         </section>
     );
 }

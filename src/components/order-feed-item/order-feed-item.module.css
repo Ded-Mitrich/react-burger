@@ -1,0 +1,95 @@
+.order_container {
+    composes: p-6 mr-2 mb-4 from "@ya.praktikum/react-developer-burger-ui-components/dist/ui/box.css";
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    background: #1C1C21;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.04), 0px 0px 2px rgba(0, 0, 0, 0.06), 0px 0px 1px rgba(0, 0, 0, 0.04);
+    border-radius: 40px;
+    width: 584px;
+}
+
+.price {
+    composes: text text_type_digits-default from "@ya.praktikum/react-developer-burger-ui-components/dist/ui/common.css";
+    justify-content: right;
+    width: 30%;
+    display: flex;
+    align-content: center;
+    align-items: center;
+}
+
+.order_header {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+}
+
+.order_header_number {
+    composes: text text_type_digits-default from "@ya.praktikum/react-developer-burger-ui-components/dist/ui/common.css";
+    display: flex;
+    justify-content: left;
+    width: 30%;
+}
+
+.order_header_date {
+    composes: text text_type_main-default text_color_inactive from "@ya.praktikum/react-developer-burger-ui-components/dist/ui/common.css";
+    display: flex;
+    justify-content: right;
+    width: 70%;
+}
+
+.order_header_status {
+    composes: text text_type_main-default from "@ya.praktikum/react-developer-burger-ui-components/dist/ui/common.css";
+    display: flex;
+    justify-content: left;
+}
+
+.order_footer {
+    composes: mt-6 ml-5 from "@ya.praktikum/react-developer-burger-ui-components/dist/ui/box.css";
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+}
+
+.ingredient_image {
+    width: 64px;
+    height: 64px;
+    border-radius: 100px;
+    object-fit: cover;
+    margin-top: -64px;
+}
+
+.ingredient_border_back {
+    width: 64px;
+    height: 64px;
+    border-radius: 100px;
+    background: #1C1C21;
+}
+
+.ingredient_image_dim_text {
+    composes: text text_type_main-default from "@ya.praktikum/react-developer-burger-ui-components/dist/ui/common.css";
+    width: 64px;
+    height: 64px;
+    border-radius: 100px;
+    margin-top: -68px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    font-weight: bold;
+}
+
+.ingredient_border {
+    margin-left: -20px;
+    padding: 2px;
+    width: 64px;
+    height: 64px;
+    border-radius: 100px;
+    background: linear-gradient(63.18deg, #801AB3 0%, #4C4CFF 100%);
+}
+
+.ingredients {
+    display: flex;
+    flex-direction: row;
+    width: 70%;
+}

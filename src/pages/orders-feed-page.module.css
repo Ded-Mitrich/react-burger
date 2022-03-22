@@ -1,0 +1,44 @@
+.root_container {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+    width: 100%;
+}
+
+.main_container {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    width: 100%;
+}
+
+.order_feed {
+    flex: 1;
+    display: flex;
+    justify-content: right;
+    width: 50%;
+    composes: custom-scroll from "@ya.praktikum/react-developer-burger-ui-components/dist/ui/common.css";
+    max-height: calc(100vh - 190px);
+    overflow: auto;
+}
+
+.order_summary {
+    flex: 1;
+    display: flex;
+    justify-content: left;
+    width: 50%;
+}
+
+.order_header {
+    display: flex;
+    justify-content: left;
+    width: 652px;
+}
+
+.order_header_container {
+    display: flex;
+    justify-content: right;
+    width: 50%;
+}

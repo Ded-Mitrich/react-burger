@@ -1,22 +1,21 @@
-﻿import { useSelector } from 'react-redux';
-import { CurrencyIcon, Counter } from '@ya.praktikum/react-developer-burger-ui-components';
+﻿import { CurrencyIcon, Counter } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './ingredient-element.module.css';
-import { BUN_TYPE, FILAMENT_TYPE, ILocationState, TBurgerIngredient, TDragObject } from '../../utils/types'
+import { ConstructorElementType, ILocationState, TBurgerIngredient, TDragObject } from '../../utils/types'
 import { useDrag } from 'react-dnd';
 import { Link, useLocation } from 'react-router-dom';
 import { FunctionComponent } from 'react';
-import { IRootState } from '../../services/reducers';
+import { useAppSelector } from '../../services/store';
 
 export const IngredientElement: FunctionComponent<{ ingredient: TBurgerIngredient }> = ({ ingredient }) => {
-    const selectedIngredients = useSelector((store: IRootState) => store.ingredients.selected);
-    const selectedBuns = useSelector((store: IRootState) => store.ingredients.buns);
+    const selectedIngredients = useAppSelector(store => store.ingredients.selected);
+    const selectedBuns = useAppSelector(store => store.ingredients.buns);
 
     const [, drag] = useDrag<TDragObject, void, { isDrag: boolean }>({
-        type: ingredient.type === 'bun' ? BUN_TYPE : FILAMENT_TYPE,
+        type: ingredient.type === 'bun' ? ConstructorElementType.BUN_TYPE : ConstructorElementType.FILAMENT_TYPE,
         item: {
             id: ingredient._id,
             type: ingredient.type,
-            index : 0
+            index: 0
         },
         collect: monitor => ({
             isDrag: monitor.isDragging()

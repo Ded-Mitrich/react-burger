@@ -6,7 +6,7 @@ function IngredientInfoPage() {
         <div className={styles.root_container}>
             <h1 className="text text_type_main-medium">Детали ингредиента</h1>
             <IngredientDetails />
-        </div> 
+        </div>
     )
 }
 
