@@ -13,7 +13,7 @@ const order: TWSOrder = {
 
 describe('ws reducer', () => {
 
-    it('should return satate with ws message data', () => {
+    it('should return state with ws message data', () => {
         expect(reducer(undefined, { type: WebSocketActions.WS_GET_MESSAGE, payload: { orders: [order], total: 1, totalToday: 1 } }))
             .toEqual(
                 {
