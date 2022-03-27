@@ -11,7 +11,7 @@ const order: TWSOrder = {
     updatedAt: new Date('2022-03-20T15:37:57.740Z'),
 };
 
-describe('auth reducer', () => {
+describe('ws reducer', () => {
 
     it('should return satate with ws message data', () => {
         expect(reducer(undefined, { type: WebSocketActions.WS_GET_MESSAGE, payload: { orders: [order], total: 1, totalToday: 1 } }))
