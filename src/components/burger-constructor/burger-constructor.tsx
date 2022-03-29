@@ -91,7 +91,7 @@ const BurgerConstructor: FunctionComponent = () => {
         <section className={styles.main_holder}>
             <div ref={dropBuns} className={canDropBuns ? styles.highlight_border_buns : styles.elements_container}>
                 {bunLayout(selectedBuns[0], 'top')}
-                <div ref={drop} className={canDropFilament ? styles.highlight_border_filament : styles.scroll}>
+                <div ref={drop} id="ingredients" className={canDropFilament ? styles.highlight_border_filament : styles.scroll}>
                     {selectedIngredients
                         .filter((elem) => elem.type !== 'bun')
                         .map((elem, index) => (elementLayout(elem, index)

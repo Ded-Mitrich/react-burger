@@ -1,5 +1,4 @@
 import { BrowserRouter as Router } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
 import { useEffect } from 'react';
 import { ModalSwitch } from '../modal-switch/modal-switch';
 import moment from 'moment';
