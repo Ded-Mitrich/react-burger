@@ -49,7 +49,7 @@ You don’t have to ever use `eject`. The curated feature set is suitable for sm
 
 ### `npm run cypress`
 
-Запуск интtграционных тестов на пользовательский сценарий создания бургера в конструкторе
+Запуск интеграционных тестов на пользовательский сценарий создания бургера в конструкторе
 
 ## Learn More
 
