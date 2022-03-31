@@ -1,6 +1,6 @@
 import { FunctionComponent } from 'react';
 import styles from './order-details.module.css';
-import confirmImg from '../../images/Confirm.svg';
+import confirmImg from '../../images/confirm.svg';
 import { useAppSelector } from '../../services/store';
 
 const OrderDetails: FunctionComponent = () => {

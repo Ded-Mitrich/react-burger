@@ -75,8 +75,6 @@ export interface IIngredientAction {
 
 export interface IIngredientDragAction {
     type?: IngredientDragActions;
-    id: string,
-    uid: string,
     dragIndex: number,
     hoverIndex: number
 }
